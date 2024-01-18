@@ -1,0 +1,79 @@
+
+.home-contact{
+    padding: 2rem 0;
+    h1{
+      width: 80%;
+      margin: auto;
+      text-align: center;
+      font-size: 2.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px ridge var(--dark-shade);
+      color: var(--dark-shade);
+    }
+  }
+  .home-contact-container{
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem 0;
+  }
+  
+  .contact-card{
+    width: 20rem;
+    height: 20rem;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    .main-icon{
+      font-size: 5rem;
+      margin-bottom: 1rem;
+    }
+    h2,
+    h3{
+      margin: 0.2rem 0;
+    }
+    .follow-button{
+      padding: 0.5rem 1rem;
+      border: 2px solid var(--light-shade);
+      margin-top: 1rem;
+      transition: all 0.1s ease-in-out;
+      cursor: pointer;
+    }
+    span{
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      gap: 0.5rem;
+      i{
+        font-size: 2rem;
+      }
+    }
+  }
+  
+  .facebook-card{
+    background: var(--facebook-color);
+    color: var(--light-shade);
+    .follow-button:hover{
+      background: var(--light-shade);
+      color: var(--facebook-color);;
+    }
+  }
+  
+  .instagram-card{
+    background: var(--insta-color);
+    color: var(--light-shade);
+    .follow-button:hover{
+      background: var(--light-shade);
+      color: var(--insta-color);
+    }
+  }
+  
+  .call-card{
+    background: var(--main);
+    color: var(--light-shade);
+  }

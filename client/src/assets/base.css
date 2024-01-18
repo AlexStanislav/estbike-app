@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
+:root {
+  --light-shade: #F3F7F4;
+  --light-accent: #9195A9;
+  --main: #D70000;
+  --dark-accent: #C03E53;
+  --dark-shade: #1C131C;
+  --accent: #45ae53;
+  --dark: #3d4541;
+
+  --primary: #D70000;
+  --info: #272c40;
+  --success: #6e8b48;
+  --warning: #ec7b10;
+  --danger: #f44336;
+
+  --beneli-color: #009B43;
+  --suzuki-color: #003399;
+  --kawasaki-color: #e63f4d;
+  --yamaha-color: #c0000a;
+
+  --insta-color: #08bdbd;
+  --facebook-color: #1877f2;
+}
+
+body{
+  margin: 0;
+  font-family: 'Oswald', sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--main);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light-shade);
+}

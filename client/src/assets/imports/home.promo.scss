@@ -1,0 +1,90 @@
+
+.home-promo {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    h1{
+      width: 100%;
+      text-align: center;
+      font-size: 3rem;
+      margin-top: 5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px ridge var(--dark-shade);
+      color: var(--dark-shade);
+    }
+  }
+  
+  .promo-categories{
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .promo-box{
+    width: 25.5rem;
+    height: 12.5rem;
+    transition: 0.2s ease-in-out;
+    cursor: pointer;
+    background: var(--dark);
+    clip-path: polygon(90% 0%, 100% 50%, 90% 100%, 0% 100%, 5% 50%, 0% 0%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .promo-box:hover{
+    transform: scale(1.1);
+  }
+  
+  .promo-box-active{
+    transform: scale(1.1);
+  }
+  
+  .beneli-logo{
+    width: 11rem !important;
+    margin-left: -2rem !important;
+  }
+  
+  .promo-box-shape{
+    width: 25rem;
+    height: 12rem;
+    clip-path: polygon(90% 0%, 100% 50%, 90% 100%, 0% 100%, 5% 50%, 0% 0%);
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    img{
+      width: 8rem;
+      height: auto;
+      margin-left: -1rem;
+      transform: rotateZ(90deg);
+      position: relative;
+      z-index: 2;
+    }
+    .promo-box-gradient{
+      width: 25rem;
+      height: 12rem;
+      position: absolute;
+      background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+    }
+  }
+  
+  .promo-container{
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem 0 5rem 0;
+  }
