@@ -27,16 +27,68 @@
     </div>
     <div class="search-container p-input-icon-left">
       <i class="pi pi-search" />
-      <InputText placeholder="Cauta..." />
+      <AutoComplete
+        v-model="searchValue"
+        :suggestions="suggestions"
+        @complete="search"
+        optionLabel="bike_name"
+        placeholder="Cauta..."
+      >
+        <template #option="slotProps">
+          <div class="autocomplete-result" @click="selectBike(slotProps.option)">
+            {{ slotProps.option.bike_name.toUpperCase() }}
+          </div>
+        </template>
+      </AutoComplete>
     </div>
   </div>
 </template>
 <script setup>
-import InputText from "primevue/inputtext";
+import AutoComplete from "primevue/autocomplete";
 import router from "../router";
+import { ref } from "vue";
+import { useAppStore } from "../stores/appStore";
+const appStore = useAppStore();
 const goTo = (url) => {
   router.push({ path: url });
 };
+
+const searchValue = ref("");
+const suggestions = ref([]);
+
+const search = (event) => {
+  const models = getAllModels();
+  suggestions.value = models.filter((model) => {
+    return model.bike_name.toLowerCase().startsWith(event.query.toLowerCase());
+  });
+  
+};
+
+function getAllModels() {
+  const array = [];
+  const models = appStore.allBikes;
+  for (const modelIndex in models) {
+    const bikes = models[modelIndex];
+    for (const bikeIndex in bikes) {
+      const bike = bikes[bikeIndex];
+      array.push(bike);
+    }
+  }
+
+  return array;
+}
+
+const selectBike = (bike) => {
+  if(router.currentRoute.value.path === '/model'){
+    router.go(-1);
+    setTimeout(() => {
+      router.go(1)
+    })
+  }
+  searchValue.value = "";
+  appStore.setCurrentBike(bike);
+  router.push({ path: '/model' })
+}
 </script>
 <style lang="scss">
 .desktop-nav {
@@ -62,16 +114,17 @@ const goTo = (url) => {
     z-index: 3;
     left: 1.5rem;
   }
-  .p-input-icon-left > .p-inputtext {
+  .p-input-icon-left > .p-autocomplete-input {
     padding-left: 3rem;
   }
-  .p-inputtext {
+  .p-autocomplete-input {
     background: var(--dark-shade);
     border: none;
     color: var(--light-shade);
     margin-top: 0.2rem;
     border-radius: 0;
     clip-path: polygon(10% 0%, 100% 1%, 100% 100%, 10% 100%, 0% 50%);
+    padding-left: 3rem;
   }
 
   .p-inputtext::-moz-placeholder {

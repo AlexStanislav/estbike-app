@@ -11,7 +11,19 @@
     <Sidebar v-model:visible="appStore.sidebarOpen" header="Meniu">
       <span class="p-input-icon-left">
         <i class="pi pi-search" />
-        <InputText type="text" placeholder="Cauta" />
+        <AutoComplete
+        v-model="searchValue"
+        :suggestions="suggestions"
+        @complete="search"
+        optionLabel="bike_name"
+        placeholder="Cauta..."
+      >
+        <template #option="slotProps">
+          <div class="autocomplete-result" @click="selectBike(slotProps.option)">
+            {{ slotProps.option.bike_name.toUpperCase() }}
+          </div>
+        </template>
+      </AutoComplete>
       </span>
       <ul>
         <li><router-link to="/">Acasă</router-link></li>
@@ -25,14 +37,55 @@
   </div>
 </template>
 <script setup>
-import InputText from "primevue/inputtext";
+import AutoComplete from "primevue/autocomplete";
 import Sidebar from "primevue/sidebar";
 import { useAppStore } from "@/stores/appStore";
+import { ref } from "vue";
+import router from "../router";
 const appStore = useAppStore();
 const toggleSidebar = () => {
   appStore.toggleSidebar();
   console.log(appStore.sidebarOpen);
 };
+
+
+const searchValue = ref("");
+const suggestions = ref([]);
+
+const search = (event) => {
+  const models = getAllModels();
+  suggestions.value = models.filter((model) => {
+    return model.bike_name.toLowerCase().startsWith(event.query.toLowerCase());
+  });
+  
+};
+
+function getAllModels() {
+  const array = [];
+  const models = appStore.allBikes;
+  for (const modelIndex in models) {
+    const bikes = models[modelIndex];
+    for (const bikeIndex in bikes) {
+      const bike = bikes[bikeIndex];
+      array.push(bike);
+    }
+  }
+
+  return array;
+}
+
+const selectBike = (bike) => {
+  if(router.currentRoute.value.path === '/model'){
+    router.go(-1);
+    setTimeout(() => {
+      router.go(1)
+    })
+  }
+  searchValue.value = "";
+  appStore.setCurrentBike(bike);
+  router.push({ path: '/model' })
+}
+
 </script>
 <style lang="scss">
 .mobile-nav {

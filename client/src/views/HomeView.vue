@@ -7,7 +7,7 @@
         <div class="carousel-text-container">
           <h1>{{ slotProps.data.title }}</h1>
           <h2>{{ slotProps.data.subtitle }}</h2>
-          <Button label="Mail multe detalii" />
+          <Button label="Mail multe detalii" @click="selectBike(slotProps.data)" />
         </div>
         <div class="bottom-gradient"></div>
       </template>
@@ -77,6 +77,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { useAppStore } from "../stores/appStore";
 import ProductCard from "@/components/ProductCard.vue";
 import Button from "primevue/button";
+import router from "../router";
 const store = useAppStore();
 
 const carouselImages = ref([]);
@@ -105,6 +106,29 @@ const motoboomImageResizer = (image) => {
   }
   return image;
 }
+
+function getAllModels() {
+  const array = [];
+  const models = store.allBikes;
+  for (const modelIndex in models) {
+    const bikes = models[modelIndex];
+    for (const bikeIndex in bikes) {
+      const bike = bikes[bikeIndex];
+      array.push(bike);
+    }
+  }
+
+  return array;
+}
+const selectBike = (bike) => {
+  const models = getAllModels();
+  for (const model of models) {
+    if (model.bike_name === bike.alt) {
+      store.setCurrentBike(model);
+      router.push({ path: `/model` });
+    }
+  }
+};
 
 onMounted(() => {
   window.addEventListener("scroll", toggleStickyNav);
