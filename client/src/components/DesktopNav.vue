@@ -36,7 +36,7 @@
       >
         <template #option="slotProps">
           <div class="autocomplete-result" @click="selectBike(slotProps.option)">
-            {{ slotProps.option.bike_name.toUpperCase() }}
+            {{ slotProps.option.bike_name }}
           </div>
         </template>
       </AutoComplete>
@@ -59,7 +59,9 @@ const suggestions = ref([]);
 const search = (event) => {
   const models = getAllModels();
   suggestions.value = models.filter((model) => {
-    return model.bike_name.toLowerCase().startsWith(event.query.toLowerCase());
+    if(model.bike_name.toLowerCase().includes(event.query.toLowerCase())){
+      return model.bike_name.replace(/-/g, " ");
+    }
   });
   
 };

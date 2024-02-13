@@ -2,7 +2,8 @@
   <div class="product">
     <div class="product-top-container">
       <div class="product-header">
-        <span>Acasa</span> / <span>Modele</span> /
+        <span>Acasa</span> /
+        <span>Modele</span> /
         <span class="bike-name-crumb">{{ bikeDisplayName }}</span>
       </div>
       <section class="product-info-left">
@@ -35,7 +36,7 @@
                 <i class="pi pi-chart-bar"></i>Finantare flexibila in rate
               </li>
               <li><i class="pi pi-money-bill"></i>Rate fara avans</li>
-              <li><i class="pi pi-car"></i>Program RABLA</li>
+              <li v-if="showRabla"><i class="pi pi-car"></i>Program RABLA</li>
             </ul>
           </div>
           <div class="installment-container">
@@ -52,18 +53,54 @@
               Va trebuii sa platiti: {{ calulateInstallments() }}
               {{ displayModel.currency }} pe luna
             </div>
-            <Button
+            <div class="installment-price">
+              SAU {{ calculateRonInstallments() }} RON pe luna
+            </div>
+            <!-- <Button
               severity="danger"
               label="Modalitati de plata"
               @click="buyNow()"
-            ></Button>
+            ></Button> -->
           </div>
         </div>
       </section>
       <section class="product-info-right">
         <div class="product-info-details">
           <h1>{{ bikeDisplayName }}</h1>
+          <h4>
+            Producator:
+            {{
+              displayModel.brand !== undefined
+                ? displayModel.brand.toUpperCase()
+                : "Necunoscut"
+            }}
+          </h4>
           <h4>Categoria: {{ getCategory() }}</h4>
+          <h4
+            v-if="
+              displayModel.permis !== undefined &&
+              displayModel.permis.length > 0
+            "
+          >
+            Permis:
+            <span
+              class="info-permis"
+              v-for="permis in displayModel.permis"
+              :key="permis"
+              >{{ permis }}</span
+            >
+          </h4>
+          <h4>
+            Tip Vehicul:
+            {{
+              displayModel.vehicle_type !== undefined
+                ? displayModel.vehicle_type
+                    .replace("bikes", "Motociclete")
+                    .replace("scooters", "Scutere")
+                    .replace("atv", "ATV")
+                : "Necunoscut"
+            }}
+          </h4>
           <p>{{ bikeSlogan }}</p>
           <p
             class="product-description"
@@ -73,28 +110,29 @@
           </p>
         </div>
         <div class="product-info-price">
-          <b
-            ><span>Pret: </span>{{ displayModel.price }}
-            {{ displayModel.currency }}</b
-          >
-          <span
-            v-if="
-              displayModel.old_price !== '' &&
-              displayModel.old_price !== 'null' &&
-              displayModel.old_price !== null
-            "
-          >
-            <s
+          <div class="eur-price" v-if="displayModel.price !== null">
+            <span>{{ displayModel.price }} {{ displayModel.currency }}</span>
+            <s v-if="displayModel.old_price !== null"
               >{{ displayModel.old_price }} {{ displayModel.currency }}</s
-            ></span
-          >
+            >
+          </div>
+          <div class="ron-price">
+            <span
+              >{{
+                Math.ceil(displayModel.price * appStore.forexValue)
+              }}
+              RON</span
+            >
+            <s v-if="displayModel.old_price !== null"
+              >{{
+                Math.ceil(displayModel.old_price * appStore.forexValue)
+              }}
+              RON</s
+            >
+          </div>
           <div
             class="product-info-price-discount"
-            v-if="
-              displayModel.old_price !== '' &&
-              displayModel.old_price !== 'null' &&
-              displayModel.old_price !== null
-            "
+            v-if="displayModel.old_price !== null"
           >
             Reducere de {{ discount }}%
           </div>
@@ -119,13 +157,7 @@
               {{ model.price }} {{ model.currency }}
             </h4>
             <h4 v-else>Pret Indisponibil</h4>
-            <h4
-              v-if="
-                model.old_price !== 'null' &&
-                model.old_price !== '' &&
-                model.old_price !== null
-              "
-            >
+            <h4 v-if="model.old_price !== null">
               <s>{{ model.old_price }} {{ model.currency }}</s>
             </h4>
           </div>
@@ -135,7 +167,7 @@
   </div>
 </template>
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useAppStore } from "../stores/appStore";
 import Carousel from "primevue/carousel";
 import Dropdown from "primevue/dropdown";
@@ -153,30 +185,39 @@ const currentInstallment = ref(12);
 const installmentOptions = ref([12, 24, 36, 48]);
 
 const similarModels = ref([]);
+const header =
+  document.querySelector(".desktop-nav") !== null
+    ? document.querySelector(".desktop-nav")
+    : document.querySelector(".mobile-nav");
 
 onMounted(() => {
+  header.classList.add("sticky");
+
+  if (appStore.currentBike === null) {
+    router.push({ path: "/" });
+  }
+
   setTimeout(() => {
-    if (appStore.currentBike === null) {
-      router.push({ path: "/" });
-    }
     displayModel.value = appStore.currentBike;
-    mainImage.value = displayModel.value.image;
-    carouselImages.value = getGallery();
-
-    bikeDisplayName.value = displayModel.value.bike_name.toUpperCase();
-    bikeSlogan.value = displayModel.value.bike_slogan.toUpperCase();
-    if (
-      displayModel.value.old_price !== "null" &&
-      displayModel.value.old_price !== ""
-    ) {
-      discount.value = Math.round(
-        ((displayModel.value.price - displayModel.value.old_price) /
-          displayModel.value.price) *
-          100
-      ).toFixed(0);
+    if(displayModel.value){
+      mainImage.value = displayModel.value.image;
+      carouselImages.value = getGallery();
+  
+      bikeDisplayName.value = displayModel.value.bike_name.toUpperCase();
+      bikeSlogan.value = displayModel.value.bike_slogan.toUpperCase();
+      if (
+        displayModel.value.old_price !== "null" &&
+        displayModel.value.old_price !== ""
+      ) {
+        discount.value = Math.round(
+          ((displayModel.value.price - displayModel.value.old_price) /
+            displayModel.value.price) *
+            100
+        ).toFixed(0);
+      }
+  
+      similarModels.value = getRandomSlice(getSimilarModels()[0], 4);
     }
-
-    similarModels.value = getRandomSlice(getSimilarModels()[0], 4);
   }, 300);
 });
 
@@ -186,6 +227,7 @@ const setModelAsCurrent = (model) => {
   carouselImages.value = getGallery();
   bikeDisplayName.value = displayModel.value.bike_name.toUpperCase();
   bikeSlogan.value = displayModel.value.bike_slogan.toUpperCase();
+  window.scrollTo(0, 0)
 };
 
 function getRandomSlice(array, sliceLength) {
@@ -228,7 +270,7 @@ const getDescription = () => {
 
 const getGallery = () => {
   const gallery = [];
-  for (const img of displayModel.value.gallery.split(",")) {
+  for (const img of displayModel.value.gallery) {
     gallery.push(motoboomImageResizer(img));
   }
   return gallery;
@@ -241,7 +283,10 @@ const motoboomImageResizer = (image) => {
   return image;
 };
 const getCategory = () => {
-  if (displayModel.value.category !== undefined) {
+  if (
+    displayModel.value.category !== undefined &&
+    displayModel.value.category !== null
+  ) {
     return displayModel.value.category.toUpperCase();
   }
 };
@@ -249,10 +294,34 @@ const getCategory = () => {
 const calulateInstallments = () => {
   return Math.round(displayModel.value.price / currentInstallment.value);
 };
+const calculateRonInstallments = () => {
+  return Math.round(
+    Math.ceil(displayModel.value.price * appStore.forexValue) /
+      currentInstallment.value
+  );
+};
 
 function setMainImage(image) {
   mainImage.value = image;
 }
+
+const showRabla = computed(() => {
+  if (
+    displayModel.value.rabla !== "null" &&
+    displayModel.value.rabla !== "undefined" &&
+    displayModel.value.rabla !== null &&
+    displayModel.value.rabla !== undefined &&
+    displayModel.value.rabla !== "" &&
+    displayModel.value.rabla !== "NU" &&
+    displayModel.value.rabla !== "nu" &&
+    displayModel.value.rabla !== "Nu" &&
+    displayModel.value.rabla !== "nU" &&
+    displayModel.value.rabla !== false &&
+    displayModel.value.rabla !== "false"
+  ) {
+    return true;
+  }
+});
 </script>
 <style lang="scss">
 .product {
@@ -336,6 +405,10 @@ function setMainImage(image) {
   }
 }
 
+.info-permis {
+  margin-right: 0.5rem;
+}
+
 .installment-container {
   display: flex;
   height: fit-content;
@@ -412,22 +485,26 @@ function setMainImage(image) {
 .product-info-price {
   padding: 1rem;
   display: flex;
-  flex-flow: row wrap;
-  gap: 1rem;
-  align-items: flex-end;
-  justify-content: space-between;
-  b {
-    color: var(--main);
-    font-size: 3rem;
+  flex-flow: column wrap;
+  align-items: flex-start;
+  color: var(--dark);
+  label {
+    font-size: 1.5rem;
   }
   span {
-    color: var(--dark);
+    color: var(--main);
     font-size: 2rem;
     line-height: 60px;
+    margin: 0 0.5rem;
+  }
+  s {
+    font-size: 1.5rem;
   }
 }
 
 .product-info-price-discount {
+  position: absolute;
+  right: 1rem;
   width: 15rem;
   color: var(--light-shade);
   font-size: 1.5rem;
@@ -471,6 +548,11 @@ function setMainImage(image) {
   flex-flow: column nowrap;
   border: 2px solid var(--dark);
   cursor: pointer;
+  transition: background 0.1s ease-in-out;
+}
+
+.similar-model-card:hover{
+  background: var(--main);
 }
 
 .similar-img-container {
@@ -499,24 +581,37 @@ function setMainImage(image) {
   h4 {
     color: var(--light-shade);
     margin: 0;
+    text-align: center;
   }
   h3 {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
   }
   h4 {
     font-size: 1.3rem;
   }
 }
 
-@media screen and (max-width: 412px) {
+@media screen and (max-width: 1366px) {
   .product{
+    width: 95%;
+  }
+}
+
+@media screen and (max-height: 414px) {
+  .product-info-price-discount{
+    position: initial;
+  }
+}
+@media screen and (max-width: 414px) {
+  .product {
     width: 100%;
   }
   .product-top-container {
     flex-flow: column wrap;
     align-items: center;
   }
-  .product-info-left, .product-info-right {
+  .product-info-left,
+  .product-info-right {
     width: 95%;
   }
   .product-info-right {
@@ -525,8 +620,11 @@ function setMainImage(image) {
   .similar-models-container {
     justify-content: center;
   }
-  .similar-model-card{
+  .similar-model-card {
     width: 90%;
+  }
+  .product-info-price-discount{
+    position: initial;
   }
 }
 </style>

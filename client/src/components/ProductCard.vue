@@ -1,18 +1,36 @@
 <template>
   <div class="product-card" @click="selectBike(bike)">
-    <i class="pi pi-heart-fill" @click="favoriteBike(bike)"></i>
-    <div class="call-to-action">Afla mai multe</div>
+    <!-- <i class="pi pi-heart-fill" @click="favoriteBike(bike)"></i> -->
+    <!-- <div class="call-to-action">Afla mai multe</div> -->
     <div class="img-container">
-      <img :src="bike.image" alt="" />
+      <div class="extra-info-container">
+        <span class="license-info" v-if="showLicense">
+          Permis:
+          <span v-for="(license, index) in bike.permis" :key="index">
+            {{ license }}</span
+          >
+        </span>
+        <span class="rabla-info" v-if="showRabla">Eligibila Rabla</span>
+      </div>
+      <img :src="bike.image" loading="lazy" />
     </div>
     <div class="info-container">
-      <div v-if="(bike.old_price !== 'null' && bike.old_price !== '' && bike.old_price !== null)" class="ribbon">-{{Math.round(((props.bike.old_price - props.bike.price) / props.bike.old_price) * 100)}}%</div>
+      <div v-if="showDiscount" class="ribbon">
+        -{{
+          Math.round(
+            ((props.bike.old_price - bikePrice) / props.bike.old_price) * 100
+          )
+        }}%
+      </div>
       <h2>{{ bike.bike_name.toUpperCase() }}</h2>
-      <!-- <p>{{ bike.bike_slogan.split(" ").slice(0, 4).join(" ").replace("este", " ").replace("un", "") }}</p> -->
       <p class="price-container">
-        <b v-if="bike.price !== 'null'">{{ bike.price }} {{ bike.currency }}</b>
+        <b class="bike-price" v-if="bike.price !== null"
+          >{{ bikePrice }} {{ bike.currency }}</b
+        >
         <b v-else>Pret Indisponibil</b>
-        <span v-if="(bike.old_price !== 'null' && bike.old_price !== '' && bike.old_price !== null)"><s>{{ bike.old_price }} {{ bike.currency }}</s></span>
+        <span class="bike-old-price" v-if="bike.old_price !== null"
+          ><s>{{ bike.old_price }} {{ bike.currency }}</s></span
+        >
       </p>
     </div>
   </div>
@@ -25,41 +43,90 @@ const props = defineProps({
     default: () => {},
   },
 });
-import { useToast } from 'primevue/usetoast';
-import { useAppStore } from '@/stores/appStore';
-import router from '../router';
+import { useToast } from "primevue/usetoast";
+import { useAppStore } from "@/stores/appStore";
+import router from "../router";
+import { computed } from "vue";
 
 const appStore = useAppStore();
 const toast = useToast();
 
 const favoriteBike = (bike) => {
-  appStore.favoriteBike(bike);
-  toast.add({severity:'success', summary: 'Vehiculul adaugat la favorite', detail: 'Vehiculul a fost adaugat la favorite', life: 3000});
-}
+  console.log(bike);
+  toast.add({
+    severity: "success",
+    summary: "Vehiculul adaugat la favorite",
+    detail: "Vehiculul a fost adaugat la favorite",
+    life: 3000,
+  });
+};
 
 const selectBike = (bike) => {
-  console.log(bike);
   appStore.setCurrentBike(bike);
-  router.push({ name: 'model'});
-}
+  router.push({ name: "model" });
+};
 
+const bikePrice = computed(() => {
+  if (props.bike.price === null) return "Pret Indisponibil";
+  return props.bike.price;
+});
+
+const showDiscount = computed(() => {
+  return (
+    props.bike.old_price !== "null" &&
+    props.bike.old_price !== "" &&
+    props.bike.old_price !== null
+  );
+});
+
+const showLicense = computed(() => {
+  if (
+    props.bike.permis !== "null" &&
+    props.bike.permis !== "undefined" &&
+    props.bike.permis !== null &&
+    props.bike.permis !== undefined &&
+    props.bike.permis !== "" &&
+    props.bike.permis.length > 0
+  ) {
+    return true;
+  }
+});
+
+const showRabla = computed(() => {
+  if (
+    props.bike.rabla !== "null" &&
+    props.bike.rabla !== "undefined" &&
+    props.bike.rabla !== null &&
+    props.bike.rabla !== undefined &&
+    props.bike.rabla !== "" &&
+    props.bike.rabla !== "NU" &&
+    props.bike.rabla !== "nu" && 
+    props.bike.rabla !== "Nu" &&
+    props.bike.rabla !== "nU" &&
+    props.bike.rabla !== false &&
+    props.bike.rabla !== "false"
+  ) {
+    return true;
+  }
+});
 </script>
 <style lang="scss">
 .product-card {
-  width: 22rem;
-  height: 30rem;
+  width: 17rem;
+  height: 25rem;
   border: 2px solid var(--dark-shade);
   background: var(--dark);
   color: var(--light-shade);
   position: relative;
   overflow: hidden;
   transition: all 0.15s ease-in-out;
-  i{
+  i {
     position: absolute;
     color: var(--main);
-    font-size: 2rem;
+    font-size: 1.6rem;
     top: 0.5rem;
     left: 0.5rem;
+    z-index: 3;
   }
 }
 
@@ -68,7 +135,7 @@ const selectBike = (bike) => {
   background: var(--main);
   cursor: pointer;
   .call-to-action {
-    top: 42%;
+    top: 50%;
     z-index: 1;
   }
 }
@@ -76,7 +143,7 @@ const selectBike = (bike) => {
 .call-to-action {
   width: 100%;
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 0;
   color: var(--main);
   display: flex;
@@ -96,6 +163,7 @@ const selectBike = (bike) => {
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  position: relative;
   padding: 0.5rem;
   img {
     width: 100%;
@@ -105,18 +173,19 @@ const selectBike = (bike) => {
 }
 .info-container {
   width: 100%;
-  height: 14rem;
+  height: 10rem;
   padding: 0 1rem;
   text-align: center;
   display: flex;
   flex-flow: column;
   align-items: center;
   justify-content: center;
-  h2{
+  h2 {
     color: var(--light-shade) !important;
-    font-size: 2rem !important;
+    font-size: 1.2rem !important;
     border-bottom: none !important;
     padding: 0 !important;
+    margin: 0.5rem 0 0 0;
   }
 }
 
@@ -125,24 +194,22 @@ const selectBike = (bike) => {
   // position: absolute;
   bottom: 0;
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   align-items: center;
   justify-content: center;
   flex-flow: column;
   b {
     width: fit-content;
-    font-size: 2.5rem;
-    line-height: 36px;
+    font-size: 1.5rem;
   }
   s {
     width: fit-content;
-    font-size: 1.5rem;
-    line-height: 24px;
+    font-size: 1rem;
   }
 }
 
 .ribbon {
-  width: 15%;
+  width: 20%;
   margin: 0;
   padding: 0;
   background: var(--main);
@@ -172,6 +239,37 @@ const selectBike = (bike) => {
   left: 100%;
 }
 
+.extra-info-container {
+  position: absolute;
+  z-index: 3;
+  bottom: 0rem;
+  left: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  overflow: hidden;
+}
+
+.license-info {
+  width: fit-content;
+  background: var(--success);
+  padding: 0rem 0.5rem;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 0.2rem;
+}
+
+.rabla-info{
+  width: fit-content;
+  background: var(--success);
+  padding: 0rem 0.5rem;
+  border-radius: 0.2rem;
+}
+
+
 @media screen and (max-width: 1024px) {
   .product-card {
     width: 16rem;
@@ -179,7 +277,7 @@ const selectBike = (bike) => {
   }
   .info-container {
     height: 10rem;
-    h2{
+    h2 {
       font-size: 1.2rem !important;
       margin: 0;
     }

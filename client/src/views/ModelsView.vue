@@ -2,58 +2,59 @@
   <div class="models">
     <section class="filter-section">
       <Button
-        class="reset-filters"
+        class="filters-button reset-filters"
         icon="pi pi-filter-slash"
         label="Reseteaza filtrele"
-        @click="resetFilters()"
+        @click="methods.resetFilters()"
       />
-      <div class="price-filter">
-        <div class="price-inputs">
-          <InputText type="text" v-model.number="priceRange"/>
-          <InputText type="text" v-model.number="maxPrice" />
-        </div>
-        <div class="slider-container">
-          <Slider
-          v-model="priceRange"
-          :min="minPrice"
-          :max="maxPrice"
-          />
-        </div>
-        <Button label="Filtreaza" @click="filterByPrice()"/>
-      </div>
-      <Accordion :multiple="true" :activeIndex="[0, 1, 2]">
-        <AccordionTab header="Marca">
+      <Button
+        class="filters-button apply-filters"
+        label="Filtreaza"
+        @click="methods.applyFilters()"
+      />
+      <Accordion :multiple="true" :activeIndex="[0]">
+        <AccordionTab header="An">
           <ul>
             <li
-              v-for="(category, index) in brands()"
+              v-for="(year, index) in yearsFilter"
+              :key="index"
+              :header="year"
+            >
+              <label>
+                <RadioButton v-model="modelYear" :binary="true" :value="year" />
+                <span>{{ year }}</span>
+              </label>
+            </li>
+          </ul>
+        </AccordionTab>
+        <AccordionTab header="Capacitate Cilindrica">
+          <ul class="category-tab">
+            <li
+              v-for="(info, index) in motorFilters"
+              :key="index"
+              :header="info"
+            >
+              <label>
+                <RadioButton
+                  v-model="modelMotor"
+                  :binary="true"
+                  :value="info"
+                />
+                <span>{{ info }}cc</span>
+              </label>
+            </li>
+          </ul>
+        </AccordionTab>
+        <AccordionTab header="Categorie Moto">
+          <ul class="category-tab">
+            <li
+              v-for="(category, index) in categoriesFilter"
               :key="index"
               :header="category"
             >
               <label>
-                <RadioButton v-model="brand" :binary="true" :value="category" />
-                <span _style="{color: `var(--${category}-color)`}">{{
-                  category.toUpperCase()
-                }}</span>
-              </label>
-            </li>
-          </ul>
-        </AccordionTab>
-        <AccordionTab header="Tip">
-          <ul>
-            <li v-for="(type, index) in modelTypes()" :key="index">
-              <label>
-                <RadioButton v-model="modelType" :binary="true" :value="type" />
-                <span>{{ type.toUpperCase() }}</span>
-              </label>
-            </li>
-          </ul>
-        </AccordionTab>
-        <AccordionTab header="Categorie">
-          <ul>
-            <li v-for="(category, index) in bikeCategories" :key="index">
-              <label>
                 <RadioButton
-                  v-model="categories"
+                  v-model="modelCategory"
                   :binary="true"
                   :value="category"
                 />
@@ -62,36 +63,131 @@
             </li>
           </ul>
         </AccordionTab>
+        <AccordionTab header="Categorie Permis">
+          <ul class="license-tab">
+            <li v-for="(license, index) of licenseFilter" :key="index">
+              <label>
+                <RadioButton
+                  v-model="modelLicense"
+                  :binary="true"
+                  :value="license"
+                />
+                <span>{{ license.toUpperCase() }}</span>
+              </label>
+            </li>
+          </ul>
+        </AccordionTab>
+        <AccordionTab header="Producator">
+          <ul class="brand-tab">
+            <li v-for="(brand, index) of brandFilter" :key="index">
+              <label>
+                <RadioButton
+                  v-model="modelBrand"
+                  :binary="true"
+                  :value="brand"
+                />
+                <span>{{ brand.toUpperCase() }}</span>
+              </label>
+            </li>
+          </ul>
+        </AccordionTab>
+        <AccordionTab header="Tip Vehicul">
+          <ul class="type-tab">
+            <li v-for="(type, index) of typeFilter" :key="index">
+              <label>
+                <RadioButton
+                  v-model="modelType"
+                  :binary="true"
+                  :value="type.value"
+                />
+                <span>{{ type.label.toUpperCase() }}</span>
+              </label>
+            </li>
+          </ul>
+        </AccordionTab>
+        <AccordionTab header="Pret">
+          <div class="price-filter">
+            <div class="price-inputs">
+              <InputText
+                class="min-price-input"
+                type="text"
+                v-model.number="priceRange[0]"
+                :placeholder="minPrice"
+                readonly
+              />
+              <InputText
+                class="max-price-input"
+                type="text"
+                v-model.number="priceRange[1]"
+                :placeholder="maxPrice"
+                readonly
+              />
+            </div>
+            <div class="slider-container">
+              <Slider
+                v-model="priceRange"
+                :min="minPrice"
+                :max="maxPrice"
+                range
+                :step="100"
+              />
+            </div>
+          </div>
+        </AccordionTab>
       </Accordion>
     </section>
     <section class="bike-section">
       <div class="bike-section-header">
-        <span class="header-models-type">{{ headerModels }}</span>
         <span class="header-models-count">{{ allModels.length }} MODELE</span>
-        <span>Pagina {{ currentPage + 1 }}/{{ Math.ceil(allModels.length / rowsPerPage) }}</span>        
-        <Dropdown class="price-filter-dropdown" v-model="currentPriceOption" :options="priceFilter" @change="handlePriceFilterChange"/>
+        <span
+          >Pagina {{ currentPage + 1 }}/{{
+            Math.ceil(allModels.length / rowsPerPage)
+          }}</span
+        >
+        <span class="price-filter-dropdown-container">
+          <span class="price-filter-label">Aranjeaza dupa pret:</span>
+          <Dropdown
+            class="price-filter-dropdown"
+            v-model="currentPriceOption"
+            :options="priceFilter"
+            @change="methods.handlePriceFilterChange"
+          />
+        </span>
       </div>
-      <div class="bike-section-display">
+      <div class="bike-section-display" v-if="modelsLoaded">
         <ProductCard
           v-for="(bike, index) in displayedModels"
           :key="index"
           :bike="bike"
         />
       </div>
+      <div class="bike-section-empty" v-else>
+        <Skeleton
+          animation="wave"
+          class="mb-2"
+          width="17rem"
+          height="25rem"
+          v-for="i in 11"
+          :key="i"
+        ></Skeleton>
+      </div>
       <div class="bike-section-footer">
         <Paginator
+          ref="paginatorRef"
           :rows="rowsPerPage"
           :totalRecords="allModels.length"
+          template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink JumpToPageDropdown"
           @page="handlePaginatorChange"
-        ></Paginator>
+        >
+        </Paginator>
       </div>
     </section>
   </div>
 </template>
 <script setup>
-import Dropdown from 'primevue/dropdown';
 import { useAppStore } from "@/stores/appStore";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
+import Dropdown from "primevue/dropdown";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
 import RadioButton from "primevue/radiobutton";
@@ -100,96 +196,266 @@ import Paginator from "primevue/paginator";
 import Button from "primevue/button";
 import Slider from "primevue/slider";
 import InputText from "primevue/inputtext";
+import Skeleton from "primevue/skeleton";
 import router from "../router";
+import { storeToRefs } from "pinia";
 
-const priceFilter = ["Initial", "Pret Crescator", "Pret Decrescator"];
+const priceFilter = ["Initial", "Crescator", "Decrescator"];
 const currentPriceOption = ref("Initial");
 
+const paginatorRef = ref(null);
+const modelsLoaded = ref(false);
 
 const appStore = useAppStore();
-
-const brand = ref([]);
-const modelType = ref([]);
-const categories = ref([]);
-const priceRange = ref(0);
+const allModels = ref([]);
+const displayedModels = ref([]);
+const currentPage = ref(0);
+const rowsPerPage = ref(15);
+const priceRange = ref([0, 100000]);
 const minPrice = ref(0);
 const maxPrice = ref();
 
-const bikeCategories = ref([]);
-const models = ref({});
-const allModels = ref([]);
-const currentPage = ref(0);
-const rowsPerPage = ref(10);
-const displayedModels = ref([]);
-const headerModels = ref("Toate modelele");
+const yearsFilter = ref([]);
+const modelYear = ref([]);
 
-onMounted(() => {
-  setTimeout(() => {
-    models.value = appStore.allBikes;
-    allModels.value = getAllModels();
-    displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
-    priceRange.value = getPriceRange()[0];
-    minPrice.value = getPriceRange()[0];
-    maxPrice.value = getPriceRange()[1];
-    const query = router.currentRoute.value.query;
-    const queryType = Object.keys(query)[0];
-    const queryValue = query[queryType];
-    
-    if(queryType === "modelType"){
-      modelType.value = queryValue;
-    }
-    if(queryType === "brand"){
-      brand.value = queryValue;
-    }
-  }, 300);
-});
+const categoriesFilter = ref([]);
+const modelCategory = ref([]);
 
-const handlePriceFilterChange = () => {
-  if(currentPriceOption.value === "Pret Crescator"){
-    allModels.value = allModels.value.sort((a, b) => a.price - b.price);
-    displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
-  }
-  if(currentPriceOption.value === "Pret Decrescator"){
-    allModels.value = allModels.value.sort((a, b) => b.price - a.price);
-    displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
-  }
-  if(currentPriceOption.value === "Initial"){
-    allModels.value = getAllModels();
-    displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
-  }
-}
+const motorFilters = ref([]);
+const modelMotor = ref([]);
 
-const filterByPrice = () => {
-  let filteredModels = [];
-  for (const bike of allModels.value) {
-    if(bike.price !== "null"){
-      if(parseInt(bike.price) >= priceRange.value){
-        filteredModels.push(bike);
+const licenseFilter = ref([]);
+const modelLicense = ref([]);
+
+const brandFilter = ref([]);
+const modelBrand = ref([]);
+
+const typeFilter = ref([]);
+const modelType = ref([]);
+
+const filters = ref({});
+
+const methods = {
+  getAllModels: function () {
+    const models = [];
+    for (const brandIndex in appStore.allBikes) {
+      const brand = appStore.allBikes[brandIndex];
+      for (const bike of brand) {
+        models.push(bike);
       }
     }
-  }
-  console.log(filteredModels);
-  displayedModels.value = filteredModels;
-};
-
-const getPriceRange = () => {
-  const prices = [];
-  for (const bike of allModels.value) {
-    if (bike.price !== "null") {
-      prices.push(bike.price);
+    return models;
+  },
+  getYears: function () {
+    const years = [];
+    for (const bike of allModels.value) {
+      const value = bike.main_year;
+      if (value !== null) {
+        years.push(value);
+      }
     }
-  }
+    const uniqueYears = [...new Set(years)];
+    const finalYears = [];
+    for (const year of uniqueYears) {
+      finalYears.push(year);
+    }
+    const returnArray = [...new Set(finalYears)].sort((a, b) => b - a);
+    return returnArray;
+  },
+  getCategories: function () {
+    const categories = [];
+    for (const bike of allModels.value) {
+      const value = bike.category;
+      if (
+        value !== null &&
+        value !== undefined &&
+        value !== "" &&
+        value !== "null" &&
+        (typeof value !== "object" || Object.keys(value).length !== 0)
+      ) {
+        categories.push(value);
+      }
+    }
+    const uniqueCategories = [...new Set(categories)];
+    uniqueCategories.sort((a, b) => a.localeCompare(b));
+    return uniqueCategories;
+  },
+  getMotorInfo: function () {
+    const motorCapacities = [];
+    for (const model of allModels.value) {
+      const capacity = model.capacitate;
+      if (capacity !== null) {
+        motorCapacities.push(capacity);
+      }
+    }
 
-  return [Math.min(...prices), Math.max(...prices)];
-};
+    const roundToNearestMultiple = function (values, step) {
+      values.sort((a, b) => a - b);
+      return values.map((value) => Math.round(value / step) * step);
+    };
 
-const resetFilters = () => {
-  headerModels.value = "Toate modelele";
-  allModels.value = getAllModels();
-  displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
-  currentPage.value = 0;
-  brand.value = [];
-  modelType.value = [];
+    const uniqueRoundedMotors = [
+      ...new Set(roundToNearestMultiple([...new Set(motorCapacities)], 5)),
+    ];
+
+    return uniqueRoundedMotors;
+  },
+  getLicenseCategories: function () {
+    const licenseCategories = [];
+    for (const model of allModels.value) {
+      if (model.permis !== null) {
+        licenseCategories.push(model.permis);
+      }
+    }
+    return licenseCategories;
+  },
+  filterModels: function (filters) {
+    const models = this.getAllModels();
+    const filteredModels = models.filter((model) => {
+      const yearMatch =
+        !filters.main_year || filters.main_year === model.main_year;
+      const categoryMatch =
+        !filters.category || filters.category === model.category;
+      const motorMatch =
+        !filters.capacitate ||
+        (parseInt(model.capacitate) >= filters.capacitate - 50 &&
+          parseInt(model.capacitate) <= filters.capacitate);
+
+      const licenseMatch =
+        !filters.permis || model.permis.includes(filters.permis);
+
+      const brandMatch = !filters.brand || filters.brand === model.brand;
+
+      const typeMatch = !filters.type || filters.type === model.vehicle_type;
+
+      const priceMatch =
+        parseInt(model.price) >= priceRange.value[0] &&
+        parseInt(model.price) <= priceRange.value[1];
+
+      return (
+        yearMatch &&
+        categoryMatch &&
+        motorMatch &&
+        licenseMatch &&
+        priceMatch &&
+        brandMatch &&
+        typeMatch
+      );
+    });
+
+    allModels.value = filteredModels;
+
+    const startIndex = currentPage.value * rowsPerPage.value;
+    const endIndex = startIndex + rowsPerPage.value;
+    filteredModels.sort((a, b) => a.price - b.price);
+    displayedModels.value = filteredModels.slice(startIndex, endIndex);
+  },
+  applyFilters: function () {
+    modelsLoaded.value = false;
+    this.filterModels(filters.value);
+    setTimeout(() => {
+      modelsLoaded.value = true;
+    }, 1000);
+  },
+  resetFilters: function () {
+    modelYear.value = [];
+    modelCategory.value = [];
+    modelMotor.value = [];
+    modelLicense.value = [];
+    modelBrand.value = [];
+    modelType.value = [];
+    priceRange.value = methods.getPriceRange();
+    minPrice.value = methods.getPriceRange()[0];
+    maxPrice.value = methods.getPriceRange()[1];
+    modelsLoaded.value = false;
+    setTimeout(() => {
+      filters.value = {};
+      allModels.value = this.getAllModels();
+      displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+    }, 100);
+
+    setTimeout(() => {
+      modelsLoaded.value = true;
+    }, 1000);
+  },
+  handlePriceFilterChange: function () {
+    if (currentPriceOption.value === "Crescator") {
+      allModels.value = allModels.value.sort((a, b) => a.price - b.price);
+      displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+    }
+    if (currentPriceOption.value === "Decrescator") {
+      allModels.value = allModels.value.sort((a, b) => b.price - a.price);
+      displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+    }
+    if (currentPriceOption.value === "Initial") {
+      allModels.value = methods.getAllModels();
+      displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+    }
+  },
+  getPriceRange: function () {
+    const prices = [];
+    for (const bike of allModels.value) {
+      if (bike.price !== null) {
+        prices.push(bike.price);
+      }
+    }
+
+    return [Math.min(...prices), Math.max(...prices)];
+  },
+  getLicenseFilters: function () {
+    const licenseCategories = [];
+    const allLicenses = [];
+    for (const model of allModels.value) {
+      if (model.permis !== null && model.permis !== "null") {
+        licenseCategories.push(model.permis);
+      }
+    }
+
+    for (const licenseArray of licenseCategories) {
+      allLicenses.push(...licenseArray);
+    }
+
+    const uniqueLicenses = [...new Set(allLicenses)];
+    uniqueLicenses.sort((a, b) => a.localeCompare(b));
+
+    return uniqueLicenses;
+  },
+  getBrands: function () {
+    let brands = [];
+    for (const bikeType in appStore.allBikes) {
+      if (!brands.includes(bikeType)) {
+        brands.push(bikeType.split("_")[0]);
+      }
+    }
+    return [...new Set(brands)];
+  },
+  getBikeType: function () {
+    let bikeType = [];
+    for (const bike of allModels.value) {
+      if (!bikeType.includes(bike)) {
+        if (bike.vehicle_type === "bikes") {
+          bikeType.push({ label: "motociclete", value: bike.vehicle_type });
+        }
+
+        if (bike.vehicle_type === "scooters") {
+          bikeType.push({ label: "scutere", value: bike.vehicle_type });
+        }
+
+        if (bike.vehicle_type === "atv") {
+          bikeType.push({ label: "atv", value: bike.vehicle_type });
+        }
+      }
+    }
+
+    const removeDuplicateObjects = function (array, key) {
+      return array.filter(
+        (obj, index, self) =>
+          index === self.findIndex((t) => t[key] === obj[key])
+      );
+    };
+
+    return removeDuplicateObjects(bikeType, "value");
+  },
 };
 
 function handlePaginatorChange(event) {
@@ -197,129 +463,99 @@ function handlePaginatorChange(event) {
   let startIndex = currentPage.value * rowsPerPage.value;
   let endIndex = startIndex + rowsPerPage.value;
   displayedModels.value = allModels.value.slice(startIndex, endIndex);
+  window.scrollTo(0, 0);
 }
 
-const modelTypes = () => {
-  let types = [];
-  for (const bikeType in models.value) {
-    if (!types.includes(bikeType.split("_")[1])) {
-      types.push(bikeType.split("_")[1]);
-    }
+watch(
+  () => modelYear.value,
+  () => {
+    filters.value.main_year = modelYear.value;
   }
-  return [...new Set(types)];
-};
+);
 
-const brands = () => {
-  let brands = [];
-  for (const bikeType in models.value) {
-    if (!brands.includes(bikeType)) {
-      brands.push(bikeType.split("_")[0]);
-    }
+watch(
+  () => modelCategory.value,
+  () => {
+    filters.value.category = modelCategory.value;
   }
-  return [...new Set(brands)];
-};
+);
 
-function getAllModels() {
-  const array = [];
-  for (const modelIndex in models.value) {
-    const bikes = models.value[modelIndex];
-    for (const bikeIndex in bikes) {
-      const bike = bikes[bikeIndex];
-      array.push(bike);
-    }
+watch(
+  () => modelMotor.value,
+  () => {
+    filters.value.capacitate = modelMotor.value;
   }
+);
 
-  return array;
-}
-
-watch(brand, () => {
-  if (brand.value.length !== 0) {
-    let bikeCategory = brand.value;
-    let allCategories = [];
-    for (const bikeType in models.value) {
-      if (
-        bikeCategory.includes(bikeType.split("_")[0]) &&
-        bikeType.split("_")[1] === "bikes"
-      ) {
-        headerModels.value = bikeCategory.toUpperCase();
-        allModels.value = models.value[bikeType];
-        displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
-        modelType.value = [];
-        for (const bike of models.value[bikeType]) {
-          allCategories.push(bike.category);
-        }
-      }
-    }
-
-    modelType.value = "bikes";
-    bikeCategories.value = [...new Set(allCategories)];
+watch(
+  () => modelLicense.value,
+  () => {
+    filters.value.permis = modelLicense.value;
   }
-});
+);
 
-watch(modelType, () => {
-  if (modelType.value.length !== 0) {
-    let bikeType = modelType.value;
-    let allTypes = [];
-    let allCategories = [];
-    for (const bikeIndex in models.value) {
-      let bikeIndexArray = bikeIndex.split("_");
-      if (brand.value.length === 0) {
-        if (bikeIndexArray[1] === bikeType) {
-          for (const bike of models.value[bikeIndex]) {
-            allTypes.push(bike);
-          }
-          for (const bike of models.value[bikeIndex]) {
-            allCategories.push(bike.category);
-          }
-        }
+watch(
+  () => modelBrand.value,
+  () => {
+    filters.value.brand = modelBrand.value;
+  }
+);
 
-        headerModels.value = bikeType.toUpperCase();
-        bikeCategories.value = [...new Set(allCategories)];
-      } else {
-        if (
-          bikeIndexArray[1] === bikeType &&
-          bikeIndexArray[0] === brand.value
-        ) {
-          for (const bike of models.value[bikeIndex]) {
-            allTypes.push(bike);
-          }
-          for (const bike of models.value[bikeIndex]) {
-            allCategories.push(bike.category);
-          }
-        }
-        headerModels.value = `${brand.value.toUpperCase()} ${bikeType.toUpperCase()}`;
-        bikeCategories.value = [...new Set(allCategories)];
-      }
-    }
-    allModels.value = allTypes;
+watch(
+  () => modelType.value,
+  () => {
+    filters.value.type = modelType.value;
+  }
+);
+
+onMounted(() => {
+  if (appStore.allBikes) {
+    allModels.value = methods.getAllModels();
     displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+    yearsFilter.value = methods.getYears();
+    categoriesFilter.value = methods.getCategories();
+    motorFilters.value = methods.getMotorInfo();
+    priceRange.value = methods.getPriceRange();
+    minPrice.value = methods.getPriceRange()[0];
+    maxPrice.value = methods.getPriceRange()[1];
+    licenseFilter.value = methods.getLicenseFilters();
+    brandFilter.value = methods.getBrands();
+    typeFilter.value = methods.getBikeType();
+
+    setTimeout(() => {
+      modelsLoaded.value = true;
+    }, 1000);
   }
 });
 
-watch(categories, () => {
-  let currentCategory = [];
-  for (const bike of allModels.value) {
-    if (bike.category === categories.value) {
-      currentCategory.push(bike);
-    }
-  }
+const modelFilters = storeToRefs(appStore).modelsFilters
 
-  displayedModels.value = currentCategory;
+watch(modelFilters, () => {
+  const filters = modelFilters.value[0];
+  modelBrand.value = filters.brand
+  if(filters.type !== undefined){
+    modelType.value = filters.type
+  }
+  setTimeout(() => {
+    methods.applyFilters()
+  }, 300);
 });
 </script>
 <style lang="scss">
 .models {
   padding-top: 70px;
+  padding-bottom: 70px;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
 }
 
 .filter-section {
-  width: 15%;
+  width: 13%;
   height: fit-content;
   border: 1px solid #b3b3b3;
   position: relative;
+  margin-left: 2rem;
   justify-self: flex-start;
   .p-accordion-header {
     width: 100%;
@@ -342,6 +578,7 @@ watch(categories, () => {
         align-items: center;
         gap: 0.5rem;
         color: var(--dark-shade);
+        font-size: 0.9rem;
         .p-radiobutton .p-radiobutton-box.p-highlight {
           border-color: var(--dark-accent);
           background: var(--dark-accent);
@@ -358,18 +595,23 @@ watch(categories, () => {
   }
 }
 
+.category-tab {
+  height: 40vh;
+  overflow: auto;
+}
+
 .price-filter {
   padding: 1rem;
   display: flex;
   flex-flow: column wrap;
   gap: 1rem;
   .p-inputtext {
-    width: 30%;
+    width: 50%;
   }
-  .slider-container{
+  .slider-container {
     width: 100%;
   }
-  .price-inputs{
+  .price-inputs {
     display: flex;
     gap: 1rem;
     justify-content: space-between;
@@ -377,10 +619,16 @@ watch(categories, () => {
 }
 
 .reset-filters {
-  width: 90%;
-  margin-left: 5%;
-  margin-top: 2%;
+  width: 100%;
+  border-radius: 0;
   background: var(--light-accent);
+  border: none;
+}
+
+.apply-filters {
+  width: 100%;
+  border-radius: 0;
+  background: var(--warning);
   border: none;
 }
 
@@ -401,7 +649,29 @@ watch(categories, () => {
   z-index: 3;
   position: relative;
   span {
-    font-size: 1.3rem;
+    font-size: 1rem;
+  }
+}
+
+.price-filter-dropdown-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  position: absolute;
+  align-items: center;
+  right: 2rem;
+  .price-filter-label {
+    font-size: 1.2rem;
+  }
+  .price-filter-dropdown {
+    width: 13rem;
+    right: 2rem;
+    top: 0.1rem;
+    background: transparent;
+    border: none;
+    span {
+      font-size: 1rem;
+    }
   }
 }
 
@@ -423,22 +693,30 @@ watch(categories, () => {
 
 .bike-section-display {
   margin-top: 1rem;
+  height: 95%vh;
   display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
   flex-flow: row wrap;
   gap: 2rem;
 }
 
-.price-filter-dropdown {
-  position: absolute;
-  width: 13rem;
-  right: 2rem;
-  background: transparent;
-  border: none;
-  span{
-    font-size: 1rem;
-  }
+.bike-section-empty {
+  margin-top: 1rem;
+  height: 100vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-flow: row wrap;
+  gap: 2rem;
 }
 
+@media screen and (max-width: 1366px) {
+  .filter-section {
+    width: 20%;
+    margin-right: 2rem;
+  }
+}
 @media screen and (max-width: 1024px) {
   .models {
     gap: 0.5rem;
@@ -446,11 +724,11 @@ watch(categories, () => {
   .filter-section {
     width: 20%;
   }
-  .price-filter{
-    .p-inputtext{
+  .price-filter {
+    .p-inputtext {
       width: 100%;
     }
-    .price-inputs{
+    .price-inputs {
       flex-flow: column wrap;
     }
   }
@@ -459,12 +737,12 @@ watch(categories, () => {
   }
 }
 
-@media screen and (max-width: 412px) {
+@media screen and (max-width: 414px) {
   .models {
     flex-flow: column wrap;
   }
   .filter-section {
-    width: 100%;
+    width: 80%;
   }
   .bike-section {
     width: 100%;
@@ -473,16 +751,18 @@ watch(categories, () => {
     justify-content: center;
   }
   .bike-section-header {
-    .header-models-count, .header-models-type {
+    .price-filter-label,
+    .header-models-count,
+    .header-models-type {
       display: none;
     }
-    span{
+    span {
       font-size: 1rem;
     }
   }
-  .bike-section-footer nav{
+  .bike-section-footer nav {
     width: 100%;
-    .p-paginator{
+    .p-paginator {
       padding: 0;
     }
   }

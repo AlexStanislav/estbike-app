@@ -11,9 +11,11 @@
     <footer>
       <div class="footer-container">
         <div class="footer-wrapper">
-          <img src="@/assets/img/logoest.jpg" alt="">
+          <img src="@/assets/img/logoest.jpg" alt="" />
           <p>
-            EST BIKE reprezinta pasiunea imensa pentru motociclete si ATV-uri concretizata intr-un magazin de motociclete si ATV, echipamente si accesorii. Proiectul a fost inceput in primavara...
+            EST BIKE reprezinta pasiunea imensa pentru motociclete si ATV-uri
+            concretizata intr-un magazin de motociclete si ATV, echipamente si
+            accesorii. Proiectul a fost inceput in primavara...
           </p>
           <span @click="router.push('/despre')">Cititi mai mult</span>
         </div>
@@ -21,20 +23,23 @@
       <div class="footer-container">
         <h3>Stock-ul Nostru</h3>
         <div class="footer-link-list">
-          <ul>
+          <ul class="footer-brands">
             <li
-              v-for="brand in appStore.homeBrands"
-              :key="brand"
-              @click="goToBrand(brand)"
+              v-for="(brand, index) in appStore.homeBrands"
+              :key="index"
+              @click="goToBrand(index)"
             >
-              <i class="pi pi-angle-double-right"></i
-              >{{ brand.split("")[0].toUpperCase() + brand.slice(1) }}
+              <i class="pi pi-angle-double-right"></i>{{ index.toUpperCase() }}
             </li>
           </ul>
           <ul>
-            <li v-for="modelType in appStore.homeModelTypes" :key="modelType" @click="goToModel(modelType)">
+            <li
+              v-for="modelType in appStore.homeModelTypes"
+              :key="modelType"
+              @click="goToModel(modelType)"
+            >
               <i class="pi pi-angle-double-right"></i
-              >{{ modelType.split("")[0].toUpperCase() + modelType.slice(1) }}
+              >{{ modelType.toUpperCase() }}
             </li>
           </ul>
         </div>
@@ -46,18 +51,32 @@
             <li><i class="pi pi-angle-double-right"></i>Despre noi</li>
             <li><i class="pi pi-angle-double-right"></i>Rabla</li>
             <li><i class="pi pi-angle-double-right"></i>Termeni si conditii</li>
-            <li><i class="pi pi-angle-double-right"></i>Politica de cookie-uri</li>
+            <li>
+              <i class="pi pi-angle-double-right"></i>Politica de cookie-uri
+            </li>
             <li><i class="pi pi-angle-double-right"></i>Contact</li>
           </ul>
-          <br>
+          <br />
           <ul class="footer-schedule">
             <li><i class="pi pi-clock"></i>Program</li>
-            <li><div>Luni:</div> 10:00 - 15:00</li>
-            <li><div>Marti-Vineri:</div> 09:00 - 18:00</li>
-            <li><div>Sambata:</div> 10:00 - 17:00</li>
-            <li><div>Duminica:</div> Inchis</li>
+            <li>
+              <div>Luni:</div>
+              10:00 - 15:00
+            </li>
+            <li>
+              <div>Marti-Vineri:</div>
+              09:00 - 18:00
+            </li>
+            <li>
+              <div>Sambata:</div>
+              10:00 - 17:00
+            </li>
+            <li>
+              <div>Duminica:</div>
+              Inchis
+            </li>
           </ul>
-          <br>
+          <br />
           <ul>
             <li><i class="pi pi-mobile"></i>0712345678</li>
             <li><i class="pi pi-map-marker"></i>Str. Șelimbăr nr 10, Brebu</li>
@@ -83,14 +102,19 @@ import router from "./router";
 const appStore = useAppStore();
 const showMobileNav = ref(false);
 
+async function firstAppLoad(){
+  if(appStore.bikesLoaded === false){
+    await appStore.getAllBikes();
+  }
+
+  appStore.toggleFirstLoadComplete();
+  appStore.setHomeBrands()
+}
+
+
 onMounted(async () => {
-  await appStore.getAllBikes();
-  setTimeout(() => {
-    appStore.togglePreloader();
-    appStore.toggleFirstLoadComplete();
-    appStore.setHomeBrands();
-    appStore.setHomeModelTypes();
-  }, 1000);
+
+  await appStore.togglePageLoad(firstAppLoad)
 
   if (appStore.isMobile() || window.innerWidth <= 1024) {
     showMobileNav.value = true;
@@ -106,13 +130,14 @@ onMounted(async () => {
 });
 
 const goToBrand = (query) => {
-  router.push({ path: "/modele", query: { brand: query } });
-};
+  appStore.setModelsFilters({brand: query})
+  router.push({ path: "/modele" });
+  window.scrollTo(0, 0);
+}
 
-const goToModel = (query) => {
-  router.push({ path: "/modele", query: { modelType: query } });
-};
-
+// const goToModel = (query) => {
+//   router.push({ path: "/modele", query: { modelType: query } });
+// };
 </script>
 <style lang="scss">
 .sticky {
@@ -176,29 +201,29 @@ footer {
   }
 }
 
-.footer-wrapper{
+.footer-wrapper {
   width: 50%;
 }
 
-.footer-container{
+.footer-container {
   width: 30%;
   font-size: 1.2rem;
   display: flex;
   flex-flow: column wrap;
   align-items: center;
-  span{
+  span {
     border-bottom: 1px solid white;
     cursor: pointer;
   }
-  p{
+  p {
     font-size: 0.8rem;
     text-align: justify;
     text-justify: distribute;
   }
-  h3{
+  h3 {
     font-size: 1.5rem;
     margin: 0 0 1rem 0;
-    font-family: 'Oswald', sans-serif;
+    font-family: "Oswald", sans-serif;
     font-weight: 400;
   }
 }
@@ -209,29 +234,42 @@ footer {
     margin: 0;
     padding: 0;
   }
-  li{
-    font-family: 'Oswald', sans-serif;
+  li {
+    font-family: "Oswald", sans-serif;
     font-weight: 300;
-    i{
+    i {
       margin-right: 0.5rem;
     }
   }
 }
 
-.footer-schedule{
-  div{
+.footer-brands {
+  display: flex;
+  flex-flow: column wrap;
+  height: 80%;
+  cursor: pointer;
+  li{
+    margin-right: 2rem;
+  }
+}
+
+.footer-schedule {
+  div {
     display: inline-block;
     width: 6rem;
   }
 }
 
-@media screen and (max-width: 412px) {
-  body{
+@media screen and (max-width: 414px) {
+  body {
     overflow-x: hidden;
   }
-  .footer-container{
+  .footer-container {
     width: 95%;
     margin-bottom: 5rem;
+  }
+  .footer-brands{
+    margin-left: -5rem !important;
   }
 }
 </style>

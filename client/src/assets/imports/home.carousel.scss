@@ -109,7 +109,10 @@
     }
 }
 
-@media screen and (max-width: 412px) {
+@media screen and (max-width: 414px) {
+    .home-carousel-img{
+        pointer-events: none;
+    }
     .carousel-text-container {
         h1 {
             width: 80%;

@@ -12,42 +12,66 @@
       <span class="p-input-icon-left">
         <i class="pi pi-search" />
         <AutoComplete
-        v-model="searchValue"
-        :suggestions="suggestions"
-        @complete="search"
-        optionLabel="bike_name"
-        placeholder="Cauta..."
-      >
-        <template #option="slotProps">
-          <div class="autocomplete-result" @click="selectBike(slotProps.option)">
-            {{ slotProps.option.bike_name.toUpperCase() }}
-          </div>
-        </template>
-      </AutoComplete>
+          v-model="searchValue"
+          :suggestions="suggestions"
+          @complete="search"
+          optionLabel="bike_name"
+          placeholder="Cauta..."
+        >
+          <template #option="slotProps">
+            <div
+              class="autocomplete-result"
+              @click="selectBike(slotProps.option)"
+            >
+              {{ slotProps.option.bike_name.toUpperCase() }}
+            </div>
+          </template>
+        </AutoComplete>
       </span>
-      <ul>
-        <li><router-link to="/">Acasă</router-link></li>
-        <li><router-link to="/despre">Despre Noi</router-link></li>
-        <li><router-link to="/modele">Modele</router-link></li>
-        <li><router-link to="/rabla">Rabla</router-link></li>
-        <li><router-link to="/service">Service</router-link></li>
-        <li><router-link to="/contact">Contact</router-link></li>
+      <ul class="brands-link">
+        <h2>Vehicule</h2>
+        <li v-for="(brand, brandName) in appStore.homeBrands" :key="brandName">
+          <span class="brand-sublinks" v-if="hasSublinks(brand)">
+            <Accordion :multiple="true">
+              <AccordionTab :header="brandName.toUpperCase()">
+                <ul>
+                  <li v-for="(sublink, index) in brand" :key="index" @click="goToModels(brandName, sublink)">
+                    {{
+                      sublink
+                        .replace("bikes", "Motociclete")
+                        .replace("scooters", "Scutere")
+                        .replace("atv", "ATV")
+                    }}
+                  </li>
+                </ul>
+              </AccordionTab>
+            </Accordion>
+          </span>
+          <span v-else @click="goToModel(brandName)">{{ brandName.toUpperCase() }}</span>
+        </li>
+        <h2>Meniu</h2>
+        <li @click="appStore.sidebarOpen = false"><router-link to="/">Acasă</router-link></li>
+        <li @click="appStore.sidebarOpen = false"><router-link to="/despre">Despre Noi</router-link></li>
+        <li @click="appStore.sidebarOpen = false"><router-link to="/modele">Modele</router-link></li>
+        <li @click="appStore.sidebarOpen = false"><router-link to="/rabla">Rabla</router-link></li>
+        <li @click="appStore.sidebarOpen = false"><router-link to="/service">Service</router-link></li>
+        <li @click="appStore.sidebarOpen = false"><router-link to="/contact">Contact</router-link></li>
       </ul>
     </Sidebar>
   </div>
 </template>
 <script setup>
 import AutoComplete from "primevue/autocomplete";
+import Accordion from "primevue/accordion";
+import AccordionTab from "primevue/accordiontab";
 import Sidebar from "primevue/sidebar";
 import { useAppStore } from "@/stores/appStore";
-import { ref } from "vue";
+import { ref, watch, watchEffect } from "vue";
 import router from "../router";
 const appStore = useAppStore();
 const toggleSidebar = () => {
   appStore.toggleSidebar();
-  console.log(appStore.sidebarOpen);
 };
-
 
 const searchValue = ref("");
 const suggestions = ref([]);
@@ -55,9 +79,8 @@ const suggestions = ref([]);
 const search = (event) => {
   const models = getAllModels();
   suggestions.value = models.filter((model) => {
-    return model.bike_name.toLowerCase().startsWith(event.query.toLowerCase());
+    return model.bike_name.toLowerCase().includes(event.query.toLowerCase());
   });
-  
 };
 
 function getAllModels() {
@@ -74,18 +97,47 @@ function getAllModels() {
   return array;
 }
 
+const goToModels = (brand, sublink) => {
+  appStore.setModelsFilters({brand, type: sublink})
+  router.push({ path: "/modele" });
+  appStore.sidebarOpen = false
+};
+
+const goToModel = (query) => {
+  appStore.setModelsFilters({brand: query})
+  router.push({ path: "/modele" });
+  appStore.sidebarOpen = false
+};
+
+watch(
+  () => appStore.sidebarOpen,
+  () => {
+    const body = document.querySelector("body");
+    if (!appStore.sidebarOpen) {
+      searchValue.value = "";
+      body.style.overflow = "initial";
+    } else {
+      body.style.overflow = "hidden";
+    }
+  }
+);
+
 const selectBike = (bike) => {
-  if(router.currentRoute.value.path === '/model'){
+  if (router.currentRoute.value.path === "/model") {
     router.go(-1);
     setTimeout(() => {
-      router.go(1)
-    })
+      router.go(1);
+    });
   }
   searchValue.value = "";
   appStore.setCurrentBike(bike);
-  router.push({ path: '/model' })
-}
+  router.push({ path: "/model" });
+};
 
+const hasSublinks = (brand) => {
+  if (brand.length > 1) return true;
+  else return false;
+};
 </script>
 <style lang="scss">
 .mobile-nav {
@@ -97,7 +149,7 @@ const selectBike = (bike) => {
   justify-content: center;
   position: fixed;
   top: 0;
-  z-index: 3;
+  z-index: 15;
   img {
     width: 132px;
     height: 50px;
@@ -145,10 +197,13 @@ const selectBike = (bike) => {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    align-items: center;
     margin-top: 2rem;
+    h2 {
+      border-bottom: 1px solid var(--light-shade);
+      padding-bottom: 0.25rem;
+    }
     li {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       a {
         text-decoration: none;
         color: var(--light-shade);
@@ -167,14 +222,40 @@ const selectBike = (bike) => {
   color: var(--main);
 }
 
-@media screen and (max-width: 412px) {
+.brand-sublinks {
+  .p-accordion-toggle-icon {
+    position: absolute;
+    right: 0;
+  }
+  .p-accordion .p-accordion-header .p-accordion-header-link,
+  .p-accordion
+    .p-accordion-header:not(.p-disabled).p-highlight
+    .p-accordion-header-link {
+    background: var(--dark-shade);
+    padding: 0;
+    border: none;
+  }
+  .p-accordion .p-accordion-content {
+    background: var(--dark-shade);
+    padding: 0 0 0 1rem;
+    border: none;
+    color: var(--light-shade);
+  }
+  .p-accordion-header-text {
+    font-size: 1.2rem;
+    font-weight: 400;
+    font-family: "Oswald", sans-serif;
+  }
+}
+
+@media screen and (max-width: 414px) {
   .mobile-nav {
     width: 100vw;
     .menu-icon {
       font-size: 1.5rem;
     }
     img {
-      width: 100px;
+      width: 90px;
       height: 35px;
     }
     #phone-number-container {
@@ -184,11 +265,10 @@ const selectBike = (bike) => {
       #phone-number {
         font-size: 0.8rem;
       }
-      i{
+      i {
         font-size: 1rem;
       }
     }
   }
-  
 }
 </style>

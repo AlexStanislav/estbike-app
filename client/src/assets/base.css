@@ -28,6 +28,10 @@ body{
   font-family: 'Oswald', sans-serif;
 }
 
+.sidebar-open{
+  overflow: hidden !important;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
