@@ -4,8 +4,6 @@ const app = express();
 const cors = require('cors');
 const port = process.env.PORT || 3000;
 const connection = require('./api/connection');
-const forexScrape = require('./api/scrapeForex');
-const forexData = require('./data/forexData')
 const Recaptcha = require('google-recaptcha');
 const secretKey = process.env.RECAPTCHA_SECRET
 const recaptcha = new Recaptcha({ secret: secretKey });
@@ -97,9 +95,7 @@ app.get('/api/bikes', async (req, res) => {
             }
         }
 
-        await forexScrape()
-
-        const currency_data = forexData.value
+        const currency_data = 5.04
 
         res.json({ bikes: bikes, forex: currency_data })
     } catch (error) {
