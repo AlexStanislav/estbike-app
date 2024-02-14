@@ -1,8 +1,8 @@
 <template>
   <div class="desktop-nav">
     <img
-      src="../assets/img/logoest.jpg"
-      alt="ESTBike Logo"
+      src="../assets/img/logo.svg"
+      alt="motobrebu Logo"
       @click="goTo('/')"
     />
     <nav class="main-nav">
@@ -102,8 +102,7 @@ const selectBike = (bike) => {
   position: fixed;
   z-index: 10;
   img {
-    width: 132px;
-    height: 50px;
+    width: 198px;
     margin-right: 1rem;
     cursor: pointer;
   }
@@ -216,13 +215,13 @@ const selectBike = (bike) => {
   background: var(--dark-shade);
   align-items: center;
   i {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: var(--light-shade);
   }
 }
 
 #phone-number {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin: 0.5rem 0.5rem;
   a {
     text-decoration: none;

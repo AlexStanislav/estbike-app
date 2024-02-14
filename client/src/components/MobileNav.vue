@@ -1,7 +1,7 @@
 <template>
   <div class="mobile-nav">
     <i class="pi pi-bars menu-icon" @click="toggleSidebar()"></i>
-    <img src="../assets/img/logoest.jpg" alt="Logo EstBike" />
+    <img src="../assets/img/logo.svg" alt="Logo motobrebu" />
     <div id="phone-number-container">
       <i class="pi pi-phone" />
       <div id="phone-number">
@@ -151,7 +151,7 @@ const hasSublinks = (brand) => {
   top: 0;
   z-index: 15;
   img {
-    width: 132px;
+    width: 200px;
     height: 50px;
   }
   .menu-icon {
@@ -255,7 +255,7 @@ const hasSublinks = (brand) => {
       font-size: 1.5rem;
     }
     img {
-      width: 90px;
+      width: 140px;
       height: 35px;
     }
     #phone-number-container {

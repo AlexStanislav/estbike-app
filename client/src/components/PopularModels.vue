@@ -73,18 +73,13 @@ const getPopularModels = (allBikes) => {
   for (const brandIndex in allBikes) {
     const bikes = [];
     const brand = allBikes[brandIndex];
-    if (
-      brandIndex.includes("suzuki_bikes") ||
-      brandIndex.includes("yamaha_bikes") ||
-      brandIndex.includes("kawasaki_bikes")
-    ) {
-      for (const bike of brand) {
-        if (bike.is_popular === true) {
-          bikes.push(bike);
-          finalPopular[brandIndex] = bikes;
-        }
+
+    brand.filter((bike) => {
+      if (bike.is_popular === true) {
+        bikes.push(bike);
+        finalPopular[brandIndex] = bikes;
       }
-    }
+    });
   }
   return finalPopular;
 };

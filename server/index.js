@@ -10,18 +10,20 @@ const Recaptcha = require('google-recaptcha');
 const secretKey = process.env.RECAPTCHA_SECRET
 const recaptcha = new Recaptcha({ secret: secretKey });
 const { v4: uuidv4 } = require('uuid');
+const path = require('path')
 connection();
 
 app.use(express.json())
 app.use(cors())
 
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/bikes', async (req, res) => {
     try {
         const tables = await process.postgresql.query(`SELECT tablename FROM pg_tables WHERE schemaname = 'public'`);
         const bikes = {}
         for (const table of tables) {
-            if(table.tablename !== 'service_requests'){
+            if(table.tablename.includes('_bikes') || table.tablename.includes('_scooters') || table.tablename.includes('_atv')) {
                 const query = `SELECT * FROM ${table.tablename}`;
                 const result = await process.postgresql.query(query);
                 bikes[table.tablename] = result

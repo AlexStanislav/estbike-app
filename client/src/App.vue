@@ -11,9 +11,9 @@
     <footer>
       <div class="footer-container">
         <div class="footer-wrapper">
-          <img src="@/assets/img/logoest.jpg" alt="" />
+          <img src="@/assets/img/logo.svg" alt="" />
           <p>
-            EST BIKE reprezinta pasiunea imensa pentru motociclete si ATV-uri
+            Moto Brebu reprezinta pasiunea imensa pentru motociclete si ATV-uri
             concretizata intr-un magazin de motociclete si ATV, echipamente si
             accesorii. Proiectul a fost inceput in primavara...
           </p>
@@ -80,11 +80,11 @@
           <ul>
             <li><i class="pi pi-mobile"></i>0712345678</li>
             <li><i class="pi pi-map-marker"></i>Str. Șelimbăr nr 10, Brebu</li>
-            <li><i class="pi pi-envelope"></i>estbike@example.com</li>
+            <li><i class="pi pi-envelope"></i>motobrebu@example.com</li>
           </ul>
         </div>
       </div>
-      <p class="copyright">Copyright © 2024 EstBike. All rights reserved.</p>
+      <p class="copyright">Copyright © 2024 motobrebu. All rights reserved.</p>
     </footer>
     <Loader :isVisible="appStore.showPreloader" />
     <Toast />
@@ -131,8 +131,10 @@ onMounted(async () => {
 
 const goToBrand = (query) => {
   appStore.setModelsFilters({brand: query})
-  router.push({ path: "/modele" });
-  window.scrollTo(0, 0);
+  setTimeout(() => {
+    router.push({ path: "/modele" });
+    window.scrollTo(0, 0);
+  }, 100)
 }
 
 // const goToModel = (query) => {

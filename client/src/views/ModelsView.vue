@@ -171,6 +171,9 @@
           :key="i"
         ></Skeleton>
       </div>
+      <div class="bike-section-no-match" v-if="displayedModels.length === 0">
+        <span>Nu au fost gasite modele corespunzatoare filtrelor</span>
+      </div>
       <div class="bike-section-footer">
         <Paginator
           ref="paginatorRef"
@@ -234,6 +237,7 @@ const typeFilter = ref([]);
 const modelType = ref([]);
 
 const filters = ref({});
+const modelFilters = storeToRefs(appStore).modelsFilters;
 
 const methods = {
   getAllModels: function () {
@@ -328,19 +332,33 @@ const methods = {
 
       const typeMatch = !filters.type || filters.type === model.vehicle_type;
 
-      const priceMatch =
-        parseInt(model.price) >= priceRange.value[0] &&
-        parseInt(model.price) <= priceRange.value[1];
+      let priceMatch;
+      
+      if(model.price !== null){
+        priceMatch =
+          parseInt(model.price) >= priceRange.value[0] &&
+          parseInt(model.price) <= priceRange.value[1];
 
-      return (
-        yearMatch &&
-        categoryMatch &&
-        motorMatch &&
-        licenseMatch &&
-        priceMatch &&
-        brandMatch &&
-        typeMatch
-      );
+          return (
+            yearMatch &&
+            categoryMatch &&
+            motorMatch &&
+            licenseMatch &&
+            priceMatch &&
+            brandMatch &&
+            typeMatch
+          );
+      }else{
+        return (
+          yearMatch &&
+          categoryMatch &&
+          motorMatch &&
+          licenseMatch &&
+          brandMatch &&
+          typeMatch
+        )
+      }
+
     });
 
     allModels.value = filteredModels;
@@ -364,15 +382,16 @@ const methods = {
     modelLicense.value = [];
     modelBrand.value = [];
     modelType.value = [];
-    priceRange.value = methods.getPriceRange();
-    minPrice.value = methods.getPriceRange()[0];
-    maxPrice.value = methods.getPriceRange()[1];
     modelsLoaded.value = false;
     setTimeout(() => {
       filters.value = {};
       allModels.value = this.getAllModels();
       displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
-    }, 100);
+      priceRange.value = methods.getPriceRange();
+      minPrice.value = methods.getPriceRange()[0];
+      maxPrice.value = methods.getPriceRange()[1];
+      appStore.clearModelsFilters();
+    }, 50);
 
     setTimeout(() => {
       modelsLoaded.value = true;
@@ -508,6 +527,13 @@ watch(
   }
 );
 
+watch(modelFilters, () => {
+  console.log(modelFilters.value);
+  if (modelFilters.value.length > 0) {
+    filterByQuery();
+  }
+});
+
 onMounted(() => {
   if (appStore.allBikes) {
     allModels.value = methods.getAllModels();
@@ -525,21 +551,23 @@ onMounted(() => {
     setTimeout(() => {
       modelsLoaded.value = true;
     }, 1000);
+
+    if (modelFilters.value.length > 0) {
+      filterByQuery();
+    }
   }
 });
 
-const modelFilters = storeToRefs(appStore).modelsFilters
-
-watch(modelFilters, () => {
+const filterByQuery = () => {
   const filters = modelFilters.value[0];
-  modelBrand.value = filters.brand
-  if(filters.type !== undefined){
-    modelType.value = filters.type
+  modelBrand.value = filters.brand;
+  if (filters.type !== undefined) {
+    modelType.value = filters.type;
   }
   setTimeout(() => {
-    methods.applyFilters()
+    methods.applyFilters();
   }, 300);
-});
+};
 </script>
 <style lang="scss">
 .models {
@@ -709,6 +737,16 @@ watch(modelFilters, () => {
   align-items: flex-start;
   flex-flow: row wrap;
   gap: 2rem;
+}
+
+.bike-section-no-match {
+  span {
+    display: block;
+    width: 100%;
+    font-size: 1.5rem;
+    font-family: "Oswald";
+    text-align: center;
+  }
 }
 
 @media screen and (max-width: 1366px) {

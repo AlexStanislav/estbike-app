@@ -26,7 +26,7 @@
               <i class="pi pi-envelope"></i>
             </div>
             <div class="info-content">
-              <a href="mailto:office@estbike.ro">office@estbike.ro</a>
+              <a href="mailto:office@motobrebu.ro">office@motobrebu.ro</a>
             </div>
           </div>
           <div class="info-row">
@@ -34,7 +34,7 @@
               <i class="pi pi-envelope"></i>
             </div>
             <div class="info-content">
-              <a href="mailto:campina@estbike.ro">campina@estbike.ro</a>
+              <a href="mailto:campina@motobrebu.ro">campina@motobrebu.ro</a>
             </div>
           </div>
           <div class="info-row">
@@ -61,13 +61,13 @@
             <div class="contact-card facebook-card">
               <i class="pi pi-facebook main-icon"></i>
               <h2>FACEBOOK</h2>
-              <h3>EST Bike Adventure</h3>
+              <h3>Moto Brebu</h3>
               <div class="follow-button">FOLLOW</div>
             </div>
             <div class="contact-card instagram-card">
               <i class="pi pi-instagram main-icon"></i>
               <h2>INSTAGRAM</h2>
-              <h3>@estbike</h3>
+              <h3>@motobrebu</h3>
               <div class="follow-button">FOLLOW</div>
             </div>
           </div>

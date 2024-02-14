@@ -33,13 +33,13 @@
         <div class="contact-card facebook-card">
           <i class="pi pi-facebook main-icon"></i>
           <h2>FACEBOOK</h2>
-          <h3>EST Bike Adventure</h3>
+          <h3>Moto Brebu</h3>
           <div class="follow-button">FOLLOW</div>
         </div>
         <div class="contact-card instagram-card">
           <i class="pi pi-instagram main-icon"></i>
           <h2>INSTAGRAM</h2>
-          <h3>@estbike</h3>
+          <h3>@motobrebu</h3>
           <div class="follow-button">FOLLOW</div>
         </div>
         <div class="contact-card call-card">
@@ -49,7 +49,7 @@
           </span>
           <span>
             <i class="pi pi-envelope"></i>
-            <div>estbike@example.com</div>
+            <div>motobrebu@example.com</div>
           </span>
           <span>
             <i class="pi pi-map-marker"></i>

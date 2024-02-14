@@ -26,6 +26,9 @@ export const useAppStore = defineStore('appStore', {
       this.modelsFilters = []
       this.modelsFilters.push(data)
     },
+    clearModelsFilters(){
+      this.modelsFilters = []
+    },
     getBikes() {
       return new Promise((resolve, reject) => {
         resolve(this.allBikes)

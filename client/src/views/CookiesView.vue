@@ -12,13 +12,13 @@
       <article id="cookies-intro">
         <h1>GDPR</h1>
         <p>
-            Est Bike Adventure SRL înțelege importanța protejării datelor dumneavoastra cu caracter personal. În acest context, dorim să ne asigurăm de totala transparență a modului în care utilizăm datele dumneavoastră. Vă rugăm să parcurgeți cu atenție informațiile de mai jos, pentru a înțelege ce date prelucrăm, în ce mod și pentru cât timp, ce drepturi aveți în legătură cu prelucrarea datelor dumneavoastră și cum puteți exercita aceste drepturi.
+            Moto Brebu SRL înțelege importanța protejării datelor dumneavoastra cu caracter personal. În acest context, dorim să ne asigurăm de totala transparență a modului în care utilizăm datele dumneavoastră. Vă rugăm să parcurgeți cu atenție informațiile de mai jos, pentru a înțelege ce date prelucrăm, în ce mod și pentru cât timp, ce drepturi aveți în legătură cu prelucrarea datelor dumneavoastră și cum puteți exercita aceste drepturi.
         </p>
       </article>
       <article id="cookies-date-prelucrate">
           <h2>Ce date cu caracter personal prelucrăm?</h2>
           <p>
-            Est Bike Adventure SRL prelucrează datele de identificare (nume, prenume) și de contact (telefon, adresă de e-mail, adresă fizică) sau interesele dumneavoastră pe care ni le comunicați (model de autovehicul, metodă de finanțare, etc.) pe care ni le furnizați atunci când vizitați site-ul nostru, inclusiv informații pe care ni le transmiteți atunci când ne contactați utilizând unul din formularele aflate pe site-ul nostru. <br>
+            Moto Brebu SRL prelucrează datele de identificare (nume, prenume) și de contact (telefon, adresă de e-mail, adresă fizică) sau interesele dumneavoastră pe care ni le comunicați (model de autovehicul, metodă de finanțare, etc.) pe care ni le furnizați atunci când vizitați site-ul nostru, inclusiv informații pe care ni le transmiteți atunci când ne contactați utilizând unul din formularele aflate pe site-ul nostru. <br>
             Suplimentar, prelucrăm detalii ale modului în care utilizați site-ul nostru, incluzând, de exemplu, date de trafic, date de localizare, pagini pe care le vizitați. <br>
             În anumite situații putem colecta informații despre dispozitivul folosit pentru a accesa site-ul nostru, precum adresa IP, sistemul de operare și tipul browserului folosit, pentru a putea îmbunătăți funcționarea site-ului și serviciile pe care le oferim. Aceste date sunt agregate și utilizate în scop statistic, fără a identifica o anumită persoană. <br>
             De asemenea, site-ul nostru folosește cookies pentru a vă putea distinge de alți vizitatori ai site-ului. Utilizarea acestora ne permite să vă oferim o experiență îmbunătățită și să optimizăm funcționarea site-ului. Pentru informații detaliate privind modul în care folosim cookies și despre cum puteți să dezactivați folosirea acestora va rugăm să consultați  <br><br>
@@ -28,7 +28,7 @@
     </article>
     <article>
         <p>
-            Est Bike Adventure SRL prelucrează datele de identificare (nume, prenume) și de contact (telefon, adresă de e-mail, adresă fizică) sau interesele dumneavoastră pe care ni le comunicați (model de autovehicul, metodă de finanțare, etc.) pe care ni le furnizați atunci când vizitați site-ul nostru, inclusiv informații pe care ni le transmiteți atunci când ne contactați utilizând unul din formularele aflate pe site-ul nostru.
+            Moto Brebu SRL prelucrează datele de identificare (nume, prenume) și de contact (telefon, adresă de e-mail, adresă fizică) sau interesele dumneavoastră pe care ni le comunicați (model de autovehicul, metodă de finanțare, etc.) pe care ni le furnizați atunci când vizitați site-ul nostru, inclusiv informații pe care ni le transmiteți atunci când ne contactați utilizând unul din formularele aflate pe site-ul nostru.
             Suplimentar, prelucrăm detalii ale modului în care utilizați site-ul nostru, incluzând, de exemplu, date de trafic, date de localizare, pagini pe care le vizitați. <br>
             În anumite situații putem colecta informații despre dispozitivul folosit pentru a accesa site-ul nostru, precum adresa IP, sistemul de operare și tipul browserului folosit, pentru a putea îmbunătăți funcționarea site-ului și serviciile pe care le oferim. Aceste date sunt agregate și utilizate în scop statistic, fără a identifica o anumită persoană. <br>
             De asemenea, site-ul nostru folosește cookies pentru a vă putea distinge de alți vizitatori ai site-ului. Utilizarea acestora ne permite să vă oferim o experiență îmbunătățită și să optimizăm funcționarea site-ului. Pentru informații detaliate privind modul în care folosim cookies și despre cum puteți să dezactivați folosirea acestora va rugăm să consultați Politica de cookies. <br><br>
@@ -52,13 +52,13 @@
             Totuși, nu ne angajăm să păstrăm aceste date pentru perioadele menționate mai sus și putem șterge sau anonimiza datele dumneavoastră mai devreme, dacă nu avem o obligație legală de păstrare. <br><br>
         
             Cui dezvăluim datele dumneavoastră? <br>
-            Est Bike Adventure SRL tratează datele dumneavoastră în strictă confidențialitate și nu vinde, transferă, nu dezvăluie și nu permite accesul la datele dumneavoastră personale unor terți care nu au legătura cu activitatea sa. <br><br>
+            Moto Brebu SRL tratează datele dumneavoastră în strictă confidențialitate și nu vinde, transferă, nu dezvăluie și nu permite accesul la datele dumneavoastră personale unor terți care nu au legătura cu activitatea sa. <br><br>
         
             Atunci când selectați unul din partenerii noștri autorizați la momentul transmiterii unei solicitări către noi, vom dezvălui datele dumneavoastră către partenerul respectiv, strict pentru a vă putea răspunde la solicitare. Nu vom permite partenerilor noștri să folosească datele dumneavoastră în alte scopuri, cu excepția cazului în care dumneavoastră le acordați direct consimțământul în acest sens sau aceștia au un alt temei legal pentru prelucrare. <br><br>
         
-            Pentru a putea atinge scopurile descrise mai sus, putem de asemenea să permitem accesul la datele dumneavoastră altor entități din cadrul Est Bike Adventure SRL sau furnizorilor noștri de servicii, care însă nu vor putea să utilizeze aceste date în scop personal. <br><br>
+            Pentru a putea atinge scopurile descrise mai sus, putem de asemenea să permitem accesul la datele dumneavoastră altor entități din cadrul Moto Brebu SRL sau furnizorilor noștri de servicii, care însă nu vor putea să utilizeze aceste date în scop personal. <br><br>
         
-            În cazul în care entitățile Est Bike Adventure SRL sau partenerii contractuali cărora le dezvăluim datele dumneavoastră personale în situațiile descrise mai sus sunt situați în afara Spațiului Economic European, dezvăluirea va avea loc doar în cazul în care Comisia Europeana a confirmat un nivel adecvat de protecție pentru respectiva țară sau dacă au fost luate alte măsuri corespunzătoare de protecție (de exemplu prin implementarea unor clauze contractuale standard in UE). <br><br>
+            În cazul în care entitățile Moto Brebu SRL sau partenerii contractuali cărora le dezvăluim datele dumneavoastră personale în situațiile descrise mai sus sunt situați în afara Spațiului Economic European, dezvăluirea va avea loc doar în cazul în care Comisia Europeana a confirmat un nivel adecvat de protecție pentru respectiva țară sau dacă au fost luate alte măsuri corespunzătoare de protecție (de exemplu prin implementarea unor clauze contractuale standard in UE). <br><br>
         
             De asemenea, putem dezvălui datele dumneavoastră cu caracter personal unor autorități publice, în baza și în limitele prevederilor legale și ca urmare a unor cereri expres formulate de acestea. <br><br>
         
@@ -89,7 +89,7 @@
                     dreptul de solicita ștergerea datelor cu caracter personal, cu excepția situațiilor în care legea interzice ștergerea.
                 </li>
                 <li>
-                    Puteți exercita drepturile de mai sus oricând, contactându-ne la adresa Constanta, judetul Constanta, str Medeea, nr 1A, email: office@estbike.ro, telefon: 0757.777.064. Puteți contacta responsabilul nostru cu protecția datelor la adresa Constanta, judetul Constanta, str Medeea, nr 1A , email: office@estbike.ro.
+                    Puteți exercita drepturile de mai sus oricând, contactându-ne la adresa Constanta, judetul Constanta, str Medeea, nr 1A, email: office@motobrebu.ro, telefon: 0757.777.064. Puteți contacta responsabilul nostru cu protecția datelor la adresa Constanta, judetul Constanta, str Medeea, nr 1A , email: office@motobrebu.ro.
                 </li>
             </ul>
         

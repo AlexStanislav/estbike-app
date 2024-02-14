@@ -4,7 +4,7 @@
     <article class="about-card">
       <h2>Din pasiune pentru motociclete...</h2>
       <p>
-        EST BIKE reprezinta pasiunea imensa pentru motociclete si ATV-uri
+        Moto Brebu reprezinta pasiunea imensa pentru motociclete si ATV-uri
         concretizata intr-un magazin de motociclete si ATV, echipamente si
         accesorii. Proiectul a fost inceput in primavara lui 2016 si are la baza
         o echipa tanara si entuziasta, pasionata de mersul pe doua roti dar si
@@ -29,7 +29,7 @@
         magazin de echipamente moto si accesorii moto din sud-estul Romaniei.
       </p>
       <p>
-        Cu ajutorul vostru, EST BIKE devenit dealer oficial in Constanta si
+        Cu ajutorul vostru, Moto Brebu devenit dealer oficial in Constanta si
         Dobrogea pentru marcile de motociclete si atv SUZUKI, HONDA, KAWASAKI,
         TRIUMPH, KTM, HUSQVARNA, BETA, SWM, INDIAN si distribuitor YAMAHA, CF
         MOTO, CAN-AM, POLARIS, LINHAI, BRP, TGB, ARCTIC CAT, APRILIA, VESPA,
@@ -59,7 +59,7 @@
           La noi veti gasi cele mai bune
           servicii si cele mai accesibile preturi, impreuna cu cele mai potrivite
           sfaturi pentru nevoile dv. Clientii nostrii sunt in primul rand
-          prietenii nostrii. Service-ul EST BIKE este service de motociclete si
+          prietenii nostrii. Service-ul Moto Brebu este service de motociclete si
           scootere dar si service ATV. Este autorizat RAR pentru intretinere si
           reparatii si este dotat cu scule si aparatura profesionala de ultima
           generatie, diagnoza moto si ATV, condus de tehnicieni priceputi si cu
