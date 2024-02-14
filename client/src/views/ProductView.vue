@@ -39,7 +39,7 @@
               <li v-if="showRabla"><i class="pi pi-car"></i>Program RABLA</li>
             </ul>
           </div>
-          <div class="installment-container">
+          <div class="installment-container" v-if="displayModel.price !== null">
             <h2>Calculeaza-ti ratele</h2>
             <label>
               Pentru a plati suma totala in
@@ -116,7 +116,7 @@
               >{{ displayModel.old_price }} {{ displayModel.currency }}</s
             >
           </div>
-          <div class="ron-price">
+          <div class="ron-price"  v-if="displayModel.price !== null">
             <span
               >{{
                 Math.ceil(displayModel.price * appStore.forexValue)
@@ -153,7 +153,7 @@
           </div>
           <div class="similar-info-container">
             <h3>{{ model.bike_name.toUpperCase() }}</h3>
-            <h4 v-if="model.price !== 'null'">
+            <h4 v-if="model.price !== null">
               {{ model.price }} {{ model.currency }}
             </h4>
             <h4 v-else>Pret Indisponibil</h4>
@@ -270,8 +270,13 @@ const getDescription = () => {
 
 const getGallery = () => {
   const gallery = [];
-  for (const img of displayModel.value.gallery) {
-    gallery.push(motoboomImageResizer(img));
+  if(displayModel.value.gallery === null) return gallery
+  if(displayModel.value.gallery[0] === ""){
+    gallery.push(motoboomImageResizer(displayModel.value.image));
+  }else{
+    for (const img of displayModel.value.gallery) {
+      gallery.push(motoboomImageResizer(img));
+    }
   }
   return gallery;
 };
