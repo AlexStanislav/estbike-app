@@ -1,7 +1,6 @@
 const cheerio = require('cheerio')
 const forexData = require('../data/forexData')
 const { default: axios } = require('axios')
-const fs = require('fs')
 
 
 const scrapeForex = async () => {
