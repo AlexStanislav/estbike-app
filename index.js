@@ -10,9 +10,9 @@ const recaptcha = new Recaptcha({ secret: secretKey });
 const { v4: uuidv4 } = require('uuid');
 const path = require('path')
 const history = require('connect-history-api-fallback');
-const { default: axios } = require('axios');
 const scrapeForex = require('./api/scrapeForex')
 const forexData = require('./data/forexData')
+const cron = require('cron');
 connection();
 
 app.use(express.urlencoded({ extended: true }));
@@ -27,7 +27,7 @@ app.get('/api/bikes', async (req, res) => {
         const tables = await process.postgresql.query(`SELECT tablename FROM pg_tables WHERE schemaname = 'public'`);
         const bikes = {}
         for (const table of tables) {
-            if(table.tablename.includes('_bikes') || table.tablename.includes('_scooters') || table.tablename.includes('_atv') || table.tablename.includes('_snowmobiles')) {
+            if (table.tablename.includes('_bikes') || table.tablename.includes('_scooters') || table.tablename.includes('_atv') || table.tablename.includes('_snowmobiles')) {
                 const query = `SELECT * FROM ${table.tablename}`;
                 const result = await process.postgresql.query(query);
                 bikes[table.tablename] = result
@@ -39,7 +39,7 @@ app.get('/api/bikes', async (req, res) => {
             for (const bikeIndex in bikeTypes) {
                 const bike = bikeTypes[bikeIndex]
 
-                if(bike.brand === 'utv'){
+                if (bike.brand === 'utv') {
                     bike.brand = 'linhai'
                     bike.vehicle_type = 'utv'
                 }
@@ -107,7 +107,7 @@ app.get('/api/bikes', async (req, res) => {
         }
 
         await scrapeForex()
-        
+
         const currency_data = forexData.value
 
         res.json({ bikes: bikes, forex: currency_data })
@@ -154,6 +154,13 @@ const insertRequest = (req) => {
     return query
 }
 
+const job = new cron.CronJob(
+    '50 23 * * *', // Everyday at 11:50 pm
+    function () {
+        forexData.setValue(0.0)
+    }
+)
+job.start()
 app.listen(port, () => {
     console.log(`Server started on http://localhost:${port}`);
 })
