@@ -13,16 +13,30 @@
         @click="methods.applyFilters()"
       />
       <Accordion :multiple="true" :activeIndex="[0]">
-        <AccordionTab header="An">
-          <ul>
-            <li
-              v-for="(year, index) in yearsFilter"
-              :key="index"
-              :header="year"
-            >
+        <AccordionTab header="Tip Vehicul">
+          <ul class="type-tab">
+            <li v-for="(type, index) of typeFilter" :key="index">
               <label>
-                <RadioButton v-model="modelYear" :binary="true" :value="year" />
-                <span>{{ year }}</span>
+                <RadioButton
+                  v-model="modelType"
+                  :binary="true"
+                  :value="type.value"
+                />
+                <span>{{ type.label.toUpperCase() }}</span>
+              </label>
+            </li>
+          </ul>
+        </AccordionTab>
+        <AccordionTab header="Producator">
+          <ul class="brand-tab">
+            <li v-for="(brand, index) of brandFilter" :key="index">
+              <label>
+                <RadioButton
+                  v-model="modelBrand"
+                  :binary="true"
+                  :value="brand"
+                />
+                <span>{{ brand.toUpperCase() }}</span>
               </label>
             </li>
           </ul>
@@ -77,30 +91,16 @@
             </li>
           </ul>
         </AccordionTab>
-        <AccordionTab header="Producator">
-          <ul class="brand-tab">
-            <li v-for="(brand, index) of brandFilter" :key="index">
+        <AccordionTab header="An">
+          <ul>
+            <li
+              v-for="(year, index) in yearsFilter"
+              :key="index"
+              :header="year"
+            >
               <label>
-                <RadioButton
-                  v-model="modelBrand"
-                  :binary="true"
-                  :value="brand"
-                />
-                <span>{{ brand.toUpperCase() }}</span>
-              </label>
-            </li>
-          </ul>
-        </AccordionTab>
-        <AccordionTab header="Tip Vehicul">
-          <ul class="type-tab">
-            <li v-for="(type, index) of typeFilter" :key="index">
-              <label>
-                <RadioButton
-                  v-model="modelType"
-                  :binary="true"
-                  :value="type.value"
-                />
-                <span>{{ type.label.toUpperCase() }}</span>
+                <RadioButton v-model="modelYear" :binary="true" :value="year" />
+                <span>{{ year }}</span>
               </label>
             </li>
           </ul>
@@ -137,7 +137,7 @@
       </Accordion>
     </section>
     <section class="bike-section">
-      <div class="bike-section-header">
+      <section class="bike-section-header">
         <span class="header-models-count">{{ allModels.length }} MODELE</span>
         <span
           >Pagina {{ currentPage + 1 }}/{{
@@ -153,15 +153,15 @@
             @change="methods.handlePriceFilterChange"
           />
         </span>
-      </div>
-      <div class="bike-section-display" v-if="modelsLoaded">
+      </section>
+      <section class="bike-section-display" v-if="modelsLoaded">
         <ProductCard
           v-for="(bike, index) in displayedModels"
           :key="index"
           :bike="bike"
         />
-      </div>
-      <div class="bike-section-empty" v-else>
+      </section>
+      <section class="bike-section-empty" v-else>
         <Skeleton
           animation="wave"
           class="mb-2"
@@ -170,10 +170,20 @@
           v-for="i in 11"
           :key="i"
         ></Skeleton>
-      </div>
-      <div class="bike-section-no-match" v-if="displayedModels.length === 0">
+      </section>
+      <div class="bike-section-no-match" v-if="displayedModels.length === 0 && initialVehicleTypeSelected">
         <span>Nu au fost gasite modele corespunzatoare filtrelor</span>
       </div>
+      <section class="vehicle-type-selection" v-if="displayedModels.length === 0">
+        <h2>Va rugam alegeti tipul de vehicul dorit pentru vizualizare</h2>
+        
+        <div class="vehicle-card-container">
+          <div class="vehicle-type-card" v-for="vehicleType in typeFilter" :key="vehicleType" @click="methods.handleVehicleTypeChange(vehicleType)">
+            <div class="clip-path-bg"></div>
+            <h3>{{ vehicleType.label.toUpperCase() }}</h3>
+          </div>
+        </div>
+      </section>
       <div class="bike-section-footer">
         <Paginator
           ref="paginatorRef"
@@ -238,6 +248,8 @@ const modelType = ref([]);
 
 const filters = ref({});
 const modelFilters = storeToRefs(appStore).modelsFilters;
+
+const initialVehicleTypeSelected = ref(false);
 
 const methods = {
   getAllModels: function () {
@@ -330,7 +342,7 @@ const methods = {
 
       const brandMatch = !filters.brand || filters.brand === model.brand;
 
-      const typeMatch = !filters.type || filters.type === model.vehicle_type;
+      const typeMatch = !filters.type || filters.type === model.vehicle_type.toLowerCase();
 
       let priceMatch;
       
@@ -386,7 +398,8 @@ const methods = {
     setTimeout(() => {
       filters.value = {};
       allModels.value = this.getAllModels();
-      displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+      // displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+      displayedModels.value = [];
       priceRange.value = methods.getPriceRange();
       minPrice.value = methods.getPriceRange()[0];
       maxPrice.value = methods.getPriceRange()[1];
@@ -442,26 +455,38 @@ const methods = {
   getBrands: function () {
     let brands = [];
     for (const bikeType in appStore.allBikes) {
-      if (!brands.includes(bikeType)) {
-        brands.push(bikeType.split("_")[0]);
+      const bikesArray = appStore.allBikes[bikeType];
+      for (const bike of bikesArray) {
+        if (!brands.includes(bike.brand)) {
+          brands.push(bike.brand);
+        }
       }
     }
+
+    brands.sort((a, b) => a.localeCompare(b));
+
     return [...new Set(brands)];
   },
   getBikeType: function () {
     let bikeType = [];
     for (const bike of allModels.value) {
       if (!bikeType.includes(bike)) {
-        if (bike.vehicle_type === "bikes") {
+        if (bike.vehicle_type.toLowerCase() === "bikes") {
           bikeType.push({ label: "motociclete", value: bike.vehicle_type });
         }
 
-        if (bike.vehicle_type === "scooters") {
-          bikeType.push({ label: "scutere", value: bike.vehicle_type });
+        if (bike.vehicle_type.toLowerCase() === "scooters") {
+          bikeType.push({ label: "scutere", value: bike.vehicle_type.toLowerCase() });
         }
 
-        if (bike.vehicle_type === "atv") {
-          bikeType.push({ label: "atv", value: bike.vehicle_type });
+        if (bike.vehicle_type.toLowerCase() === "atv") {
+          bikeType.push({ label: "atv", value: bike.vehicle_type.toLowerCase() });
+        }
+        if (bike.vehicle_type.toLowerCase() === "utv") {
+          bikeType.push({ label: "utv", value: bike.vehicle_type.toLowerCase() });
+        }
+        if (bike.vehicle_type.toLowerCase() === "snowmobiles") {
+          bikeType.push({ label: "snowmobile", value: bike.vehicle_type.toLowerCase() });
         }
       }
     }
@@ -475,6 +500,12 @@ const methods = {
 
     return removeDuplicateObjects(bikeType, "value");
   },
+  handleVehicleTypeChange: function (vehicleType) {
+    modelType.value = vehicleType.value;
+    setTimeout(() => {
+      this.applyFilters();
+    }, 300);
+  }
 };
 
 function handlePaginatorChange(event) {
@@ -537,7 +568,7 @@ watch(modelFilters, () => {
 onMounted(() => {
   if (appStore.allBikes) {
     allModels.value = methods.getAllModels();
-    displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+    // displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
     yearsFilter.value = methods.getYears();
     categoriesFilter.value = methods.getCategories();
     motorFilters.value = methods.getMotorInfo();
@@ -717,6 +748,47 @@ const filterByQuery = () => {
     min-width: 2rem;
     height: 2rem;
   }
+}
+
+.vehicle-type-selection{
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  h2{
+    text-align: center;
+  }
+}
+
+.vehicle-card-container {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1rem;
+  padding: 1rem;
+  justify-content: center;
+}
+.vehicle-type-card {
+  width: 15rem;
+  text-align: center;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  position: relative;
+  .clip-path-bg {
+    width: 15rem;
+    height: 100%;
+    position: absolute;
+    background: var(--dark-shade);
+    z-index: -1;
+    left: 0;
+    top: 0;
+    clip-path: polygon(100% 0%, 90% 50%, 100% 100%, 10% 100%, 0% 50%, 10% 0%);
+  }
+}
+
+.vehicle-type-card:hover {
+  transform: translate(-2px,-2px);
+  filter: drop-shadow(4px 4px 0px var(--main));
 }
 
 .bike-section-display {

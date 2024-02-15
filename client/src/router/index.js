@@ -55,20 +55,20 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const appStore = useAppStore()
-  const header = document.querySelector('.desktop-nav') !== null ? document.querySelector('.desktop-nav') : document.querySelector('.mobile-nav')
+  const header = document.querySelector('.desktop-nav') !== null ? document.querySelector('.desktop-nav') : false
 
   window.scrollTo(0, 0)
 
   if (to.path === '/') {
-    if (appStore.firstLoadComplete){
+    if (appStore.firstLoadComplete) {
       appStore.togglePreloader()
       console.log('preload-toggle');
       setTimeout(() => {
         appStore.togglePreloader()
         console.log('preload-toggle');
       }, 1000);
-    }else{
-      if(to.path === '/modele'){
+    } else {
+      if (to.path === '/modele') {
         next('/')
       }
     }
@@ -79,7 +79,7 @@ router.beforeEach((to, from, next) => {
     }, 1000);
   }
 
-  if(to.path === '/' && from.path === '/model'){
+  if (to.path === '/' && from.path === '/model') {
     setTimeout(() => {
       appStore.togglePreloader(false)
     }, 1001);
@@ -87,10 +87,12 @@ router.beforeEach((to, from, next) => {
 
 
 
-  if (to.path !== '/') {
-    header.classList.add('sticky')
-  } else {
-    header.classList.remove('sticky')
+  if (header) {
+    if (to.path !== '/') {
+      header.classList.add('sticky')
+    } else {
+      header.classList.remove('sticky')
+    }
   }
 
   next()

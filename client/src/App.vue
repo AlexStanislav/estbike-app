@@ -88,6 +88,7 @@
     </footer>
     <Loader :isVisible="appStore.showPreloader" />
     <Toast />
+    <ScrollTop></ScrollTop>
   </div>
 </template>
 <script setup>
@@ -98,6 +99,8 @@ import DesktopNav from "./components/DesktopNav.vue";
 import MobileNav from "./components/MobileNav.vue";
 import Toast from "primevue/toast";
 import router from "./router";
+import ScrollTop from 'primevue/scrolltop';
+
 
 const appStore = useAppStore();
 const showMobileNav = ref(false);

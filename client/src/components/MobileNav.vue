@@ -30,7 +30,7 @@
       </span>
       <ul class="brands-link">
         <h2>Vehicule</h2>
-        <li v-for="(brand, brandName) in appStore.homeBrands" :key="brandName">
+        <!-- <li v-for="(brand, brandName) in appStore.homeBrands" :key="brandName">
           <span class="brand-sublinks" v-if="hasSublinks(brand)">
             <Accordion :multiple="true">
               <AccordionTab :header="brandName.toUpperCase()">
@@ -48,14 +48,43 @@
             </Accordion>
           </span>
           <span v-else @click="goToModel(brandName)">{{ brandName.toUpperCase() }}</span>
+        </li> -->
+        <li v-for="(vehicle, index) in vehicleTypes.indexes" :key="index">
+          <span class="brand-sublinks">
+            <Accordion :multiple="true">
+              <AccordionTab :header="(vehicle.replace('bikes', 'Motociclete').replace('scooters', 'Scutere').replace('atv', 'ATV').replace('utv', 'UTV').replace('snowmobiles', 'Snowmobile').toUpperCase())">
+                <ul>
+                  <li
+                    v-for="(brand, index) in vehicleTypes.values[vehicle]"
+                    :key="index"
+                    @click="goToModels(brand, vehicle)"
+                  >
+                    {{ brand.toUpperCase() }}
+                  </li>
+                </ul>
+              </AccordionTab>
+            </Accordion>
+          </span>
         </li>
         <h2>Meniu</h2>
-        <li @click="appStore.sidebarOpen = false"><router-link to="/">Acasă</router-link></li>
-        <li @click="appStore.sidebarOpen = false"><router-link to="/despre">Despre Noi</router-link></li>
-        <li @click="appStore.sidebarOpen = false"><router-link to="/modele">Modele</router-link></li>
-        <li @click="appStore.sidebarOpen = false"><router-link to="/rabla">Rabla</router-link></li>
-        <li @click="appStore.sidebarOpen = false"><router-link to="/service">Service</router-link></li>
-        <li @click="appStore.sidebarOpen = false"><router-link to="/contact">Contact</router-link></li>
+        <li @click="appStore.sidebarOpen = false">
+          <router-link to="/">Acasă</router-link>
+        </li>
+        <li @click="appStore.sidebarOpen = false">
+          <router-link to="/despre">Despre Noi</router-link>
+        </li>
+        <li @click="appStore.sidebarOpen = false">
+          <router-link to="/modele">Modele</router-link>
+        </li>
+        <li @click="appStore.sidebarOpen = false">
+          <router-link to="/rabla">Rabla</router-link>
+        </li>
+        <li @click="appStore.sidebarOpen = false">
+          <router-link to="/service">Service</router-link>
+        </li>
+        <li @click="appStore.sidebarOpen = false">
+          <router-link to="/contact">Contact</router-link>
+        </li>
       </ul>
     </Sidebar>
   </div>
@@ -97,16 +126,45 @@ function getAllModels() {
   return array;
 }
 
-const goToModels = (brand, sublink) => {
-  appStore.setModelsFilters({brand, type: sublink})
-  router.push({ path: "/modele" });
-  appStore.sidebarOpen = false
+const getVehicleTypes = () => {
+  const vehicleTypes = {};
+  const models = getAllModels();
+  for (const modelIndex in models) {
+    const bike = models[modelIndex];
+    const vehicleType = bike.vehicle_type.toLowerCase();
+    if (!vehicleTypes[vehicleType]) {
+      vehicleTypes[vehicleType] = [];
+    }
+  }
+
+  for (const modelIndex in models) {
+    const bike = models[modelIndex];
+    const vehicleType = bike.vehicle_type.toLowerCase();
+    vehicleTypes[vehicleType].push(bike.brand);
+  }
+
+  for (const vehicleType in vehicleTypes) {
+    vehicleTypes[vehicleType] = [...new Set(vehicleTypes[vehicleType])];
+  }
+
+  return {
+    indexes: Object.keys(vehicleTypes).sort((a, b) => a.localeCompare(b)),
+    values: vehicleTypes,
+  };
 };
 
-const goToModel = (query) => {
-  appStore.setModelsFilters({brand: query})
+const vehicleTypes = getVehicleTypes();
+
+const goToModels = (brand, vehicleType) => {
+  appStore.setModelsFilters({ brand, type: vehicleType });
   router.push({ path: "/modele" });
-  appStore.sidebarOpen = false
+  appStore.sidebarOpen = false;
+};
+
+const goToModel = (brand) => {
+  appStore.setModelsFilters({ brand: brand });
+  router.push({ path: "/modele" });
+  appStore.sidebarOpen = false;
 };
 
 watch(

@@ -118,7 +118,7 @@ const getCarouselImages = (allBikes) => {
   for (const bikeIndex in allBikes) {
     const brand = allBikes[bikeIndex];
     for (const bike of brand) {
-      if (bike.is_gallery) {
+      if (bike.is_gallery === true || bike.is_gallery === "true") {
         imageArray.push({
           img: bike.gallery_image,
           alt: bike.bike_name,

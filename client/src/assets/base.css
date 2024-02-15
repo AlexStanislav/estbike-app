@@ -43,3 +43,13 @@ body{
 ::-webkit-scrollbar-track {
   background: var(--light-shade);
 }
+
+.snowmobile {
+  background-image: url("Layer 2.png");
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 1750px;
+  height: 733px;
+  z-index: 3;
+}
