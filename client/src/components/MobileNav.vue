@@ -52,7 +52,17 @@
         <li v-for="(vehicle, index) in vehicleTypes.indexes" :key="index">
           <span class="brand-sublinks">
             <Accordion :multiple="true">
-              <AccordionTab :header="(vehicle.replace('bikes', 'Motociclete').replace('scooters', 'Scutere').replace('atv', 'ATV').replace('utv', 'UTV').replace('snowmobiles', 'Snowmobile').toUpperCase())">
+              <AccordionTab
+                :header="
+                  vehicle
+                    .replace('bikes', 'Motociclete')
+                    .replace('scooters', 'Scutere')
+                    .replace('atv', 'ATV')
+                    .replace('utv', 'UTV')
+                    .replace('snowmobiles', 'Snowmobile')
+                    .toUpperCase()
+                "
+              >
                 <ul>
                   <li
                     v-for="(brand, index) in vehicleTypes.values[vehicle]"
@@ -281,6 +291,9 @@ const hasSublinks = (brand) => {
 }
 
 .brand-sublinks {
+  li {
+    cursor: pointer;
+  }
   .p-accordion-toggle-icon {
     position: absolute;
     right: 0;

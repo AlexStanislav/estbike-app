@@ -25,11 +25,11 @@
         <div class="footer-link-list">
           <ul class="footer-brands">
             <li
-              v-for="(brand, index) in appStore.homeBrands"
-              :key="index"
-              @click="goToBrand(index)"
+              v-for="brand in Object.keys(appStore.homeBrands).sort((a, b) => a.localeCompare(b))"
+              :key="brand"
+              @click="goToBrand(brand)"
             >
-              <i class="pi pi-angle-double-right"></i>{{ index.toUpperCase() }}
+              <i class="pi pi-angle-double-right"></i>{{ brand.toUpperCase() }}
             </li>
           </ul>
           <ul>
@@ -48,13 +48,26 @@
         <h3>Utile</h3>
         <div class="footer-link-list">
           <ul>
-            <li><i class="pi pi-angle-double-right"></i>Despre noi</li>
-            <li><i class="pi pi-angle-double-right"></i>Rabla</li>
-            <li><i class="pi pi-angle-double-right"></i>Termeni si conditii</li>
             <li>
-              <i class="pi pi-angle-double-right"></i>Politica de cookie-uri
+              <i class="pi pi-angle-double-right"></i
+              ><router-link to="/despre">Despre noi</router-link>
             </li>
-            <li><i class="pi pi-angle-double-right"></i>Contact</li>
+            <li>
+              <i class="pi pi-angle-double-right"></i
+              ><router-link to="/rabla">Rabla</router-link>
+            </li>
+            <li>
+              <i class="pi pi-angle-double-right"></i
+              ><router-link to="/termeni">Termeni si conditii</router-link>
+            </li>
+            <li>
+              <i class="pi pi-angle-double-right"></i
+              ><router-link to="/cookies">Politica de cookie-uri</router-link>
+            </li>
+            <li>
+              <i class="pi pi-angle-double-right"></i
+              ><router-link to="/contact">Contact</router-link>
+            </li>
           </ul>
           <br />
           <ul class="footer-schedule">
@@ -99,25 +112,22 @@ import DesktopNav from "./components/DesktopNav.vue";
 import MobileNav from "./components/MobileNav.vue";
 import Toast from "primevue/toast";
 import router from "./router";
-import ScrollTop from 'primevue/scrolltop';
-
+import ScrollTop from "primevue/scrolltop";
 
 const appStore = useAppStore();
 const showMobileNav = ref(false);
 
-async function firstAppLoad(){
-  if(appStore.bikesLoaded === false){
+async function firstAppLoad() {
+  if (appStore.bikesLoaded === false) {
     await appStore.getAllBikes();
   }
 
   appStore.toggleFirstLoadComplete();
-  appStore.setHomeBrands()
+  appStore.setHomeBrands();
 }
 
-
 onMounted(async () => {
-
-  await appStore.togglePageLoad(firstAppLoad)
+  await appStore.togglePageLoad(firstAppLoad);
 
   if (appStore.isMobile() || window.innerWidth <= 1024) {
     showMobileNav.value = true;
@@ -133,12 +143,12 @@ onMounted(async () => {
 });
 
 const goToBrand = (query) => {
-  appStore.setModelsFilters({brand: query})
+  appStore.setModelsFilters({ brand: query });
   setTimeout(() => {
     router.push({ path: "/modele" });
     window.scrollTo(0, 0);
-  }, 100)
-}
+  }, 100);
+};
 
 // const goToModel = (query) => {
 //   router.push({ path: "/modele", query: { modelType: query } });
@@ -234,6 +244,10 @@ footer {
 }
 
 .footer-link-list {
+  a {
+    color: var(--light-shade);
+    text-decoration: none;
+  }
   ul {
     list-style: none;
     margin: 0;
@@ -253,7 +267,7 @@ footer {
   flex-flow: column wrap;
   height: 80%;
   cursor: pointer;
-  li{
+  li {
     margin-right: 2rem;
   }
 }
@@ -273,7 +287,7 @@ footer {
     width: 95%;
     margin-bottom: 5rem;
   }
-  .footer-brands{
+  .footer-brands {
     margin-left: -5rem !important;
   }
 }

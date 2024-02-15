@@ -111,6 +111,14 @@
   </div>
 </template>
 <script setup>
+import { onMounted } from "vue";
+
+onMounted(() => {
+  const header = document.querySelector(".desktop-nav");
+  if (header !== null) {
+    header.classList.add("sticky");
+  }
+});
 </script>
 <style lang="scss">
 .contact {

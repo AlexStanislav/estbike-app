@@ -252,11 +252,19 @@
 import InputText from "primevue/inputtext";
 import Checkbox from "primevue/checkbox";
 import Button from "primevue/button";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { VueRecaptcha } from "vue-recaptcha";
 import { useAppStore } from "@/stores/appStore";
 import axios from "axios";
 import { useToast } from "primevue/usetoast";
+
+onMounted(() => {
+  const header = document.querySelector(".desktop-nav");
+  if (header !== null) {
+    header.classList.add("sticky");
+  }
+});
+
 const toast = useToast();
 const appStore = useAppStore();
 

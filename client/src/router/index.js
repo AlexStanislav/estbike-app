@@ -59,6 +59,14 @@ router.beforeEach((to, from, next) => {
 
   window.scrollTo(0, 0)
 
+  if (header) {
+    if (to.path !== '/') {
+      header.classList.add('sticky')
+    } else {
+      header.classList.remove('sticky')
+    }
+  }
+  
   if (to.path === '/') {
     if (appStore.firstLoadComplete) {
       appStore.togglePreloader()
@@ -85,15 +93,6 @@ router.beforeEach((to, from, next) => {
     }, 1001);
   }
 
-
-
-  if (header) {
-    if (to.path !== '/') {
-      header.classList.add('sticky')
-    } else {
-      header.classList.remove('sticky')
-    }
-  }
 
   next()
 })

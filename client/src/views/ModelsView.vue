@@ -307,6 +307,7 @@ const methods = {
 
     const roundToNearestMultiple = function (values, step) {
       values.sort((a, b) => a - b);
+      console.log(values);
       return values.map((value) => Math.round(value / step) * step);
     };
 
@@ -578,6 +579,7 @@ onMounted(() => {
     licenseFilter.value = methods.getLicenseFilters();
     brandFilter.value = methods.getBrands();
     typeFilter.value = methods.getBikeType();
+    typeFilter.value.sort((a, b) => a.label.localeCompare(b.label));
 
     setTimeout(() => {
       modelsLoaded.value = true;
@@ -585,6 +587,11 @@ onMounted(() => {
 
     if (modelFilters.value.length > 0) {
       filterByQuery();
+    }
+
+    const header = document.querySelector('.desktop-nav')
+    if (header !== null) {
+      header.classList.add('sticky')
     }
   }
 });

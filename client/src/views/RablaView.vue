@@ -208,25 +208,28 @@
 <script setup>
 import { onMounted, ref } from "vue";
 
-const indexLinks = ref([])
+const indexLinks = ref([]);
 
 const goTo = (element) => {
-    let offset = 60
-      let elementPos = element.getBoundingClientRect().top
-      let position = elementPos + window.pageYOffset - offset
+  let offset = 60;
+  let elementPos = element.getBoundingClientRect().top;
+  let position = elementPos + window.pageYOffset - offset;
 
-      window.scrollTo({
-        top: position,
-        behavior: "smooth"
-      })
+  window.scrollTo({
+    top: position,
+    behavior: "smooth",
+  });
 };
 
 onMounted(() => {
-    for (const link of document.getElementsByTagName("article")) {    
-        indexLinks.value.push(link)
-    }
-    console.log(indexLinks.value);  
-})
+  for (const link of document.getElementsByTagName("article")) {
+    indexLinks.value.push(link);
+  }
+  const header = document.querySelector(".desktop-nav");
+  if (header !== null) {
+    header.classList.add("sticky");
+  }
+});
 </script>
 <style lang="scss">
 .rabla-view {
