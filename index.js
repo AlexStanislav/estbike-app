@@ -9,8 +9,14 @@ const secretKey = process.env.RECAPTCHA_SECRET
 const recaptcha = new Recaptcha({ secret: secretKey });
 const { v4: uuidv4 } = require('uuid');
 const path = require('path')
+const history = require('connect-history-api-fallback');
+const { default: axios } = require('axios');
+const scrapeForex = require('./api/scrapeForex')
+const forexData = require('./data/forexData')
 connection();
 
+app.use(express.urlencoded({ extended: true }));
+app.use(history())
 app.use(express.json())
 app.use(cors())
 
@@ -54,7 +60,7 @@ app.get('/api/bikes', async (req, res) => {
 
                 bike.gallery = bike.gallery.replace(/[{}]+/g, "").replace(/\"+/g, "").split(",")
                 if (bike.capacitate !== "null" && typeof bike.capacitate === "string") {
-                    bike.capacitate = bike.capacitate.replace("cc", "").replace("CM3", "").replace("cmc", "").replace("c.c.", "").replace("cm3", "").replace(",", ".").trim()
+                    bike.capacitate = parseInt(bike.capacitate.replace("cc", "").replace("CM3", "").replace("cmc", "").replace("c.c.", "").replace("cm3", "").replace(",", "").trim())
                 }
 
                 if (bike.main_year === "undefined" || bike.main_year === "null" || bike.main_year === null || bike.main_year === undefined) {
@@ -100,7 +106,9 @@ app.get('/api/bikes', async (req, res) => {
             }
         }
 
-        const currency_data = 5.04
+        await scrapeForex()
+        
+        const currency_data = forexData.value
 
         res.json({ bikes: bikes, forex: currency_data })
     } catch (error) {
