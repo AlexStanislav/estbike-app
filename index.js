@@ -21,7 +21,7 @@ app.get('/api/bikes', async (req, res) => {
         const tables = await process.postgresql.query(`SELECT tablename FROM pg_tables WHERE schemaname = 'public'`);
         const bikes = {}
         for (const table of tables) {
-            if(table.tablename.includes('_bikes') || table.tablename.includes('_scooters') || table.tablename.includes('_atv')) {
+            if(table.tablename.includes('_bikes') || table.tablename.includes('_scooters') || table.tablename.includes('_atv') || table.tablename.includes('_snowmobiles')) {
                 const query = `SELECT * FROM ${table.tablename}`;
                 const result = await process.postgresql.query(query);
                 bikes[table.tablename] = result
@@ -32,6 +32,11 @@ app.get('/api/bikes', async (req, res) => {
             const bikeTypes = bikes[bikeTypeIndex]
             for (const bikeIndex in bikeTypes) {
                 const bike = bikeTypes[bikeIndex]
+
+                if(bike.brand === 'utv'){
+                    bike.brand = 'linhai'
+                    bike.vehicle_type = 'utv'
+                }
 
                 if (bike.permis !== 'undefined' && bike.permis !== 'null' && bike.permis !== null && bike.permis !== undefined) {
                     const permisArray = bike.permis.split(" ").filter(item => item !== "")
