@@ -171,10 +171,10 @@
           :key="i"
         ></Skeleton>
       </section>
-      <div class="bike-section-no-match" v-if="displayedModels.length === 0 && initialVehicleTypeSelected">
+      <div class="bike-section-no-match" v-if="displayedModels.length === 0 && initialVehicleTypeSelected === true">
         <span>Nu au fost gasite modele corespunzatoare filtrelor</span>
       </div>
-      <section class="vehicle-type-selection" v-if="displayedModels.length === 0">
+      <section class="vehicle-type-selection" v-if="displayedModels.length === 0 && initialVehicleTypeSelected === false">
         <h2>Va rugam alegeti tipul de vehicul dorit pentru vizualizare</h2>
         
         <div class="vehicle-card-container">
@@ -396,6 +396,7 @@ const methods = {
     modelBrand.value = [];
     modelType.value = [];
     modelsLoaded.value = false;
+    initialVehicleTypeSelected.value = false;
     setTimeout(() => {
       filters.value = {};
       allModels.value = this.getAllModels();
@@ -422,6 +423,7 @@ const methods = {
     }
     if (currentPriceOption.value === "Initial") {
       allModels.value = methods.getAllModels();
+      methods.applyFilters();
       displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
     }
   },
@@ -503,6 +505,7 @@ const methods = {
   },
   handleVehicleTypeChange: function (vehicleType) {
     modelType.value = vehicleType.value;
+    initialVehicleTypeSelected.value = true;
     setTimeout(() => {
       this.applyFilters();
     }, 300);
@@ -589,10 +592,12 @@ onMounted(() => {
       filterByQuery();
     }
 
-    const header = document.querySelector('.desktop-nav')
-    if (header !== null) {
-      header.classList.add('sticky')
-    }
+    setTimeout(() => {
+      const header = document.querySelector('.desktop-nav')
+      if (header !== null) {
+        header.classList.add('sticky')
+      }
+    }, 500);
   }
 });
 

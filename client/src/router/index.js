@@ -59,6 +59,14 @@ router.beforeEach((to, from, next) => {
 
   window.scrollTo(0, 0)
 
+  if (to.path === '/cookies' || to.path === '/termeni') {
+    if (localStorage.getItem("gdpr") === null) {
+      console.log('gdpr-toggle');
+      localStorage.setItem("gdpr", true);
+      appStore.toggleGDPRDialog(false)
+    }
+  }
+
   if (header) {
     if (to.path !== '/') {
       header.classList.add('sticky')
@@ -66,7 +74,7 @@ router.beforeEach((to, from, next) => {
       header.classList.remove('sticky')
     }
   }
-  
+
   if (to.path === '/') {
     if (appStore.firstLoadComplete) {
       appStore.togglePreloader()

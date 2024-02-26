@@ -18,15 +18,19 @@ export const useAppStore = defineStore('appStore', {
       currentBike: null,
       homeBrands: {},
       homeModelTypes: [],
-      modelsFilters: []
+      modelsFilters: [],
+      showGDPRDialog: false
     }
   },
   actions: {
-    setModelsFilters(data){
+    async toggleGDPRDialog(value = null) {
+      this.showGDPRDialog = value !== null ? value : !this.showGDPRDialog
+    },
+    setModelsFilters(data) {
       this.modelsFilters = []
       this.modelsFilters.push(data)
     },
-    clearModelsFilters(){
+    clearModelsFilters() {
       this.modelsFilters = []
     },
     getBikes() {
@@ -58,18 +62,23 @@ export const useAppStore = defineStore('appStore', {
       this.homeModelTypes = [...new Set(models)]
     },
     togglePreloader(value = null) {
-      this.showPreloader = value !== null ? value :  !this.showPreloader
+      this.showPreloader = value !== null ? value : !this.showPreloader
     },
-    async togglePageLoad(callback){
+    async togglePageLoad(callback) {
       this.showPreloader = true
 
-      if(callback){
+      if (callback) {
         await callback()
 
         setTimeout(() => {
           this.showPreloader = false
         }, 1000)
-      }else{
+        setTimeout(() => {
+          if (localStorage.getItem("gdpr") === null) {
+            this.toggleGDPRDialog(true)
+          }
+        }, 1500);
+      } else {
         setTimeout(() => {
           this.showPreloader = false
         }, 1000)

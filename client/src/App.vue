@@ -18,6 +18,11 @@
             accesorii. Proiectul a fost inceput in primavara...
           </p>
           <span @click="router.push('/despre')">Cititi mai mult</span>
+          <p>&nbsp;</p>
+          <p>
+            Toate informatiile au rol de prezentare, iar MotoBrebu nu raspunde
+            de erori de afisaj.
+          </p>
         </div>
       </div>
       <div class="footer-container">
@@ -25,7 +30,9 @@
         <div class="footer-link-list">
           <ul class="footer-brands">
             <li
-              v-for="brand in Object.keys(appStore.homeBrands).sort((a, b) => a.localeCompare(b))"
+              v-for="brand in Object.keys(appStore.homeBrands).sort((a, b) =>
+                a.localeCompare(b)
+              )"
               :key="brand"
               @click="goToBrand(brand)"
             >
@@ -102,6 +109,21 @@
     <Loader :isVisible="appStore.showPreloader" />
     <Toast />
     <ScrollTop></ScrollTop>
+    <Dialog class="gdpr-dialog" modal v-model:visible="appStore.showGDPRDialog">
+      <div class="gdpr">
+        <p>
+          Pentru buna functionare a site-ului, folosim cookie-uri sau alte
+          technologii similare. Informatiile colectate de aceste technologii nu
+          contin date personale sau date care pot fii folosite pentru a
+          identifica utilizatorii. Prin continuare utilizarii acestui site, va
+          exprimati acordul cu utilizarea acestor technologii.
+        </p>
+        <p>
+          Puteti citi mai multe despre cookie-uri si termenii de utilizare <router-link to="/cookies">aici</router-link> si respectiv <router-link to="/termeni">aici</router-link>
+        </p>
+        <Button @click="acceptGDPR()" severity="danger">Am inteles</Button>
+      </div>
+    </Dialog>
   </div>
 </template>
 <script setup>
@@ -113,6 +135,8 @@ import MobileNav from "./components/MobileNav.vue";
 import Toast from "primevue/toast";
 import router from "./router";
 import ScrollTop from "primevue/scrolltop";
+import Dialog from "primevue/dialog";
+import Button from "primevue/button";
 
 const appStore = useAppStore();
 const showMobileNav = ref(false);
@@ -122,8 +146,8 @@ async function firstAppLoad() {
     await appStore.getAllBikes();
   }
 
-  appStore.toggleFirstLoadComplete();
-  appStore.setHomeBrands();
+  await appStore.toggleFirstLoadComplete();
+  await appStore.setHomeBrands();
 }
 
 onMounted(async () => {
@@ -150,9 +174,10 @@ const goToBrand = (query) => {
   }, 100);
 };
 
-// const goToModel = (query) => {
-//   router.push({ path: "/modele", query: { modelType: query } });
-// };
+function acceptGDPR() {
+  localStorage.setItem("gdpr", true);
+  appStore.toggleGDPRDialog(false);
+}
 </script>
 <style lang="scss">
 .sticky {
@@ -276,6 +301,22 @@ footer {
   div {
     display: inline-block;
     width: 6rem;
+  }
+}
+
+.gdpr-dialog {
+  width: 40%;
+  .p-dialog-content {
+    background: var(--dark-shade);
+    color: var(--light-shade);
+    border-radius: 5px;
+    p {
+      font-size: 1.2rem;
+    }
+  }
+  .p-dialog-header,
+  .p-dialog-footer {
+    display: none;
   }
 }
 
