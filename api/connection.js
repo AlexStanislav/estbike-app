@@ -18,9 +18,9 @@ module.exports = (callback = null) => {
         port: 5432, // PostgreSQL server port
         host:  process.env.PORT ? process.env.PG_HOST : "localhost", // PostgreSQL server host
         //TODO remove for production
-        ssl: {
-            rejectUnauthorized: false
-        }
+        // ssl: {
+        //     rejectUnauthorized: false
+        // }
     });
 
     // Define the connection object
