@@ -39,6 +39,15 @@ app.get('/api/bikes', async (req, res) => {
             for (const bikeIndex in bikeTypes) {
                 const bike = bikeTypes[bikeIndex]
 
+
+                if(bike.bike_name.includes('\(') && bike.bike_name.includes('\)')) {
+                    bike.bike_name = bike.bike_name.replace(/-\(.+\)/g, '').replace(/\d+(\/\d+)+/g, bike.capacitate)
+                }
+
+                if(bike.bike_name.includes(bike.main_year)){
+                    bike.bike_name = bike.bike_name.replace(bike.main_year, '')
+                }
+
                 if (bike.brand === 'utv') {
                     bike.brand = 'linhai'
                     bike.vehicle_type = 'utv'
@@ -84,7 +93,6 @@ app.get('/api/bikes', async (req, res) => {
                 if (bike.price !== null && bike.price !== undefined && bike.price !== "null" && bike.price !== "undefined" && bike.price.includes("{")) {
                     bike.price = parseInt(bike.price.replace(/[{}]/g, "").replace(/\"/g, "").split(",")[0].replace(/[.,\s]+/g, ""))
                 } else if (bike.price !== null && bike.price !== undefined && bike.price !== "null" && bike.price !== "undefined") {
-
                     bike.price = parseInt(bike.price.replace(/[.,\s]+/g, ""))
                 }
 
