@@ -9,7 +9,10 @@
         :data-model="index"
         @click="selectModel"
       >
-        <div
+      <div class="promo-box-shape">
+       {{ modelCardName(index) }}
+      </div>
+        <!-- <div
           class="promo-box-shape"
           :style="{
             backgroundImage: `url(${motoboomImageResizer(model[0].gallery[1])}`,
@@ -22,7 +25,7 @@
             :class="`${index.replace(/_bikes/g, '')}-logo`"
           />
           <div class="promo-box-gradient"></div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="promo-container">
@@ -62,7 +65,7 @@ const imgURL = (url) => {
 
 const motoboomImageResizer = (image) => {
   console.log(image);
-  if (image.includes("motoboom")) {
+  if (image && image.includes("motoboom")) {
     image = image.replace("125x1", "650x1");
   }
   return image;
@@ -74,8 +77,21 @@ const getPopularModels = (allBikes) => {
     const bikes = [];
     const brand = allBikes[brandIndex];
 
+    // const oldPriceBrands = brand.filter((bike) => {
+    //   if (bike.old_price !== null) {
+    //     return bike;
+    //   }
+    // })
+
+    // oldPriceBrands.filter((bike) => {
+    //   if (bike.is_popular === true) {
+    //     bikes.push(bike);
+    //     finalPopular[brandIndex] = bikes;
+    //   }
+    // });
+
     brand.filter((bike) => {
-      if (bike.is_popular === true) {
+      if (bike.old_price !== null) {
         bikes.push(bike);
         finalPopular[brandIndex] = bikes;
       }
@@ -83,6 +99,18 @@ const getPopularModels = (allBikes) => {
   }
   return finalPopular;
 };
+
+const modelCardName = (name) => {
+  if(name.includes("atv")){
+    return `ATV ${name.replace("_atv", "").toUpperCase()}`;
+  }
+  if(name.includes("scooters")){
+    return `Scutere ${name.replace("_scooters", "").toUpperCase()}`;
+  }
+  if(name.includes("bikes")){
+    return `Motociclete ${name.replace("_bikes", "").toUpperCase()}`;
+  }
+}
 
 watchEffect(() => {
   popularModels.value = getPopularModels(appStore.allBikes);

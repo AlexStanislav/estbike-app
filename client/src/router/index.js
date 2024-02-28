@@ -75,31 +75,30 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  if (to.path === '/') {
-    if (appStore.firstLoadComplete) {
-      appStore.togglePreloader()
-      console.log('preload-toggle');
-      setTimeout(() => {
-        appStore.togglePreloader()
-        console.log('preload-toggle');
-      }, 1000);
-    } else {
-      if (to.path === '/modele') {
-        next('/')
-      }
-    }
-  } else {
-    appStore.togglePreloader()
-    setTimeout(() => {
-      appStore.togglePreloader()
-    }, 1000);
-  }
+  // if (to.path === '/') {
+  //   if (appStore.firstLoadComplete) {
+  //     appStore.togglePreloader()
+  //     setTimeout(() => {
+  //       appStore.togglePreloader()
+  //       console.log('preload-toggle');
+  //     }, 1000);
+  //   } else {
+  //     if (to.path === '/modele') {
+  //       next('/')
+  //     }
+  //   }
+  // } else if (to.path !== '/' || to.path !== '/modele' || to.path !== '/model') {
+  //   appStore.togglePreloader()
+  //   setTimeout(() => {
+  //     appStore.togglePreloader()
+  //   }, 1000);
+  // }
 
-  if (to.path === '/' && from.path === '/model') {
-    setTimeout(() => {
-      appStore.togglePreloader(false)
-    }, 1001);
-  }
+  // if (to.path === '/' && from.path === '/model') {
+  //   setTimeout(() => {
+  //     appStore.togglePreloader(false)
+  //   }, 1001);
+  // }
 
 
   next()

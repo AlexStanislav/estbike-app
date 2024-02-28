@@ -98,7 +98,7 @@
           </ul>
           <br />
           <ul>
-            <li><i class="pi pi-mobile"></i>0712345678</li>
+            <li><i class="pi pi-mobile"></i>0733782453</li>
             <li><i class="pi pi-map-marker"></i>Str. Șelimbăr nr 10, Brebu</li>
             <li><i class="pi pi-envelope"></i>motobrebu@example.com</li>
           </ul>
@@ -119,7 +119,9 @@
           exprimati acordul cu utilizarea acestor technologii.
         </p>
         <p>
-          Puteti citi mai multe despre cookie-uri si termenii de utilizare <router-link to="/cookies">aici</router-link> si respectiv <router-link to="/termeni">aici</router-link>
+          Puteti citi mai multe despre cookie-uri si termenii de utilizare
+          <router-link to="/cookies">aici</router-link> si respectiv
+          <router-link to="/termeni">aici</router-link>
         </p>
         <Button @click="acceptGDPR()" severity="danger">Am inteles</Button>
       </div>
@@ -167,6 +169,7 @@ onMounted(async () => {
 });
 
 const goToBrand = (query) => {
+  appStore.togglePreloader(true);
   appStore.setModelsFilters({ brand: query });
   setTimeout(() => {
     router.push({ path: "/modele" });
@@ -330,6 +333,21 @@ footer {
   }
   .footer-brands {
     margin-left: -5rem !important;
+  }
+  .gdpr-dialog {
+    width: 90%;
+    .p-dialog-content p {
+      font-size: 1rem;
+    }
+  }
+}
+
+@media screen and (max-height: 851px) and (orientation: landscape) {
+  .gdpr-dialog {
+    width: 90%;
+    .p-dialog-content p {
+      font-size: 1rem;
+    }
   }
 }
 </style>

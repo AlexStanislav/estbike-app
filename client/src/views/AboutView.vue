@@ -72,13 +72,21 @@
   </div>
 </template>
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, onBeforeMount } from "vue";
+import { useAppStore } from "../stores/appStore";
+const store = useAppStore();
+onBeforeMount(() => {
+  store.togglePreloader(true);
+});
 
 onMounted(() => {
   const header = document.querySelector(".desktop-nav");
   if (header !== null) {
     header.classList.add("sticky");
   }
+  setTimeout(() => {
+    store.togglePreloader(false);
+  }, 1000);
 });
 </script>
 <style lang="scss">

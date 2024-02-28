@@ -2,8 +2,7 @@
   <div class="product">
     <div class="product-top-container">
       <div class="product-header">
-        <span>Acasa</span> /
-        <span>Modele</span> /
+        <span>Acasa</span> / <span>Modele</span> /
         <span class="bike-name-crumb">{{ bikeDisplayName }}</span>
       </div>
       <section class="product-info-left">
@@ -51,7 +50,7 @@
             </label>
             <div class="installment-price">
               Va trebuii sa platiti: {{ calulateInstallments() }}
-              {{ displayModel.currency }} pe luna
+              EUR pe luna
             </div>
             <div class="installment-price">
               SAU {{ calculateRonInstallments() }} RON pe luna
@@ -67,16 +66,17 @@
       <section class="product-info-right">
         <div class="product-info-details">
           <h1>{{ bikeDisplayName }}</h1>
-          <h4>
+          <div class="bike-subtitle">
             Producator:
             {{
               displayModel.brand !== undefined
                 ? displayModel.brand.toUpperCase()
                 : "Necunoscut"
             }}
-          </h4>
-          <h4>Categoria: {{ getCategory() }}</h4>
-          <h4
+          </div>
+          <div class="bike-subtitle">An fabricatie: {{ displayModel.main_year }}</div>
+          <div class="bike-subtitle">Categoria: {{ getCategory() }}</div>
+          <div
             v-if="
               displayModel.permis !== undefined &&
               displayModel.permis.length > 0
@@ -89,8 +89,8 @@
               :key="permis"
               >{{ permis }}</span
             >
-          </h4>
-          <h4>
+          </div>
+          <div class="bike-subtitle">
             Tip Vehicul:
             {{
               displayModel.vehicle_type !== undefined
@@ -100,7 +100,7 @@
                     .replace("atv", "ATV")
                 : "Necunoscut"
             }}
-          </h4>
+          </div>
           <p>{{ bikeSlogan }}</p>
           <p
             class="product-description"
@@ -111,12 +111,12 @@
         </div>
         <div class="product-info-price">
           <div class="eur-price" v-if="displayModel.price !== null">
-            <span>{{ displayModel.price }} {{ displayModel.currency }}</span>
+            <span>{{ displayModel.price }} EUR</span>
             <s v-if="displayModel.old_price !== null"
-              >{{ displayModel.old_price }} {{ displayModel.currency }}</s
+              >{{ displayModel.old_price }} EUR</s
             >
           </div>
-          <div class="ron-price"  v-if="displayModel.price !== null">
+          <div class="ron-price" v-if="displayModel.price !== null">
             <span
               >{{
                 Math.ceil(displayModel.price * appStore.forexValue)
@@ -167,11 +167,10 @@
   </div>
 </template>
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeMount, onMounted, ref, watchEffect } from "vue";
 import { useAppStore } from "../stores/appStore";
 import Carousel from "primevue/carousel";
 import Dropdown from "primevue/dropdown";
-import Button from "primevue/button";
 import router from "../router";
 const appStore = useAppStore();
 const displayModel = ref({});
@@ -190,34 +189,46 @@ const header =
     ? document.querySelector(".desktop-nav")
     : document.querySelector(".mobile-nav");
 
+onBeforeMount(() => {
+  console.log(router);
+  appStore.togglePreloader(true);
+  if (appStore.currentBike === null) {
+    appStore.currentBike = JSON.parse(localStorage.getItem("currentBike"));
+  }
+  setTimeout(() => {
+    appStore.togglePreloader(false);
+  }, 1000);
+});
+
+function loadCurrentBike() {
+  if(appStore.currentBike === null){
+    appStore.currentBike = JSON.parse(localStorage.getItem("currentBike"));
+  }
+  displayModel.value = appStore.currentBike;
+  mainImage.value = displayModel.value.image;
+  carouselImages.value = getGallery();
+
+  bikeDisplayName.value = displayModel.value.bike_name.toUpperCase();
+  bikeSlogan.value = displayModel.value.bike_slogan.toUpperCase();
+  if (
+    displayModel.value.old_price !== "null" &&
+    displayModel.value.old_price !== ""
+  ) {
+    discount.value = Math.round(
+      ((displayModel.value.price - displayModel.value.old_price) /
+        displayModel.value.price) *
+        100
+    ).toFixed(0);
+  }
+
+  similarModels.value = getRandomSlice(getSimilarModels()[0], 4);
+}
+
 onMounted(() => {
   header.classList.add("sticky");
 
-  if (appStore.currentBike === null) {
-    router.push({ path: "/" });
-  }
-
   setTimeout(() => {
-    displayModel.value = appStore.currentBike;
-    if(displayModel.value){
-      mainImage.value = displayModel.value.image;
-      carouselImages.value = getGallery();
-  
-      bikeDisplayName.value = displayModel.value.bike_name.toUpperCase();
-      bikeSlogan.value = displayModel.value.bike_slogan.toUpperCase();
-      if (
-        displayModel.value.old_price !== "null" &&
-        displayModel.value.old_price !== ""
-      ) {
-        discount.value = Math.round(
-          ((displayModel.value.price - displayModel.value.old_price) /
-            displayModel.value.price) *
-            100
-        ).toFixed(0);
-      }
-  
-      similarModels.value = getRandomSlice(getSimilarModels()[0], 4);
-    }
+    loadCurrentBike();
   }, 300);
 });
 
@@ -227,7 +238,7 @@ const setModelAsCurrent = (model) => {
   carouselImages.value = getGallery();
   bikeDisplayName.value = displayModel.value.bike_name.toUpperCase();
   bikeSlogan.value = displayModel.value.bike_slogan.toUpperCase();
-  window.scrollTo(0, 0)
+  window.scrollTo(0, 0);
 };
 
 function getRandomSlice(array, sliceLength) {
@@ -270,10 +281,10 @@ const getDescription = () => {
 
 const getGallery = () => {
   const gallery = [];
-  if(displayModel.value.gallery === null) return gallery
-  if(displayModel.value.gallery[0] === ""){
+  if (displayModel.value.gallery === null) return gallery;
+  if (displayModel.value.gallery[0] === "") {
     gallery.push(motoboomImageResizer(displayModel.value.image));
-  }else{
+  } else {
     for (const img of displayModel.value.gallery) {
       gallery.push(motoboomImageResizer(img));
     }
@@ -326,6 +337,10 @@ const showRabla = computed(() => {
   ) {
     return true;
   }
+});
+
+watchEffect(() => {
+  loadCurrentBike();
 });
 </script>
 <style lang="scss">
@@ -449,8 +464,9 @@ const showRabla = computed(() => {
   color: var(--dark-shade);
   position: relative;
   h1,
-  h4 {
+  .bike-subtitle {
     margin: 0;
+    font-weight: 500;
   }
   p {
     font-size: 1.1rem;
@@ -556,7 +572,7 @@ const showRabla = computed(() => {
   transition: background 0.1s ease-in-out;
 }
 
-.similar-model-card:hover{
+.similar-model-card:hover {
   background: var(--main);
 }
 
@@ -597,13 +613,13 @@ const showRabla = computed(() => {
 }
 
 @media screen and (max-width: 1366px) {
-  .product{
+  .product {
     width: 95%;
   }
 }
 
 @media screen and (max-height: 414px) {
-  .product-info-price-discount{
+  .product-info-price-discount {
     position: initial;
   }
 }
@@ -628,7 +644,7 @@ const showRabla = computed(() => {
   .similar-model-card {
     width: 90%;
   }
-  .product-info-price-discount{
+  .product-info-price-discount {
     position: initial;
   }
 }

@@ -41,21 +41,7 @@
             <div class="info-picto">
               <i class="pi pi-map-marker"></i>
             </div>
-            <div class="info-content">Strada Medeea 1A, Contanta</div>
-          </div>
-          <div class="info-row">
-            <div class="info-picto">
-              <i class="pi pi-map-marker"></i>
-            </div>
             <div class="info-content">Strada Șelimbăr nr. 10, Comuna Brebu</div>
-          </div>
-          <div class="info-row">
-            <div class="info-picto">
-              <i class="pi pi-map-marker"></i>
-            </div>
-            <div class="info-content">
-              Strada Pescarilor PA7 Parter, Contanta
-            </div>
           </div>
           <div class="social-media">
             <div class="contact-card facebook-card">
@@ -77,27 +63,7 @@
         <h2 class="contact-subtitle">Locațiile noastre</h2>
         <div class="iframe-container">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11447.937554508204!2d28.5983005!3d44.1661813!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xa67bd9768e231959!2sEST%20BIKE%20ADVENTURE!5e0!3m2!1sro!2sro!4v1664964531380!5m2!1sro!2sro"
-            width="100%"
-            height="300"
-            style="border: 0"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-
-          <iframe
             src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11250.472360489086!2d25.7747136!3d45.174583!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x6b60a315be9c5724!2sEST%20BIKE%20Campina!5e0!3m2!1sro!2sro!4v1664964232514!5m2!1sro!2sro"
-            width="100%"
-            height="300"
-            style="border: 0"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2860.4289457603763!2d28.653765300000007!3d44.1982312!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40bafb75dc353631%3A0x8a4044ca53f132a1!2sEst%20Bike%20Funky%20Sports!5e0!3m2!1sro!2sro!4v1664984674764!5m2!1sro!2sro"
             width="100%"
             height="300"
             style="border: 0"
@@ -111,9 +77,18 @@
   </div>
 </template>
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, onBeforeMount } from "vue";
+import { useAppStore } from "../stores/appStore";
+const store = useAppStore();
+
+onBeforeMount(() => {
+  store.togglePreloader(true);
+});
 
 onMounted(() => {
+  setTimeout(() => {
+    store.togglePreloader(false);
+  }, 1000);
   const header = document.querySelector(".desktop-nav");
   if (header !== null) {
     header.classList.add("sticky");

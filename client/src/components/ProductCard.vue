@@ -6,7 +6,7 @@
       <div class="extra-info-container">
         <span class="license-info" v-if="showLicense">
           Permis:
-          <span v-for="(license, index) in bike.permis" :key="index">
+          <span v-for="(license, index) in bikeLicenses" :key="index">
             {{ license }}</span
           >
         </span>
@@ -22,16 +22,22 @@
           )
         }}%
       </div>
-      <h2>{{ bike.bike_name.toUpperCase() }}</h2>
+      <h2>
+        {{
+          bike.bike_name.toUpperCase().match(/'\d+/g)
+            ? bike.bike_name.replace(/'\d+/g, "").toUpperCase()
+            : bike.bike_name.toUpperCase()
+        }}
+      </h2>
       <p class="price-container">
-        <b class="bike-price" v-if="bike.price !== null"
-          >{{ bikePrice }} {{ bike.currency }}</b
-        >
+        <b class="bike-price" v-if="bike.price !== null">{{ bikePrice }} EUR</b>
         <b v-else>Pret Indisponibil</b>
         <span class="bike-old-price" v-if="bike.old_price !== null"
-          ><s>{{ bike.old_price }} {{ bike.currency }}</s></span
+          ><s>{{ bike.old_price }} EUR</s></span
         >
       </p>
+
+      <span>{{ bike.main_year }}</span>
     </div>
   </div>
 </template>
@@ -51,18 +57,18 @@ import { computed } from "vue";
 const appStore = useAppStore();
 const toast = useToast();
 
-const favoriteBike = (bike) => {
-  console.log(bike);
-  toast.add({
-    severity: "success",
-    summary: "Vehiculul adaugat la favorite",
-    detail: "Vehiculul a fost adaugat la favorite",
-    life: 3000,
-  });
-};
+const bikeLicenses = computed(() => {
+  const finalArray = [];
+  for (const license of props.bike.permis) {
+    finalArray.push(license.replace(/[{}""]/g, ""));
+  }
+  return finalArray;
+});
 
 const selectBike = (bike) => {
+  appStore.togglePreloader(true);
   appStore.setCurrentBike(bike);
+  localStorage.setItem("currentBike", JSON.stringify(bike));
   router.push({ name: "model" });
 };
 
@@ -99,10 +105,7 @@ const showRabla = computed(() => {
     props.bike.rabla !== null &&
     props.bike.rabla !== undefined &&
     props.bike.rabla !== "" &&
-    props.bike.rabla !== "NU" &&
-    props.bike.rabla !== "nu" && 
-    props.bike.rabla !== "Nu" &&
-    props.bike.rabla !== "nU" &&
+    props.bike.rabla.toLowerCase() !== "nu" &&
     props.bike.rabla !== false &&
     props.bike.rabla !== "false"
   ) {
@@ -198,6 +201,7 @@ const showRabla = computed(() => {
   align-items: center;
   justify-content: center;
   flex-flow: column;
+  margin: 0;
   b {
     width: fit-content;
     font-size: 1.5rem;
@@ -262,13 +266,12 @@ const showRabla = computed(() => {
   border-radius: 0.2rem;
 }
 
-.rabla-info{
+.rabla-info {
   width: fit-content;
   background: var(--success);
   padding: 0rem 0.5rem;
   border-radius: 0.2rem;
 }
-
 
 @media screen and (max-width: 1024px) {
   .product-card {

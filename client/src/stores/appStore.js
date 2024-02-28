@@ -62,6 +62,7 @@ export const useAppStore = defineStore('appStore', {
       this.homeModelTypes = [...new Set(models)]
     },
     togglePreloader(value = null) {
+      console.log(value)
       this.showPreloader = value !== null ? value : !this.showPreloader
     },
     async togglePageLoad(callback) {
@@ -88,6 +89,7 @@ export const useAppStore = defineStore('appStore', {
       this.sidebarOpen = !this.sidebarOpen
     },
     async getAllBikes() {
+      
       try {
         const response = await axios.get(`${this.serverURL}/api/bikes`)
         this.allBikes = await response.data.bikes

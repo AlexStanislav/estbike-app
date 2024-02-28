@@ -206,7 +206,9 @@
   </section>
 </template>
 <script setup>
-import { onMounted, ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
+import { useAppStore } from "../stores/appStore";
+const store = useAppStore();
 
 const indexLinks = ref([]);
 
@@ -221,7 +223,14 @@ const goTo = (element) => {
   });
 };
 
+onBeforeMount(() => {
+  store.togglePreloader(true);
+})
+
 onMounted(() => {
+  setTimeout(() => {
+    store.togglePreloader(false);
+  }, 1000);
   for (const link of document.getElementsByTagName("article")) {
     indexLinks.value.push(link);
   }

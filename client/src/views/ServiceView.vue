@@ -252,13 +252,19 @@
 import InputText from "primevue/inputtext";
 import Checkbox from "primevue/checkbox";
 import Button from "primevue/button";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, onBeforeMount } from "vue";
 import { VueRecaptcha } from "vue-recaptcha";
 import { useAppStore } from "@/stores/appStore";
 import axios from "axios";
 import { useToast } from "primevue/usetoast";
+onBeforeMount(() => {
+  appStore.togglePreloader(true);
+});
 
 onMounted(() => {
+  setTimeout(() => {
+    appStore.togglePreloader(false);
+  }, 1000);
   const header = document.querySelector(".desktop-nav");
   if (header !== null) {
     header.classList.add("sticky");

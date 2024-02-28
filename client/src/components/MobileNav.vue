@@ -191,6 +191,7 @@ watch(
 );
 
 const selectBike = (bike) => {
+  appStore.togglePreloader(true);
   if (router.currentRoute.value.path === "/model") {
     router.go(-1);
     setTimeout(() => {

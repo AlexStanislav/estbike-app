@@ -36,7 +36,7 @@
       >
         <template #option="slotProps">
           <div class="autocomplete-result" @click="selectBike(slotProps.option)">
-            {{ slotProps.option.bike_name }}
+            {{ slotProps.option.bike_name }} - {{ slotProps.option.main_year }}
           </div>
         </template>
       </AutoComplete>
@@ -46,7 +46,7 @@
 <script setup>
 import AutoComplete from "primevue/autocomplete";
 import router from "../router";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useAppStore } from "../stores/appStore";
 const appStore = useAppStore();
 const goTo = (url) => {
@@ -63,7 +63,6 @@ const search = (event) => {
       return model.bike_name.replace(/-/g, " ");
     }
   });
-  
 };
 
 function getAllModels() {
@@ -81,14 +80,12 @@ function getAllModels() {
 }
 
 const selectBike = (bike) => {
-  if(router.currentRoute.value.path === '/model'){
-    router.go(-1);
-    setTimeout(() => {
-      router.go(1)
-    })
+  if (router.currentRoute.value.path === "/model") {
+   
   }
   searchValue.value = "";
   appStore.setCurrentBike(bike);
+  localStorage.setItem("currentBike", JSON.stringify(bike));
   router.push({ path: '/model' })
 }
 </script>
@@ -242,6 +239,20 @@ const selectBike = (bike) => {
   }
   #phone-number {
     font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .desktop-nav {
+    width: 100%;
+  }
+  .sticky {
+    img{
+      margin-right: 1rem !important;
+    }
+    #phone-number-container {
+      right: 22% !important;
+    }
   }
 }
 </style>

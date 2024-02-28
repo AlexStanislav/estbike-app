@@ -45,7 +45,7 @@
         <div class="contact-card call-card">
           <span>
             <i class="pi pi-phone"></i>
-            <div>0712345678</div>
+            <div>0733782453</div>
           </span>
           <span>
             <i class="pi pi-envelope"></i>
@@ -75,7 +75,7 @@
 <script setup>
 import Skeleton from "primevue/skeleton";
 import Carousel from "primevue/carousel";
-import { onMounted, onUnmounted, ref, watchEffect } from "vue";
+import { onBeforeMount, onMounted, onUnmounted, ref, watchEffect } from "vue";
 import { useAppStore } from "../stores/appStore";
 import PopularModels from "../components/PopularModels.vue";
 import Button from "primevue/button";
@@ -131,13 +131,19 @@ const getCarouselImages = (allBikes) => {
   return imageArray;
 };
 
+onBeforeMount(() => {
+  store.togglePreloader(true);
+});
+
 onMounted(() => {
   window.addEventListener("scroll", toggleStickyNav);
+  setTimeout(() => {
+    store.togglePreloader(false);
+  }, 1000);
 });
 
 watchEffect(() => {
   if (store.allBikes) {
-    const allBikes = getAllModels();
     carouselImages.value = getCarouselImages(store.allBikes);
   }
 });
