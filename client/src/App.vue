@@ -11,7 +11,7 @@
     <footer>
       <div class="footer-container">
         <div class="footer-wrapper">
-          <img src="@/assets/img/logo.svg" alt="" />
+          <img lazy src="@/assets/img/logo.svg" alt="" />
           <p>
             Moto Brebu reprezinta pasiunea imensa pentru motociclete si ATV-uri
             concretizata intr-un magazin de motociclete si ATV, echipamente si

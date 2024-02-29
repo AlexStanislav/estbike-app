@@ -12,7 +12,7 @@
         </span>
         <span class="rabla-info" v-if="showRabla">Eligibila Rabla</span>
       </div>
-      <img :src="bike.image" loading="lazy" />
+      <img lazy :src="bike.image" />
     </div>
     <div class="info-container">
       <div v-if="showDiscount" class="ribbon">

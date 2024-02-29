@@ -2,7 +2,7 @@
   <div id="preloader" v-if="isVisible">
     <div id="preload-content">
       <div id="preload-logo">
-        <img src="@/assets/img/logo.svg" alt="Logo motobrebu" />
+        <img lazy src="@/assets/img/logo.svg" alt="Logo motobrebu" />
       </div>
       <div id="spinner-container">
         <div id="pulsing-spinner"></div>

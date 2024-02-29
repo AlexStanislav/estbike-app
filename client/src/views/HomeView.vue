@@ -14,7 +14,7 @@
     >
       <template #item="slotProps">
         <div class="top-gradient"></div>
-        <img class="home-carousel-img" :src="slotProps.data.img" :alt="slotProps.data.alt" />
+        <img lazy class="home-carousel-img" :src="slotProps.data.img" :alt="slotProps.data.alt" />
         <div class="carousel-text-container">
           <h1>{{ slotProps.data.title }}</h1>
           <h2>{{ slotProps.data.subtitle }}</h2>

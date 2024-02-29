@@ -70,7 +70,7 @@ export const useAppStore = defineStore('appStore', {
 
       if (callback) {
         await callback()
-
+        
         setTimeout(() => {
           this.showPreloader = false
         }, 1000)

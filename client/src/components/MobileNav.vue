@@ -1,7 +1,7 @@
 <template>
   <div class="mobile-nav">
     <i class="pi pi-bars menu-icon" @click="toggleSidebar()"></i>
-    <img src="../assets/img/logo.svg" alt="Logo motobrebu" />
+    <img lazy src="../assets/img/logo.svg" alt="Logo motobrebu" />
     <div id="phone-number-container">
       <i class="pi pi-phone" />
       <div id="phone-number">

@@ -7,7 +7,7 @@
       </div>
       <section class="product-info-left">
         <div class="product-img-container">
-          <img :src="mainImage" alt="" />
+          <img lazy :src="mainImage" alt="" />
           <Carousel
             class="product-carousel"
             verticalViewPortHeight="400px"
@@ -149,7 +149,7 @@
           @click="setModelAsCurrent(model)"
         >
           <div class="similar-img-container">
-            <img :src="model.image" alt="" />
+            <img lazy :src="model.image" alt="" />
           </div>
           <div class="similar-info-container">
             <h3>{{ model.bike_name.toUpperCase() }}</h3>

@@ -148,10 +148,10 @@
     </section>
     <section class="bike-section">
       <section class="bike-section-header" v-if="displayedModels.length > 0">
-        <span class="header-models-count">{{ allModels.length }} MODELE</span>
+        <span class="header-models-count">{{ numberOfModels }} MODELE</span>
         <span
           >Pagina {{ currentPage + 1 }}/{{
-            Math.ceil(allModels.length / rowsPerPage)
+            Math.ceil(numberOfModels / rowsPerPage)
           }}</span
         >
         <span class="price-filter-dropdown-container">
@@ -233,6 +233,8 @@ import InputText from "primevue/inputtext";
 import Skeleton from "primevue/skeleton";
 import { storeToRefs } from "pinia";
 
+const numberOfModels = ref(0);
+
 const priceFilter = ["Initial", "Crescator", "Decrescator"];
 const currentPriceOption = ref("Initial");
 
@@ -276,6 +278,44 @@ const modelFilters = storeToRefs(appStore).modelsFilters;
 const initialVehicleTypeSelected = ref(false);
 
 const methods = {
+  getModelsNumber: function (filters) {
+    const models = this.getAllModels();
+    const filteredModels = models.filter((model) => {
+      const yearMatch =
+        !filters.main_year || filters.main_year === model.main_year;
+      const categoryMatch =
+        !filters.category || filters.category === model.category;
+      const motorMatch =
+        !filters.capacitate ||
+        (parseInt(model.capacitate) >= filters.capacitate - 50 &&
+          parseInt(model.capacitate) <= filters.capacitate + 50);
+
+      const licenseMatch =
+        !filters.permis || model.permis.includes(filters.permis);
+
+      const brandMatch = !filters.brand || filters.brand === model.brand;
+
+      const typeMatch =
+        !filters.type || filters.type === model.vehicle_type.toLowerCase();
+
+      const priceMatch =
+        !filters.priceRange ||
+        (model.price >= filters.priceRange[0] &&
+          model.price <= filters.priceRange[1]);
+
+      return (
+        yearMatch &&
+        categoryMatch &&
+        motorMatch &&
+        licenseMatch &&
+        brandMatch &&
+        priceMatch &&
+        typeMatch
+      );
+    });
+
+    return filteredModels.length;
+  },
   getAllModels: function () {
     return Object.values(appStore.allBikes).flat();
   },
@@ -285,12 +325,16 @@ const methods = {
         if (brand !== null && bike.brand === brand) {
           return bike.main_year;
         }
-        if(brand === null){
-          return bike.main_year
+        if (brand === null) {
+          return bike.main_year;
         }
       })
       .filter(
-        (value, index, self) => (value !== null && value !== "" && value !== undefined) && self.indexOf(value) === index
+        (value, index, self) =>
+          value !== null &&
+          value !== "" &&
+          value !== undefined &&
+          self.indexOf(value) === index
       )
       .sort((a, b) => b - a);
     return years;
@@ -311,7 +355,7 @@ const methods = {
           categories.push(category);
         }
       }
-      if(brand === null){
+      if (brand === null) {
         category = bike.category;
         if (
           category !== null &&
@@ -368,7 +412,7 @@ const methods = {
       const motorMatch =
         !filters.capacitate ||
         (parseInt(model.capacitate) >= filters.capacitate - 50 &&
-          parseInt(model.capacitate) <= filters.capacitate);
+          parseInt(model.capacitate) <= filters.capacitate + 50);
 
       const licenseMatch =
         !filters.permis || model.permis.includes(filters.permis);
@@ -383,19 +427,31 @@ const methods = {
         (model.price >= filters.priceRange[0] &&
           model.price <= filters.priceRange[1]);
 
-      return (
-        yearMatch &&
-        categoryMatch &&
-        motorMatch &&
-        licenseMatch &&
-        brandMatch &&
-        priceMatch &&
-        typeMatch
-      );
+      if (priceMatch) {
+        return (
+          yearMatch &&
+          categoryMatch &&
+          motorMatch &&
+          licenseMatch &&
+          brandMatch &&
+          priceMatch &&
+          typeMatch
+        );
+      } else {
+        return (
+          yearMatch &&
+          categoryMatch &&
+          motorMatch &&
+          licenseMatch &&
+          brandMatch &&
+          typeMatch
+        );
+      }
     });
 
     allModels.value = filteredModels;
 
+    numberOfModels.value = allModels.value.length;
     const startIndex = currentPage.value * rowsPerPage.value;
     const endIndex = startIndex + rowsPerPage.value;
     filteredModels.sort((a, b) => a.price - b.price);
@@ -455,12 +511,12 @@ const methods = {
   getPriceRange: function (brand = null) {
     const prices = [];
     for (const bike of allModels.value) {
-      if(brand !== null && bike.brand === brand){
+      if (brand !== null && bike.brand === brand) {
         if (bike.price !== null) {
           prices.push(bike.price);
         }
       }
-      if(brand === null){
+      if (brand === null) {
         if (bike.price !== null) {
           prices.push(bike.price);
         }
@@ -474,7 +530,7 @@ const methods = {
     const allLicenses = [];
     const regexMatch = /[{}""]/g;
     for (const model of allModels.value) {
-      if(brand !== null && model.brand === brand){
+      if (brand !== null && model.brand === brand) {
         if (
           model.permis !== null &&
           model.permis !== "null" &&
@@ -483,11 +539,11 @@ const methods = {
           if (model.permis[0].match(regexMatch)) {
             model.permis = model.permis[0].replace(regexMatch, "").split(",");
           }
-  
+
           licenseCategories.push(model.permis);
         }
       }
-      if(brand === null){
+      if (brand === null) {
         if (
           model.permis !== null &&
           model.permis !== "null" &&
@@ -580,6 +636,7 @@ const methods = {
       this.applyFilters();
       this.setFilters();
       modelsLoaded.value = true;
+      numberOfModels.value = methods.getModelsNumber(filters.value);
     }, 300);
   },
   setFilters: function (models = null) {
@@ -594,13 +651,16 @@ const methods = {
     maxPrice.value = priceRange.value[1];
   },
   setBrandFilters: function (brand) {
+    for (const index in filters.value) {
+      if (index !== "type" && index !== "brand" && index !== "priceRange") {
+        filters.value[index] = null;
+      }
+    }
+    allModels.value = methods.getAllModels();
     motorFilters.value = this.getMotorInfo(brand);
     categoriesFilter.value = this.getCategories(brand);
     yearsFilter.value = this.getYears(brand);
     licenseFilter.value = this.getLicenseFilters(brand);
-    priceRange.value = methods.getPriceRange(brand);
-    minPrice.value = priceRange.value[0];
-    maxPrice.value = priceRange.value[1];
   },
   getBrandNumbers: function () {
     const brandNumbers = {};
