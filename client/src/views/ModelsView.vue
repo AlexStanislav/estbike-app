@@ -279,37 +279,71 @@ const methods = {
   getAllModels: function () {
     return Object.values(appStore.allBikes).flat();
   },
-  getYears: function () {
+  getYears: function (brand = null) {
     const years = allModels.value
-      .map((bike) => bike.main_year)
+      .map((bike) => {
+        if (brand !== null && bike.brand === brand) {
+          return bike.main_year;
+        }
+        if(brand === null){
+          return bike.main_year
+        }
+      })
       .filter(
-        (value, index, self) => value !== null && self.indexOf(value) === index
+        (value, index, self) => (value !== null && value !== "" && value !== undefined) && self.indexOf(value) === index
       )
       .sort((a, b) => b - a);
     return years;
   },
-  getCategories: function () {
-    const uniqueCategories = new Set();
+  getCategories: function (brand = null) {
+    const categories = [];
+    let category;
     for (const bike of allModels.value) {
-      const value = bike.category;
-      if (
-        value !== null &&
-        value !== undefined &&
-        value !== "" &&
-        value !== "null" &&
-        (typeof value !== "object" || Object.keys(value).length !== 0)
-      ) {
-        uniqueCategories.add(value);
+      if (brand !== null && bike.brand === brand) {
+        category = bike.category;
+        if (
+          category !== null &&
+          category !== undefined &&
+          category !== "" &&
+          category !== "null" &&
+          (typeof category !== "object" || Object.keys(category).length !== 0)
+        ) {
+          categories.push(category);
+        }
+      }
+      if(brand === null){
+        category = bike.category;
+        if (
+          category !== null &&
+          category !== undefined &&
+          category !== "" &&
+          category !== "null" &&
+          (typeof category !== "object" || Object.keys(category).length !== 0)
+        ) {
+          categories.push(category);
+        }
       }
     }
-    return Array.from(uniqueCategories).sort((a, b) => a.localeCompare(b));
+
+    const uniqueCategories = [...new Set(categories)];
+
+    return uniqueCategories.sort((a, b) => a.localeCompare(b));
   },
-  getMotorInfo: function () {
-    const motorCapacities = [];
+  getMotorInfo: function (brand = null) {
+    let motorCapacities = [];
+    let capacity;
     for (const model of allModels.value) {
-      const capacity = model.capacitate;
-      if (capacity !== null) {
-        motorCapacities.push(capacity);
+      if (brand !== null && model.brand === brand) {
+        capacity = model.capacitate;
+        if (capacity !== null) {
+          motorCapacities.push(capacity);
+        }
+      }
+      if (brand === null) {
+        capacity = model.capacitate;
+        if (capacity !== null) {
+          motorCapacities.push(capacity);
+        }
       }
     }
 
@@ -344,8 +378,11 @@ const methods = {
       const typeMatch =
         !filters.type || filters.type === model.vehicle_type.toLowerCase();
 
-      const priceMatch = !filters.priceRange || ((model.price >= filters.priceRange[0] && model.price <= filters.priceRange[1]))
-      
+      const priceMatch =
+        !filters.priceRange ||
+        (model.price >= filters.priceRange[0] &&
+          model.price <= filters.priceRange[1]);
+
       return (
         yearMatch &&
         categoryMatch &&
@@ -415,31 +452,53 @@ const methods = {
       displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
     }
   },
-  getPriceRange: function () {
+  getPriceRange: function (brand = null) {
     const prices = [];
     for (const bike of allModels.value) {
-      if (bike.price !== null) {
-        prices.push(bike.price);
+      if(brand !== null && bike.brand === brand){
+        if (bike.price !== null) {
+          prices.push(bike.price);
+        }
+      }
+      if(brand === null){
+        if (bike.price !== null) {
+          prices.push(bike.price);
+        }
       }
     }
 
     return [Math.min(...prices), Math.max(...prices)];
   },
-  getLicenseFilters: function () {
+  getLicenseFilters: function (brand = null) {
     const licenseCategories = [];
     const allLicenses = [];
     const regexMatch = /[{}""]/g;
     for (const model of allModels.value) {
-      if (
-        model.permis !== null &&
-        model.permis !== "null" &&
-        model.permis.length > 0
-      ) {
-        if (model.permis[0].match(regexMatch)) {
-          model.permis = model.permis[0].replace(regexMatch, "").split(",");
+      if(brand !== null && model.brand === brand){
+        if (
+          model.permis !== null &&
+          model.permis !== "null" &&
+          model.permis.length > 0
+        ) {
+          if (model.permis[0].match(regexMatch)) {
+            model.permis = model.permis[0].replace(regexMatch, "").split(",");
+          }
+  
+          licenseCategories.push(model.permis);
         }
+      }
+      if(brand === null){
+        if (
+          model.permis !== null &&
+          model.permis !== "null" &&
+          model.permis.length > 0
+        ) {
+          if (model.permis[0].match(regexMatch)) {
+            model.permis = model.permis[0].replace(regexMatch, "").split(",");
+          }
 
-        licenseCategories.push(model.permis);
+          licenseCategories.push(model.permis);
+        }
       }
     }
 
@@ -531,8 +590,17 @@ const methods = {
     categoriesFilter.value = this.getCategories();
     yearsFilter.value = this.getYears();
     priceRange.value = methods.getPriceRange();
-    minPrice.value = methods.getPriceRange()[0];
-    maxPrice.value = methods.getPriceRange()[1];
+    minPrice.value = priceRange.value[0];
+    maxPrice.value = priceRange.value[1];
+  },
+  setBrandFilters: function (brand) {
+    motorFilters.value = this.getMotorInfo(brand);
+    categoriesFilter.value = this.getCategories(brand);
+    yearsFilter.value = this.getYears(brand);
+    licenseFilter.value = this.getLicenseFilters(brand);
+    priceRange.value = methods.getPriceRange(brand);
+    minPrice.value = priceRange.value[0];
+    maxPrice.value = priceRange.value[1];
   },
   getBrandNumbers: function () {
     const brandNumbers = {};
@@ -587,6 +655,7 @@ watch(
   () => modelBrand.value,
   () => {
     filters.value.brand = modelBrand.value;
+    methods.setBrandFilters(modelBrand.value);
   }
 );
 
@@ -603,9 +672,12 @@ watch(modelFilters, () => {
   }
 });
 
-watch(() => priceRange.value, () => {
-  filters.value.priceRange = priceRange.value;
-})
+watch(
+  () => priceRange.value,
+  () => {
+    filters.value.priceRange = priceRange.value;
+  }
+);
 
 onMounted(async () => {
   if (appStore.showPreloader) {
@@ -641,7 +713,6 @@ onMounted(async () => {
 
 const filterByQuery = () => {
   const filters = modelFilters.value[0];
-  console.log(filters);
   modelBrand.value = filters.brand;
   if (filters.type !== undefined) {
     modelType.value = filters.type;
