@@ -161,7 +161,7 @@ const getInfoAspGroup = async (url, tableName) => {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0"})
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const $ = cheerio.load(await page.content());
 
