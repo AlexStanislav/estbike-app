@@ -10,7 +10,7 @@ const getInfoMotoboom = async (url, type, tableName, categoryUrl) => {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const $ = cheerio.load(await page.content());
 
@@ -63,7 +63,7 @@ const getInfoMotoboom = async (url, type, tableName, categoryUrl) => {
     for (const link of bikesLinks[tableName]) {
         if (link === undefined) continue
         if (link.includes(type) && link.includes('.html')) {
-            await page.goto(link, { waitUntil: "networkidle0" })
+            await page.goto(link, { waitUntil: "networkidle0", timeout: 0 })
             const content = await page.content()
             if (typeof content === 'string') {
                 const $ = cheerio.load(content)
@@ -132,7 +132,7 @@ const getInfoMotoboom = async (url, type, tableName, categoryUrl) => {
 
     if (tableName === 'kawasaki') {
 
-        await page.goto(categoryUrl, { waitUntil: "networkidle0" })
+        await page.goto(categoryUrl, { waitUntil: "networkidle0", timeout: 0 })
 
         const html = cheerio.load(await page.content());
 
@@ -161,7 +161,7 @@ const getInfoAspGroup = async (url, tableName) => {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const $ = cheerio.load(await page.content());
 
@@ -179,7 +179,7 @@ const getInfoAspGroup = async (url, tableName) => {
 
         const finalLink = `https://www.aspgroup.ro${link}`
 
-        await page.goto(finalLink, { waitUntil: "networkidle0" })
+        await page.goto(finalLink, { waitUntil: "networkidle0", timeout: 0 })
 
         const $ = cheerio.load(await page.content())
 
@@ -320,7 +320,7 @@ const getInfoAtvRom = async (url, tableName) => {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const $ = cheerio.load(await page.content());
 
@@ -351,7 +351,7 @@ const getInfoAtvRom = async (url, tableName) => {
             continue
         }
 
-        await page.goto(link, { waitUntil: "networkidle0" })
+        await page.goto(link, { waitUntil: "networkidle0", timeout: 0 })
 
         const $ = cheerio.load(await page.content())
 
@@ -471,7 +471,7 @@ const getInfoBeneli = async (url, tableName) => {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const $ = cheerio.load(await page.content())
 
@@ -487,7 +487,7 @@ const getInfoBeneli = async (url, tableName) => {
     for (const link of bikesLinks[tableName]) {
         if (link !== undefined) {
 
-            await page.goto(link, { waitUntil: "networkidle0" })
+            await page.goto(link, { waitUntil: "networkidle0", timeout: 0 })
 
             const $ = cheerio.load(await page.content())
 
@@ -582,7 +582,7 @@ const getInfoBeta = async (url, tableName) => {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
     const $ = cheerio.load(await page.content())
 
     bikesInfo[tableName] = {}
@@ -603,7 +603,7 @@ const getInfoBeta = async (url, tableName) => {
     for (const link of bikesLinks[tableName]) {
         if (link === undefined) continue
 
-        await page.goto(link, { waitUntil: "networkidle0" })
+        await page.goto(link, { waitUntil: "networkidle0", timeout: 0 })
 
         const $ = cheerio.load(await page.content())
 
@@ -698,7 +698,7 @@ const getInfoKymco = async function (url, tableName) {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const $ = cheerio.load(await page.content())
 
@@ -718,7 +718,7 @@ const getInfoKymco = async function (url, tableName) {
     for (const link of bikesLinks[tableName]) {
         if (link !== undefined) {
 
-            await page.goto(link, { waitUntil: "networkidle0" })
+            await page.goto(link, { waitUntil: "networkidle0", timeout: 0 })
 
             const $ = cheerio.load(await page.content())
 
@@ -812,7 +812,7 @@ const getInfoKymco = async function (url, tableName) {
 const getInfoPiaggio = async function (url, tableName) {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const $ = cheerio.load(await page.content())
 
@@ -833,7 +833,7 @@ const getInfoPiaggio = async function (url, tableName) {
     const baseUrl = "https://www.piaggio.com/ro_RO/"
     for (const categoryLink of categories) {
         const finalLink = baseUrl + categoryLink.replace("/ro_RO/", "")
-        await page.goto(finalLink, { waitUntil: "networkidle0" })
+        await page.goto(finalLink, { waitUntil: "networkidle0", timeout: 0 })
         const $ = cheerio.load(await page.content())
         $('.card-product').each((index, element) => {
             const link = $(element).attr('href')
@@ -952,7 +952,7 @@ const getInfoPolaris = async function (url, tableName) {
                     if (link !== undefined) {
 
 
-                        await page.goto(link, { waitUntil: "networkidle0" })
+                        await page.goto(link, { waitUntil: "networkidle0", timeout: 0 })
 
                         const $ = cheerio.load(await page.content())
 
@@ -1051,7 +1051,7 @@ const getInfoPolaris = async function (url, tableName) {
 const getInfoSegway = async function (url, tableName) {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const $ = cheerio.load(await page.content())
 
@@ -1068,7 +1068,7 @@ const getInfoSegway = async function (url, tableName) {
 
         const finalLink = baseURL + link
 
-        await page.goto(finalLink, { waitUntil: "networkidle0" })
+        await page.goto(finalLink, { waitUntil: "networkidle0", timeout: 0 })
 
         const $ = cheerio.load(await page.content())
 
@@ -1211,7 +1211,7 @@ const getInfoSuzuki = async function (url, type, tableName) {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const $ = cheerio.load(await page.content())
 
@@ -1228,7 +1228,7 @@ const getInfoSuzuki = async function (url, type, tableName) {
     const baseURL = "https://bikes.suzuki.ro"
     for (const link of bikesLinks[tableName]) {
         const finalLink = `${baseURL}${link}`
-        await page.goto(finalLink, { waitUntil: "networkidle0" })
+        await page.goto(finalLink, { waitUntil: "networkidle0", timeout: 0 })
 
         const $ = cheerio.load(await page.content())
 
@@ -1336,7 +1336,7 @@ const getInfoSwm = async function (url, tableName) {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     bikesLinks[tableName] = []
     bikesInfo[tableName] = {}
@@ -1367,7 +1367,7 @@ const getInfoSwm = async function (url, tableName) {
     for (const link of bikesLinks[tableName]) {
         if (link === undefined) continue
 
-        await page.goto(link, { waitUntil: "networkidle0" })
+        await page.goto(link, { waitUntil: "networkidle0", timeout: 0 })
 
         const $ = cheerio.load(await page.content())
 
@@ -1481,7 +1481,7 @@ const getInfoSym = async function (url, tableName) {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const $ = cheerio.load(await page.content())
 
@@ -1495,7 +1495,7 @@ const getInfoSym = async function (url, tableName) {
     bikesLinks[tableName] = [...new Set(bikesLinks[tableName])]
 
     for (const link of bikesLinks[tableName]) {
-        await page.goto(link, { waitUntil: "networkidle0" })
+        await page.goto(link, { waitUntil: "networkidle0", timeout: 0 })
         const htmlName = link.split("/")[4]
 
         const $ = cheerio.load(await page.content())
@@ -1569,7 +1569,7 @@ const getInfoVespa = async function (url, tableName) {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const dataHtml = cheerio.load(await page.content())
 
@@ -1589,7 +1589,7 @@ const getInfoVespa = async function (url, tableName) {
 
     const baseUrl = "https://www.vespa.com"
     for (const link of bikesLinks[tableName]) {
-        await page.goto(baseUrl + link, { waitUntil: "networkidle0" })
+        await page.goto(baseUrl + link, { waitUntil: "networkidle0", timeout: 0 })
 
         const $ = cheerio.load(await page.content())
 
@@ -1605,7 +1605,7 @@ const getInfoVespa = async function (url, tableName) {
 
     for (const link of categoryLinks) {
         if (link.split("/").length === 6) {
-            await page.goto(baseUrl + link, { waitUntil: "networkidle0" })
+            await page.goto(baseUrl + link, { waitUntil: "networkidle0", timeout: 0 })
 
             const $ = cheerio.load(await page.content())
 
@@ -1662,7 +1662,7 @@ const getInfoYamaha = async function (url, tableName) {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0" })
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const $ = cheerio.load(await page.content())
 
@@ -1719,7 +1719,7 @@ const getInfoYamaha = async function (url, tableName) {
     const baseURL = "https://www.yamaha-motor.eu"
     for (const link of bikesLinks[tableName]) {
         if (link.includes("404")) continue
-        await page.goto(baseURL + link, { waitUntil: "networkidle0" })
+        await page.goto(baseURL + link, { waitUntil: "networkidle0", timeout: 0 })
 
         const $ = cheerio.load(await page.content())
 
