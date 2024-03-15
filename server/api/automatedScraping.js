@@ -10,7 +10,7 @@ const getInfoMotoboom = async (url, type, tableName, categoryUrl) => {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0"})
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
 
     const $ = cheerio.load(await page.content());
 
@@ -63,7 +63,7 @@ const getInfoMotoboom = async (url, type, tableName, categoryUrl) => {
     for (const link of bikesLinks[tableName]) {
         if (link === undefined) continue
         if (link.includes(type) && link.includes('.html')) {
-            await page.goto(link, { waitUntil: "networkidle0"})
+            await page.goto(link, { waitUntil: "networkidle0", timeout: 0 })
             const content = await page.content()
             if (typeof content === 'string') {
                 const $ = cheerio.load(content)
@@ -161,7 +161,7 @@ const getInfoAspGroup = async (url, tableName) => {
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
 
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 0 })
+    await page.goto(url, { waitUntil: "networkidle0" })
 
     const $ = cheerio.load(await page.content());
 
