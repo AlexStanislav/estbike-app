@@ -13,6 +13,7 @@ const history = require('connect-history-api-fallback');
 const scrapeForex = require('./api/scrapeForex')
 const forexData = require('./data/forexData')
 const cron = require('cron');
+const scraper = require('./api/automatedScraping')
 connection();
 
 app.use(express.urlencoded({ extended: true }));
@@ -162,13 +163,22 @@ const insertRequest = (req) => {
     return query
 }
 
-const job = new cron.CronJob(
-    '50 23 * * *', // Everyday at 11:50 pm
+const forexJob = new cron.CronJob(
+    '00 22 * * *', // Everyday at 10:00 pm
     function () {
         forexData.setValue(0.0)
     }
 )
-job.start()
+
+const scrapingJob = new cron.CronJob(
+    '00 23 * * *', // Everyday at 11:00 pm
+    function () {
+        scraper()
+    }
+)
+forexJob.start()
+scrapingJob.start()
 app.listen(port, () => {
+    scraper()
     console.log(`Server started on http://localhost:${port}`);
 })
