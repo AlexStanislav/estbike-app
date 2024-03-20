@@ -1,17 +1,20 @@
 <template>
   <div class="desktop-nav">
-    <img
-      src="../assets/img/logo.svg"
-      alt="motobrebu Logo"
-      @click="goTo('/')"
-    />
+    <img src="../assets/img/logo.svg" alt="motobrebu Logo" @click="goTo('/')" />
     <nav class="main-nav">
-      <router-link to="/">Acasă</router-link>
-      <router-link to="/despre">Despre Noi</router-link>
-      <router-link to="/modele">Modele</router-link>
-      <router-link to="/rabla">Rabla</router-link>
-      <router-link to="/service">Service</router-link>
-      <router-link to="/contact">Contact</router-link>
+      <router-link @mouseenter="hideMenu()" to="/">Acasă</router-link>
+      <router-link @mouseenter="hideMenu()" to="/despre"
+        >Despre Noi</router-link
+      >
+      <a @mouseenter="toggleMenu" @click="goTo('/modele')">
+        <span>
+          Modele
+          <Menu ref="menu" id="overlay_menu" :model="menuItems" :popup="true" @mouseleave="hideMenu()"/>
+        </span>
+      </a>
+      <router-link @mouseenter="hideMenu()" to="/rabla">Rabla</router-link>
+      <router-link @mouseenter="hideMenu()" to="/service">Service</router-link>
+      <router-link @mouseenter="hideMenu()" to="/contact">Contact</router-link>
     </nav>
     <div id="phone-number-container">
       <i class="pi pi-phone" />
@@ -35,7 +38,10 @@
         placeholder="Cauta..."
       >
         <template #option="slotProps">
-          <div class="autocomplete-result" @click="selectBike(slotProps.option)">
+          <div
+            class="autocomplete-result"
+            @click="selectBike(slotProps.option)"
+          >
             {{ slotProps.option.bike_name }} - {{ slotProps.option.main_year }}
           </div>
         </template>
@@ -46,11 +52,62 @@
 <script setup>
 import AutoComplete from "primevue/autocomplete";
 import router from "../router";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useAppStore } from "../stores/appStore";
+import Menu from "primevue/menu";
 const appStore = useAppStore();
 const goTo = (url) => {
+  menu.value.hide();
   router.push({ path: url });
+};
+
+if(appStore.isMobile() === false) {
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 0) menu.value.hide();
+  });
+}
+
+const menuItems = ref([
+  {
+    label: "Motociclete",
+    command: () => {
+      goAndSetVehicle("/modele", "bikes");
+    },
+  },
+  {
+    label: "Scutere",
+    command: () => {
+      goAndSetVehicle("/modele", "scooters");
+    },
+  },
+  {
+    label: "Snowmobile",
+    command: () => {
+      goAndSetVehicle("/modele", "snowmobiles");
+    },
+  },
+  {
+    label: "ATV",
+    command: () => {
+      goAndSetVehicle("/modele", "atv");
+    },
+  },
+]);
+
+const menu = ref();
+const toggleMenu = (event) => {
+  menu.value.toggle(event);
+};
+
+const goAndSetVehicle = (url, vehicleType) => {
+  appStore.setQueryVehicleType(vehicleType);
+  setTimeout(() => {
+    router.push({ path: url });
+  }, 100);
+};
+
+const hideMenu = () => {
+  menu.value.hide();
 };
 
 const searchValue = ref("");
@@ -59,7 +116,7 @@ const suggestions = ref([]);
 const search = (event) => {
   const models = getAllModels();
   suggestions.value = models.filter((model) => {
-    if(model.bike_name.toLowerCase().includes(event.query.toLowerCase())){
+    if (model.bike_name.toLowerCase().includes(event.query.toLowerCase())) {
       return model.bike_name.replace(/-/g, " ");
     }
   });
@@ -81,13 +138,12 @@ function getAllModels() {
 
 const selectBike = (bike) => {
   if (router.currentRoute.value.path === "/model") {
-   
   }
   searchValue.value = "";
   appStore.setCurrentBike(bike);
   localStorage.setItem("currentBike", JSON.stringify(bike));
-  router.push({ path: '/model' })
-}
+  router.push({ path: "/model" });
+};
 </script>
 <style lang="scss">
 .desktop-nav {
@@ -143,6 +199,7 @@ const selectBike = (bike) => {
   display: flex;
   border-bottom: 3px solid var(--main);
   a {
+    cursor: pointer;
     text-decoration: none;
     color: var(--light-shade);
     padding: 0.5rem 1rem;
@@ -157,6 +214,21 @@ const selectBike = (bike) => {
     background: var(--main);
     color: var(--light-shade);
   }
+}
+.p-menu.p-menu-overlay {
+  background: var(--dark-shade);
+  border-radius: 0;
+}
+.p-menuitem-text{
+  color: #fff;
+}
+.p-menuitem-content:hover{
+  background: var(--main) !important;
+  color: #fff;
+}
+.p-menu .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content{
+  background: transparent;
+  color: #fff;
 }
 
 #header-decoration {
@@ -247,7 +319,7 @@ const selectBike = (bike) => {
     width: 100%;
   }
   .sticky {
-    img{
+    img {
       margin-right: 1rem !important;
     }
     #phone-number-container {

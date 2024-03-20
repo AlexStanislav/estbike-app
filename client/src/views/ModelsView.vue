@@ -147,6 +147,14 @@
       </Accordion>
     </section>
     <section class="bike-section">
+      <div class="mobile-vehicle-reset" v-if="appStore.isMobile() && displayedModels.length !== 0">
+        <Button
+          label="Alege alt tip de vehicul"
+          class="change-vehicle"
+          icon="pi pi-filter-slash"
+          @click="methods.resetFilters()"
+        />
+      </div>
       <section class="bike-section-header" v-if="displayedModels.length > 0">
         <span class="header-models-count">{{ numberOfModels }} MODELE</span>
         <span
@@ -274,6 +282,7 @@ const brandCount = ref([]);
 
 const filters = ref({});
 const modelFilters = storeToRefs(appStore).modelsFilters;
+const queryVehicleType = storeToRefs(appStore).queryVehicleType;
 
 const initialVehicleTypeSelected = ref(false);
 
@@ -303,15 +312,26 @@ const methods = {
         (model.price >= filters.priceRange[0] &&
           model.price <= filters.priceRange[1]);
 
-      return (
-        yearMatch &&
-        categoryMatch &&
-        motorMatch &&
-        licenseMatch &&
-        brandMatch &&
-        priceMatch &&
-        typeMatch
-      );
+      if (priceMatch) {
+        return (
+          yearMatch &&
+          categoryMatch &&
+          motorMatch &&
+          licenseMatch &&
+          brandMatch &&
+          priceMatch &&
+          typeMatch
+        );
+      } else {
+        return (
+          yearMatch &&
+          categoryMatch &&
+          motorMatch &&
+          licenseMatch &&
+          brandMatch &&
+          typeMatch
+        );
+      }
     });
 
     return filteredModels.length;
@@ -630,6 +650,7 @@ const methods = {
     return removeDuplicateObjects(bikeType, "value");
   },
   handleVehicleTypeChange: function (vehicleType) {
+    filtersActiveIndex.value = [0];
     modelType.value = vehicleType.value;
     modelsLoaded.value = false;
     setTimeout(() => {
@@ -714,8 +735,11 @@ watch(
 watch(
   () => modelBrand.value,
   () => {
-    filters.value.brand = modelBrand.value;
-    methods.setBrandFilters(modelBrand.value);
+    if (modelBrand.value !== null) {
+      filters.value.brand = modelBrand.value;
+      methods.setBrandFilters(modelBrand.value);
+      methods.applyFilters();
+    }
   }
 );
 
@@ -729,6 +753,20 @@ watch(
 watch(modelFilters, () => {
   if (modelFilters.value.length > 0) {
     filterByQuery();
+  }
+});
+
+watch(queryVehicleType, () => {
+  if (queryVehicleType.value) {
+    methods.handleVehicleTypeChange(queryVehicleType);
+    const tempFilters = { ...filters.value };
+    filters.value = {};
+    for (const filter in filters.value) {
+      if (filter === "type") {
+        filters.value["type"] = tempFilters["type"];
+      }
+    }
+    modelBrand.value = null;
   }
 });
 
@@ -1007,6 +1045,19 @@ const filterByQuery = () => {
 .vehicle-type-card:hover {
   transform: translate(-2px, -2px);
   filter: drop-shadow(4px 4px 0px var(--main));
+}
+
+.mobile-vehicle-reset {
+  display: flex;
+  justify-content: center;
+}
+
+.change-vehicle {
+  width: 90%;
+  background: var(--dark-shade);
+  border: none;
+  color: #fff;
+  margin-top: 1rem;
 }
 
 .bike-section-display {

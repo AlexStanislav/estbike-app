@@ -104,7 +104,7 @@
           </ul>
         </div>
       </div>
-      <p class="copyright">Copyright © 2024 motobrebu. All rights reserved.</p>
+      <p class="copyright">Copyright © {{ new Date().getFullYear() }} motobrebu. All rights reserved.</p>
     </footer>
     <Loader :isVisible="appStore.showPreloader" />
     <Toast />
@@ -167,6 +167,7 @@ onMounted(async () => {
     }
   };
 });
+
 
 const goToBrand = (query) => {
   appStore.togglePreloader(true);

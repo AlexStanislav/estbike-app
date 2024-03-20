@@ -19,12 +19,16 @@ export const useAppStore = defineStore('appStore', {
       homeBrands: {},
       homeModelTypes: [],
       modelsFilters: [],
+      queryVehicleType: "",
       showGDPRDialog: false
     }
   },
   actions: {
     async toggleGDPRDialog(value = null) {
       this.showGDPRDialog = value !== null ? value : !this.showGDPRDialog
+    },
+    setQueryVehicleType(value) {
+      this.queryVehicleType = value
     },
     setModelsFilters(data) {
       this.modelsFilters = []
@@ -62,7 +66,6 @@ export const useAppStore = defineStore('appStore', {
       this.homeModelTypes = [...new Set(models)]
     },
     togglePreloader(value = null) {
-      console.log(value)
       this.showPreloader = value !== null ? value : !this.showPreloader
     },
     async togglePageLoad(callback) {

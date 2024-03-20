@@ -74,7 +74,15 @@ const selectBike = (bike) => {
 
 const bikePrice = computed(() => {
   if (props.bike.price === null) return "Pret Indisponibil";
-  return props.bike.price;
+  if (
+    props.bike.bike_name.toLowerCase().includes("gasgas") ||
+    props.bike.bike_name.toLowerCase().includes("husqvarana") ||
+    props.bike.bike_name.toLowerCase().includes("ktm")
+  ) {
+    return Math.round(props.bike.price * 1.19);
+  }else{
+    return props.bike.price;
+  }
 });
 
 const showDiscount = computed(() => {
