@@ -110,6 +110,9 @@ const modelCardName = (name) => {
   if(name.includes("bikes")){
     return `Motociclete ${name.replace("_bikes", "").toUpperCase()}`;
   }
+  if(name.includes("snowmobiles")){
+    return `Snowmobile ${name.replace("_snowmobiles", "").toUpperCase()}`;
+  }
 }
 
 watchEffect(() => {

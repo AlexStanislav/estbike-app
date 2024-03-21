@@ -112,6 +112,7 @@ onMounted(() => {
 
 .contact-wrapper {
   display: flex;
+  padding-bottom: 2rem;
 }
 .contact-info,
 .maps {

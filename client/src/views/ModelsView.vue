@@ -37,7 +37,7 @@
                   :binary="true"
                   :value="brand"
                 />
-                <span>{{ brand.toUpperCase() }}</span>
+                <span>{{ brand.includes("_") ? brand.replace("_", " ").toUpperCase() : brand.toUpperCase() }}</span>
               </label>
             </li>
           </ul>
