@@ -10,7 +10,7 @@
         @click="selectModel"
       >
       <div class="promo-box-shape">
-       {{ modelCardName(index) }}
+       {{ modelCardName(index).includes("_") ? modelCardName(index).replace("_", " ") : modelCardName(index) }}
       </div>
         <!-- <div
           class="promo-box-shape"
