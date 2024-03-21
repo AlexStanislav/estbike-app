@@ -800,6 +800,10 @@ onMounted(async () => {
       filterByQuery();
     }
 
+    if(queryVehicleType.value){
+      methods.handleVehicleTypeChange(queryVehicleType);
+    }
+
     setTimeout(() => {
       const header = document.querySelector(".desktop-nav");
       if (header !== null) {
