@@ -190,7 +190,6 @@ const header =
     : document.querySelector(".mobile-nav");
 
 onBeforeMount(() => {
-  console.log(router);
   appStore.togglePreloader(true);
   if (appStore.currentBike === null) {
     appStore.currentBike = JSON.parse(localStorage.getItem("currentBike"));
@@ -226,18 +225,15 @@ function loadCurrentBike() {
 
 onMounted(() => {
   header.classList.add("sticky");
-
   setTimeout(() => {
     loadCurrentBike();
   }, 300);
 });
 
 const setModelAsCurrent = (model) => {
-  displayModel.value = model;
-  mainImage.value = displayModel.value.image;
-  carouselImages.value = getGallery();
-  bikeDisplayName.value = displayModel.value.bike_name.toUpperCase();
-  bikeSlogan.value = displayModel.value.bike_slogan.toUpperCase();
+  localStorage.setItem("currentBike", JSON.stringify(model));
+  appStore.setCurrentBike(model);
+  loadCurrentBike();
   window.scrollTo(0, 0);
 };
 
