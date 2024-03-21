@@ -74,7 +74,7 @@
                 : "Necunoscut"
             }}
           </div>
-          <div class="bike-subtitle">An fabricatie: {{ displayModel.main_year }}</div>
+          <!-- <div class="bike-subtitle">An fabricatie: {{ displayModel.main_year }}</div> -->
           <div class="bike-subtitle">Categoria: {{ getCategory() }}</div>
           <div
             v-if="
@@ -208,7 +208,7 @@ function loadCurrentBike() {
   carouselImages.value = getGallery();
 
   bikeDisplayName.value = displayModel.value.bike_name.toUpperCase();
-  bikeSlogan.value = displayModel.value.bike_slogan.toUpperCase();
+  bikeSlogan.value = displayModel.value.bike_slogan !== null ? displayModel.value.bike_slogan.toUpperCase() : '';
   if (
     displayModel.value.old_price !== "null" &&
     displayModel.value.old_price !== ""

@@ -10,7 +10,7 @@
             {{ license }}</span
           >
         </span>
-        <span class="rabla-info" v-if="showRabla">Eligibila Rabla</span>
+        <!-- <span class="rabla-info" v-if="showRabla">Eligibila Rabla</span> -->
       </div>
       <img lazy :src="bike.image" />
     </div>
@@ -36,8 +36,6 @@
           ><s>{{ bike.old_price }} EUR</s></span
         >
       </p>
-
-      <span>{{ bike.main_year }}</span>
     </div>
   </div>
 </template>
@@ -75,9 +73,12 @@ const selectBike = (bike) => {
 const bikePrice = computed(() => {
   if (props.bike.price === null) return "Pret Indisponibil";
   if (
-    props.bike.bike_name.toLowerCase().includes("gasgas") ||
-    props.bike.bike_name.toLowerCase().includes("husqvarana") ||
-    props.bike.bike_name.toLowerCase().includes("ktm")
+    props.bike.brand.toLowerCase().includes("gasgas") ||
+    props.bike.brand.toLowerCase().includes("husqvarana") ||
+    props.bike.brand.toLowerCase().includes("ktm") || 
+    props.bike.brand.toLowerCase().includes("vespa") || 
+    (props.bike.brand.toLowerCase().includes("aprilia") && props.bike.vehicle_type.toLowerCase().includes("bikes")) ||
+    props.bike.brand.toLowerCase().includes("piaggio")
   ) {
     return Math.round(props.bike.price * 1.19);
   }else{

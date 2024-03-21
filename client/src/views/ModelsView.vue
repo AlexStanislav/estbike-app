@@ -101,7 +101,7 @@
             </li>
           </ul>
         </AccordionTab>
-        <AccordionTab :disabled="yearsFilter.length === 0" header="An">
+        <!-- <AccordionTab :disabled="yearsFilter.length === 0" header="An">
           <ul>
             <li
               v-for="(year, index) in yearsFilter"
@@ -114,7 +114,7 @@
               </label>
             </li>
           </ul>
-        </AccordionTab>
+        </AccordionTab> -->
         <AccordionTab :disabled="displayedModels.length === 0" header="Pret">
           <div class="price-filter">
             <div class="price-inputs">
