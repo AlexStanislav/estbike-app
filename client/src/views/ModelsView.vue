@@ -417,7 +417,7 @@ const methods = {
     };
 
     const uniqueRoundedMotors = [
-      ...new Set(roundToNearestMultiple([...new Set(motorCapacities)], 50)),
+      ...new Set(roundToNearestMultiple([...new Set(motorCapacities)], 25)),
     ];
 
     return uniqueRoundedMotors;
@@ -431,8 +431,8 @@ const methods = {
         !filters.category || filters.category === model.category;
       const motorMatch =
         !filters.capacitate ||
-        (parseInt(model.capacitate) >= filters.capacitate - 50 &&
-          parseInt(model.capacitate) <= filters.capacitate + 50);
+        (parseInt(model.capacitate) >= filters.capacitate - 25 &&
+          parseInt(model.capacitate) <= filters.capacitate + 25);
 
       const licenseMatch =
         !filters.permis || model.permis.includes(filters.permis);
