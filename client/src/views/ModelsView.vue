@@ -752,6 +752,7 @@ watch(
 
 watch(modelFilters, () => {
   if (modelFilters.value.length > 0) {
+    appStore.togglePreloader(false);
     filterByQuery();
   }
 });
