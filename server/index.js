@@ -22,6 +22,10 @@ app.use(cors())
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+function extractNumbersFromString(str) {
+    if(str.match(/\d+/g) !== null) return str.match(/\d+/g).map(Number);
+}
+
 app.get('/api/bikes', async (req, res) => {
     try {
         const tables = await process.postgresql.query(`SELECT tablename FROM pg_tables WHERE schemaname = 'public'`);
@@ -40,11 +44,11 @@ app.get('/api/bikes', async (req, res) => {
                 const bike = bikeTypes[bikeIndex]
 
 
-                if(bike.bike_name.includes('\(') && bike.bike_name.includes('\)')) {
+                if (bike.bike_name.includes('\(') && bike.bike_name.includes('\)')) {
                     bike.bike_name = bike.bike_name.replace(/-\(.+\)/g, '').replace(/\d+(\/\d+)+/g, bike.capacitate)
                 }
 
-                if(bike.bike_name.includes(bike.main_year)){
+                if (bike.bike_name.includes(bike.main_year)) {
                     bike.bike_name = bike.bike_name.replace(bike.main_year, '')
                 }
 
@@ -85,6 +89,31 @@ app.get('/api/bikes', async (req, res) => {
                 if (bike.capacitate === "undefined" || bike.capacitate === "null" || bike.capacitate === null || bike.capacitate === undefined) {
                     bike.capacitate = null
                 }
+
+                if (bike.capacitate === null) {
+                    const cilinderArray = extractNumbersFromString(bike.bike_name)
+                    for (const cilinderIndex in cilinderArray) {
+                        const cilinder = cilinderArray[cilinderIndex]
+                        if(cilinder >= 50){
+                            bike.capacitate = cilinder
+                        }
+                    }
+                }
+
+                if (bike.capacitate !== null && (bike.permis.length === 0 || bike.permis.includes('{}'))) {
+                    console.log(bike.permis)
+                    const capacitate = parseInt(bike.capacitate)
+                    if (capacitate >= 50 && capacitate <= 125) {
+                        bike.permis = ['B']
+                    }
+                    if (capacitate > 125 && capacitate <= 500) {
+                        bike.permis = ['A2', 'A']
+                    }
+                    if (capacitate > 500 && capacitate <= 800) {
+                        bike.permis = ['A2']
+                    }
+                }
+
 
                 if (bike.price === "undefined" || bike.price === "null" || bike.price === null || bike.price === undefined) {
                     bike.price = null

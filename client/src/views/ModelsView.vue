@@ -37,7 +37,11 @@
                   :binary="true"
                   :value="brand"
                 />
-                <span>{{ brand.includes("_") ? brand.replace("_", " ").toUpperCase() : brand.toUpperCase() }}</span>
+                <span>{{
+                  brand.includes("_")
+                    ? brand.replace("_", " ").toUpperCase()
+                    : brand.toUpperCase()
+                }}</span>
               </label>
             </li>
           </ul>
@@ -58,7 +62,7 @@
                   :binary="true"
                   :value="info"
                 />
-                <span>{{ info }}cc</span>
+                <span>{{ info.includes("+") ? info : `${info}cc` }}</span>
               </label>
             </li>
           </ul>
@@ -147,7 +151,10 @@
       </Accordion>
     </section>
     <section class="bike-section">
-      <div class="mobile-vehicle-reset" v-if="appStore.isMobile() && displayedModels.length !== 0">
+      <div
+        class="mobile-vehicle-reset"
+        v-if="appStore.isMobile() && displayedModels.length !== 0"
+      >
         <Button
           label="Alege alt tip de vehicul"
           class="change-vehicle"
@@ -294,10 +301,11 @@ const methods = {
         !filters.main_year || filters.main_year === model.main_year;
       const categoryMatch =
         !filters.category || filters.category === model.category;
+
       const motorMatch =
         !filters.capacitate ||
-        (parseInt(model.capacitate) >= filters.capacitate - 50 &&
-          parseInt(model.capacitate) <= filters.capacitate + 50);
+        (parseInt(model.capacitate) >= filters.capacitate - 25 &&
+          parseInt(model.capacitate) <= filters.capacitate + 25);
 
       const licenseMatch =
         !filters.permis || model.permis.includes(filters.permis);
@@ -398,9 +406,12 @@ const methods = {
     let capacity;
     for (const model of allModels.value) {
       if (brand !== null && model.brand === brand) {
-        capacity = model.capacitate;
-        if (capacity !== null) {
-          motorCapacities.push(capacity);
+        if(model.vehicle_type === filters.value.type){
+          console.log(model.capacitate);
+          capacity = model.capacitate;
+          if (capacity !== null) {
+            motorCapacities.push(capacity);
+          }
         }
       }
       if (brand === null) {
@@ -416,9 +427,35 @@ const methods = {
       return values.map((value) => Math.round(value / step) * step);
     };
 
+    for (let motorIndex in motorCapacities) {
+      const motor = motorCapacities[motorIndex];
+      if (motor < 50) {
+        motorCapacities[motorIndex] = (Math.round(motor / 25) * 25).toString();
+      }
+      if (motor >= 50 && motor < 125) {
+        motorCapacities[motorIndex] = "50";
+      }
+      if (motor >= 120 && motor < 200) {
+        motorCapacities[motorIndex] = "125";
+      }
+      if (motor >= 200 && motor <= 500) {
+        motorCapacities[motorIndex] = "200-500";
+      }
+      if (motor > 500 && motor <= 800) {
+        motorCapacities[motorIndex] = "500-800";
+      }
+      if (motor > 800) {
+        motorCapacities[motorIndex] = "800+ ";
+      }
+    }
+
     const uniqueRoundedMotors = [
-      ...new Set(roundToNearestMultiple([...new Set(motorCapacities)], 25)),
-    ];
+      ...new Set([...new Set(motorCapacities)]),
+    ].sort((a, b) => {
+      const aValue = parseInt(a.split("-")[0]);
+      const bValue = parseInt(b.split("-")[0]);
+      return aValue - bValue;
+    });
 
     return uniqueRoundedMotors;
   },
@@ -429,10 +466,29 @@ const methods = {
         !filters.main_year || filters.main_year === model.main_year;
       const categoryMatch =
         !filters.category || filters.category === model.category;
-      const motorMatch =
-        !filters.capacitate ||
-        (parseInt(model.capacitate) >= filters.capacitate - 25 &&
-          parseInt(model.capacitate) <= filters.capacitate + 25);
+      let motorMatch = true;
+      if (filters.capacitate) {
+        if (filters.capacitate.includes("-")) {
+          motorMatch =
+            parseInt(model.capacitate) >=
+              parseInt(filters.capacitate.split("-")[0]) &&
+            parseInt(model.capacitate) <=
+              parseInt(filters.capacitate.split("-")[1]);
+        } else if (filters.capacitate.includes("+")) {
+          motorMatch = parseInt(model.capacitate) >= 800;
+        } else {
+          if (parseInt(filters.capacitate) === 50) {
+            motorMatch =
+              parseInt(model.capacitate) >= 50 &&
+              parseInt(model.capacitate) < 100;
+          }
+          if (parseInt(filters.capacitate) === 125) {
+            motorMatch =
+              parseInt(model.capacitate) >= 120 &&
+              parseInt(model.capacitate) < 200;
+          }
+        }
+      }
 
       const licenseMatch =
         !filters.permis || model.permis.includes(filters.permis);
@@ -739,6 +795,9 @@ watch(
       filters.value.brand = modelBrand.value;
       methods.setBrandFilters(modelBrand.value);
       methods.applyFilters();
+      modelLicense.value = null;
+      modelMotor.value = null;
+      modelLicense.value = null;
     }
   }
 );
@@ -801,7 +860,7 @@ onMounted(async () => {
       filterByQuery();
     }
 
-    if(queryVehicleType.value){
+    if (queryVehicleType.value) {
       methods.handleVehicleTypeChange(queryVehicleType);
     }
 
