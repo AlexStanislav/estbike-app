@@ -129,7 +129,7 @@ app.get('/api/bikes', async (req, res) => {
                     bike.permis = ['B']
                 }
 
-
+                
                 if (bike.price === "undefined" || bike.price === "null" || bike.price === null || bike.price === undefined) {
                     bike.price = null
                 }
@@ -148,11 +148,12 @@ app.get('/api/bikes', async (req, res) => {
                     bike.old_price = null
                 }
 
-                if (bike.price === null && bike.old_price !== null) {
-                    bike.price = bike.old_price
+                if (bike.price === bike.old_price) {
+                    bike.old_price = null
                 }
 
-                if (bike.price === bike.old_price) {
+                if (bike.price === null || isNaN(bike.price) && bike.old_price !== null) {
+                    bike.price = bike.old_price
                     bike.old_price = null
                 }
             }
