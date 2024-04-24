@@ -23,7 +23,7 @@ app.use(cors())
 app.use(express.static(path.join(__dirname, 'public')));
 
 function extractNumbersFromString(str) {
-    if(str.match(/\d+/g) !== null) return str.match(/\d+/g).map(Number);
+    if (str.match(/\d+/g) !== null) return str.match(/\d+/g).map(Number);
 }
 
 app.get('/api/bikes', async (req, res) => {
@@ -31,7 +31,7 @@ app.get('/api/bikes', async (req, res) => {
         const tables = await process.postgresql.query(`SELECT tablename FROM pg_tables WHERE schemaname = 'public'`);
         const bikes = {}
         for (const table of tables) {
-            if (table.tablename.includes('_bikes') || table.tablename.includes('_scooters') || table.tablename.includes('_atv') || table.tablename.includes('_snowmobiles')) {
+            if (table.tablename.includes('_bikes') || table.tablename.includes('_scooters') || table.tablename.includes('_atv') || table.tablename.includes('_snowmobiles') || table.tablename.includes('_ssv')) {
                 const query = `SELECT * FROM ${table.tablename}`;
                 const result = await process.postgresql.query(query);
                 bikes[table.tablename] = result
@@ -54,7 +54,11 @@ app.get('/api/bikes', async (req, res) => {
 
                 if (bike.brand === 'utv') {
                     bike.brand = 'linhai'
-                    bike.vehicle_type = 'utv'
+                    bike.vehicle_type = 'ssv'
+                }
+
+                if(bike.bike_name.includes("utv")){
+                    bike.vehicle_type = "ssv"
                 }
 
                 if (bike.permis !== 'undefined' && bike.permis !== 'null' && bike.permis !== null && bike.permis !== undefined) {
@@ -72,6 +76,7 @@ app.get('/api/bikes', async (req, res) => {
 
 
                 bike.gallery = bike.gallery.replace(/[{}]+/g, "").replace(/\"+/g, "").split(",")
+
                 if (bike.capacitate !== "null" && typeof bike.capacitate === "string") {
                     bike.capacitate = parseInt(bike.capacitate.replace("cc", "").replace("CM3", "").replace("cmc", "").replace("c.c.", "").replace("cm3", "").replace(",", "").trim())
                 }
@@ -86,6 +91,11 @@ app.get('/api/bikes', async (req, res) => {
                     bike.category = null
                 }
 
+                if(bike.category !== null && bike.category.includes('/')){
+                    bike.brand = bike.category.replace('/', '')
+                    bike.category = null
+                }
+
                 if (bike.capacitate === "undefined" || bike.capacitate === "null" || bike.capacitate === null || bike.capacitate === undefined) {
                     bike.capacitate = null
                 }
@@ -94,14 +104,15 @@ app.get('/api/bikes', async (req, res) => {
                     const cilinderArray = extractNumbersFromString(bike.bike_name)
                     for (const cilinderIndex in cilinderArray) {
                         const cilinder = cilinderArray[cilinderIndex]
-                        if(cilinder >= 50){
+                        if (cilinder >= 50) {
                             bike.capacitate = cilinder
                         }
                     }
                 }
 
+
+
                 if (bike.capacitate !== null && (bike.permis.length === 0 || bike.permis.includes('{}'))) {
-                    console.log(bike.permis)
                     const capacitate = parseInt(bike.capacitate)
                     if (capacitate >= 50 && capacitate <= 125) {
                         bike.permis = ['B']
@@ -112,6 +123,10 @@ app.get('/api/bikes', async (req, res) => {
                     if (capacitate > 500 && capacitate <= 800) {
                         bike.permis = ['A2']
                     }
+                }
+
+                if (bike.vehicle_type === "atv" || bike.vehicle_type === "ssv") {
+                    bike.permis = ['B']
                 }
 
 
