@@ -407,7 +407,6 @@ const methods = {
     for (const model of allModels.value) {
       if (brand !== null && model.brand === brand) {
         if(model.vehicle_type === filters.value.type){
-          console.log(model.capacitate);
           capacity = model.capacitate;
           if (capacity !== null) {
             motorCapacities.push(capacity);
@@ -528,7 +527,7 @@ const methods = {
     allModels.value = filteredModels;
 
     numberOfModels.value = allModels.value.length;
-    const startIndex = currentPage.value * rowsPerPage.value;
+    const startIndex = 0;
     const endIndex = startIndex + rowsPerPage.value;
     filteredModels.sort((a, b) => a.price - b.price);
     displayedModels.value = filteredModels.slice(startIndex, endIndex);
@@ -681,9 +680,9 @@ const methods = {
             value: bike.vehicle_type.toLowerCase(),
           });
         }
-        if (bike.vehicle_type.toLowerCase() === "utv") {
+        if (bike.vehicle_type.toLowerCase() === "ssv") {
           bikeType.push({
-            label: "utv",
+            label: "ssv",
             value: bike.vehicle_type.toLowerCase(),
           });
         }

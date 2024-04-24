@@ -12,15 +12,13 @@ const { Pool } = postgresql;
 module.exports = (callback = null) => {
     // Create a new connection pool with the given configuration
     const pool = new Pool({
-        user:  process.env.PORT ? process.env.PG_USER : "local_admin", // PostgreSQL username
-        password:  process.env.PORT ? process.env.PG_PASSWORD : "local_admin", // PostgreSQL password
-        database:  process.env.PORT ? process.env.PG_DATABASE : "estbike", // PostgreSQL database name
+        user:  process.env.PG_USER, // PostgreSQL username
+        password:  process.env.PG_PASSWORD, // PostgreSQL password
+        database:  process.env.PG_DATABASE, // PostgreSQL database name
         port: 5432, // PostgreSQL server port
-        host:  process.env.PORT ? process.env.PG_HOST : "localhost", // PostgreSQL server host
+        host:  process.env.PG_HOST, // PostgreSQL server host
         //TODO remove for production
-        ssl: {
-            rejectUnauthorized: false
-        }
+        ssl: { rejectUnauthorized: false }
     });
 
     // Define the connection object

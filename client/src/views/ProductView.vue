@@ -289,6 +289,9 @@ const getGallery = () => {
 };
 
 const motoboomImageResizer = (image) => {
+  if(image.includes("$http")){
+    image = image.replace("$http", "http");
+  }
   if (image.includes("motoboom")) {
     image = image.replace("125x1", "650x1");
   }

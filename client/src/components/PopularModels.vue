@@ -64,7 +64,6 @@ const imgURL = (url) => {
 };
 
 const motoboomImageResizer = (image) => {
-  console.log(image);
   if (image && image.includes("motoboom")) {
     image = image.replace("125x1", "650x1");
   }
@@ -103,6 +102,9 @@ const getPopularModels = (allBikes) => {
 const modelCardName = (name) => {
   if(name.includes("atv")){
     return `ATV ${name.replace("_atv", "").toUpperCase()}`;
+  }
+  if(name.includes("ssv")){
+    return `SSV ${name.replace("_ssv", "").toUpperCase()}`;
   }
   if(name.includes("scooters")){
     return `Scutere ${name.replace("_scooters", "").toUpperCase()}`;

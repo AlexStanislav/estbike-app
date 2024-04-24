@@ -63,7 +63,7 @@ const goTo = (url) => {
 
 if(appStore.isMobile() === false) {
   window.addEventListener("scroll", () => {
-    if (window.scrollY > 0) menu.value.hide();
+    if (window.scrollY > 0 && menu.value !== null) menu.value.hide();
   });
 }
 
@@ -92,6 +92,12 @@ const menuItems = ref([
       goAndSetVehicle("/modele", "atv");
     },
   },
+  {
+    label: "SSV",
+    command: () => {
+      goAndSetVehicle("/modele", "ssv");
+    }
+  }
 ]);
 
 const menu = ref();
