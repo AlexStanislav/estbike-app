@@ -58,7 +58,7 @@
                     .replace('bikes', 'Motociclete')
                     .replace('scooters', 'Scutere')
                     .replace('atv', 'ATV')
-                    .replace('utv', 'UTV')
+                    .replace('utv', 'SSV')
                     .replace('snowmobiles', 'Snowmobile')
                     .toUpperCase()
                 "

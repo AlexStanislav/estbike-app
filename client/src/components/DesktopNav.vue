@@ -9,7 +9,13 @@
       <a @mouseenter="toggleMenu" @click="goTo('/modele')">
         <span>
           Modele
-          <Menu ref="menu" id="overlay_menu" :model="menuItems" :popup="true" @mouseleave="hideMenu()"/>
+          <Menu
+            ref="menu"
+            id="overlay_menu"
+            :model="menuItems"
+            :popup="true"
+            @mouseleave="hideMenu()"
+          />
         </span>
       </a>
       <router-link @mouseenter="hideMenu()" to="/rabla">Rabla</router-link>
@@ -61,13 +67,19 @@ const goTo = (url) => {
   router.push({ path: url });
 };
 
-if(appStore.isMobile() === false) {
+if (appStore.isMobile() === false) {
   window.addEventListener("scroll", () => {
     if (window.scrollY > 0 && menu.value !== null) menu.value.hide();
   });
 }
 
 const menuItems = ref([
+  {
+    label: "ATV",
+    command: () => {
+      goAndSetVehicle("/modele", "atv");
+    },
+  },
   {
     label: "Motociclete",
     command: () => {
@@ -87,17 +99,11 @@ const menuItems = ref([
     },
   },
   {
-    label: "ATV",
-    command: () => {
-      goAndSetVehicle("/modele", "atv");
-    },
-  },
-  {
     label: "SSV",
     command: () => {
       goAndSetVehicle("/modele", "ssv");
-    }
-  }
+    },
+  },
 ]);
 
 const menu = ref();
@@ -225,14 +231,16 @@ const selectBike = (bike) => {
   background: var(--dark-shade);
   border-radius: 0;
 }
-.p-menuitem-text{
+.p-menuitem-text {
   color: #fff;
 }
-.p-menuitem-content:hover{
+.p-menuitem-content:hover {
   background: var(--main) !important;
   color: #fff;
 }
-.p-menu .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus > .p-menuitem-content{
+.p-menu
+  .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus
+  > .p-menuitem-content {
   background: transparent;
   color: #fff;
 }

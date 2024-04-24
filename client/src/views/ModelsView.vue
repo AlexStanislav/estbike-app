@@ -69,7 +69,7 @@
         </AccordionTab>
         <AccordionTab
           :disabled="categoriesFilter.length === 0"
-          header="Categorie Moto"
+          header="Categorie"
         >
           <ul class="category-tab">
             <li
