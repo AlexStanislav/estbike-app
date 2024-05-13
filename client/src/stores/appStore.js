@@ -73,7 +73,7 @@ export const useAppStore = defineStore('appStore', {
 
       if (callback) {
         await callback()
-        
+
         setTimeout(() => {
           this.showPreloader = false
         }, 1000)
@@ -92,7 +92,7 @@ export const useAppStore = defineStore('appStore', {
       this.sidebarOpen = !this.sidebarOpen
     },
     async getAllBikes() {
-      
+
       try {
         const response = await axios.get(`${this.serverURL}/api/bikes`)
         this.allBikes = await response.data.bikes

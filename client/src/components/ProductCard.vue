@@ -16,11 +16,7 @@
     </div>
     <div class="info-container">
       <div v-if="showDiscount" class="ribbon">
-        -{{
-          Math.round(
-            ((props.bike.old_price - bikePrice) / props.bike.old_price) * 100
-          )
-        }}%
+        {{ Math.round(((bikeOldPrice - bikePrice) / bikeOldPrice) * 100) }}%
       </div>
       <h2>
         {{
@@ -33,7 +29,7 @@
         <b class="bike-price" v-if="bike.price !== null">{{ bikePrice }} EUR</b>
         <b v-else>Pret Indisponibil</b>
         <span class="bike-old-price" v-if="bike.old_price !== null"
-          ><s>{{ bike.old_price }} EUR</s></span
+          ><s>{{ bikeOldPrice }} EUR</s></span
         >
       </p>
     </div>
@@ -73,16 +69,57 @@ const selectBike = (bike) => {
 const bikePrice = computed(() => {
   if (props.bike.price === null) return "Pret Indisponibil";
   if (
+    props.bike.brand === "royal_enfield" ||
+    props.bike.brand === "linhai" ||
+    props.bike.brand === "argo" ||
+    props.bike.brand === "tgb" 
+  ) {
+    return parseInt(props.bike.price[0].replace(/\D/g, ""));
+  }
+  if(props.bike.brand === 'segway'){
+    console.log(props.bike.price)
+  }
+  if(Array.isArray(props.bike.price)){
+    return parseInt(props.bike.price[0].replace(/\D/g, ""));
+  }
+  if (
     props.bike.brand.toLowerCase().includes("gasgas") ||
     props.bike.brand.toLowerCase().includes("husqvarana") ||
-    props.bike.brand.toLowerCase().includes("ktm") || 
-    props.bike.brand.toLowerCase().includes("vespa") || 
-    (props.bike.brand.toLowerCase().includes("aprilia") && props.bike.vehicle_type.toLowerCase().includes("bikes")) ||
+    props.bike.brand.toLowerCase().includes("ktm") ||
+    props.bike.brand.toLowerCase().includes("vespa") ||
     props.bike.brand.toLowerCase().includes("piaggio")
   ) {
     return Math.round(props.bike.price * 1.19);
-  }else{
+  } else {
     return props.bike.price;
+  }
+});
+
+const bikeOldPrice = computed(() => {
+  if (
+    props.bike.brand === "royal_enfield" ||
+    props.bike.brand === "linhai" ||
+    props.bike.brand === "argo" ||
+    props.bike.brand === "tgb"
+  ) {
+    console.log(props.bike.old_price)
+    return parseInt(props.bike.old_price[0].replace(/\D/g, ""));
+  }
+  if(Array.isArray(props.bike.old_price)){
+    return parseInt(props.bike.old_price[0].replace(/\D/g, ""));
+  }
+  if (
+    props.bike.brand.toLowerCase().includes("gasgas") ||
+    props.bike.brand.toLowerCase().includes("husqvarana") ||
+    props.bike.brand.toLowerCase().includes("ktm") ||
+    props.bike.brand.toLowerCase().includes("vespa") ||
+    (props.bike.brand.toLowerCase().includes("aprilia") &&
+      props.bike.vehicle_type.toLowerCase().includes("bikes")) ||
+    props.bike.brand.toLowerCase().includes("piaggio")
+  ) {
+    return Math.round(props.bike.old_price * 1.19);
+  } else {
+    return props.bike.old_price;
   }
 });
 

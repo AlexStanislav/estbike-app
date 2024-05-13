@@ -68,6 +68,43 @@
           </ul>
         </AccordionTab>
         <AccordionTab
+          header="Omologare"
+          :disabled="filters.type !== 'atv' && filters.type !== 'ssv'"
+        >
+          <ul class="omologare-tab">
+            <li>
+              <label>
+                <RadioButton
+                  v-model="modelOmologare"
+                  :binary="true"
+                  value="l7e"
+                />
+                <span>Euro5</span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <RadioButton
+                  v-model="modelOmologare"
+                  :binary="true"
+                  value="t3b"
+                />
+                <span>T3</span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <RadioButton
+                  v-model="modelOmologare"
+                  :binary="true"
+                  value="neinmatriculabil"
+                />
+                <span>Neinmatriculabil</span>
+              </label>
+            </li>
+          </ul>
+        </AccordionTab>
+        <AccordionTab
           :disabled="categoriesFilter.length === 0"
           header="Categorie"
         >
@@ -76,6 +113,7 @@
               v-for="(category, index) in categoriesFilter"
               :key="index"
               :header="category"
+              @click="toggleAccordion(category)"
             >
               <label>
                 <RadioButton
@@ -89,7 +127,7 @@
           </ul>
         </AccordionTab>
         <AccordionTab
-          :disabled="licenseFilter.length === 0"
+          :disabled="licenseFilter.length === 0 || disableLicenseTab"
           header="Categorie Permis"
         >
           <ul class="license-tab">
@@ -279,6 +317,9 @@ const modelMotor = ref([]);
 const licenseFilter = ref([]);
 const modelLicense = ref([]);
 
+const omologareFilter = ref([]);
+const modelOmologare = ref([]);
+
 const brandFilter = ref([]);
 const modelBrand = ref([]);
 
@@ -292,7 +333,16 @@ const modelFilters = storeToRefs(appStore).modelsFilters;
 const queryVehicleType = storeToRefs(appStore).queryVehicleType;
 
 const initialVehicleTypeSelected = ref(false);
-
+const disableLicenseTab = ref(false);
+const toggleAccordion = function (category) {
+  if (category.toLowerCase().includes("children") || category.toLowerCase().includes("cross")) {
+    filters.value.permis = null;
+    disableLicenseTab.value = true
+    filtersActiveIndex.value = filtersActiveIndex.value.filter((item) => item !== 4);
+  } else {
+    disableLicenseTab.value = false
+  }
+};
 const methods = {
   getModelsNumber: function (filters) {
     const models = this.getAllModels();
@@ -345,7 +395,31 @@ const methods = {
     return filteredModels.length;
   },
   getAllModels: function () {
-    return Object.values(appStore.allBikes).flat();
+    const allBikes = appStore.allBikes;
+    // const swm = allBikes["swm_bikes"];
+    // const filteredSwm = swm
+    //   .map((bike) => {
+    //     const { colors, ...rest } = bike;
+    //     const bikeNameArr = bike.bike_name.split("-")
+    //     let bikeName = bike.bike_name;
+    //     if(colors){
+    //       if(bikeNameArr.length >= 3){
+    //         bikeName = bikeNameArr.slice(0, 2).join("-")
+    //       } else{
+    //         bikeName = bikeNameArr.slice(0, 3).join("-")
+    //       }
+    //     }
+    //     return { ...rest, bike_name: bikeName, colors: colors };
+    //   })
+    //   .filter(
+    //     (bike, index, self) =>
+    //       index === self.findIndex((t) => t.bike_name === bike.bike_name)
+    //   );
+
+    // allBikes["swm_bikes"] = filteredSwm;
+    const models = Object.values(allBikes).flat();
+    const finalModels = models.filter((model) => model.display_model);
+    return finalModels;
   },
   getYears: function (brand = null) {
     const years = allModels.value
@@ -406,7 +480,7 @@ const methods = {
     let capacity;
     for (const model of allModels.value) {
       if (brand !== null && model.brand === brand) {
-        if(model.vehicle_type === filters.value.type){
+        if (model.vehicle_type === filters.value.type) {
           capacity = model.capacitate;
           if (capacity !== null) {
             motorCapacities.push(capacity);
@@ -489,6 +563,11 @@ const methods = {
         }
       }
 
+      const omologareMatch =
+        !filters.omologare ||
+        (model.omologare !== null &&
+          model.omologare.includes(filters.omologare));
+
       const licenseMatch =
         !filters.permis || model.permis.includes(filters.permis);
 
@@ -507,6 +586,7 @@ const methods = {
           yearMatch &&
           categoryMatch &&
           motorMatch &&
+          omologareMatch &&
           licenseMatch &&
           brandMatch &&
           priceMatch &&
@@ -517,6 +597,7 @@ const methods = {
           yearMatch &&
           categoryMatch &&
           motorMatch &&
+          omologareMatch &&
           licenseMatch &&
           brandMatch &&
           typeMatch
@@ -781,6 +862,13 @@ watch(
 );
 
 watch(
+  () => modelOmologare.value,
+  () => {
+    filters.value.omologare = modelOmologare.value;
+  }
+);
+
+watch(
   () => modelLicense.value,
   () => {
     filters.value.permis = modelLicense.value;
@@ -794,6 +882,7 @@ watch(
       filters.value.brand = modelBrand.value;
       methods.setBrandFilters(modelBrand.value);
       methods.applyFilters();
+      modelOmologare.value = null;
       modelLicense.value = null;
       modelMotor.value = null;
       modelLicense.value = null;

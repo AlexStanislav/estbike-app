@@ -87,7 +87,7 @@
               class="info-permis"
               v-for="permis in displayModel.permis"
               :key="permis"
-              >{{ permis }}</span
+              >{{ permis.replace(/[{}"']/g, "") }}</span
             >
           </div>
           <div class="bike-subtitle">
@@ -109,32 +109,76 @@
             {{ getDescription() }}
           </p>
         </div>
+        <div class="colors-container" v-if="displayModelColors !== null">
+          <h3>Culori disponibile:</h3>
+          <ul>
+            <li
+              v-for="colorName in displayModel.colors"
+              :key="colorName"
+              @click="changeBikeColor(colorName, displayModel)"
+            >
+              <span>{{ colorName }}</span>
+              <div
+                class="color-display"
+                v-if="Array.isArray(displayModelColors[colorName])"
+              >
+                <div
+                  class="color-block"
+                  v-for="color in displayModelColors[colorName]"
+                  :key="color"
+                  :style="{ background: `#${color}` }"
+                ></div>
+              </div>
+              <div class="color-display" v-else>
+                <div
+                  class="color-block"
+                  :style="{ background: `#${displayModelColors[colorName]}` }"
+                ></div>
+              </div>
+            </li>
+          </ul>
+        </div>
         <div class="product-info-price">
+          <div class="omologare-display" v-if="displayModel.omologare !== null">
+            Omologare:
+            <ul
+              v-if="
+                displayModel.omologare !== null &&
+                displayModel.omologare.length > 1
+              "
+            >
+              <li v-for="omologare in displayModel.omologare" :key="omologare">
+                <label>
+                  <RadioButton
+                    v-model="omologareModel"
+                    :binary="true"
+                    :value="omologare"
+                  />
+                  <div>{{ omologare.toUpperCase() }}</div>
+                </label>
+              </li>
+            </ul>
+            <div v-else-if="displayModel.omologare !== null">
+              {{ displayModel.omologare[0].toUpperCase() }}
+            </div>
+          </div>
           <div class="eur-price" v-if="displayModel.price !== null">
-            <span>{{ displayModel.price }} EUR</span>
+            <span>{{ currentPrice }} EUR</span>
             <s v-if="displayModel.old_price !== null"
-              >{{ displayModel.old_price }} EUR</s
+              >{{ currentOldPrice }} EUR</s
             >
           </div>
           <div class="ron-price" v-if="displayModel.price !== null">
-            <span
-              >{{
-                Math.ceil(displayModel.price * appStore.forexValue)
-              }}
-              RON</span
-            >
+            <span>{{ Math.ceil(currentPrice * appStore.forexValue) }} RON</span>
             <s v-if="displayModel.old_price !== null"
-              >{{
-                Math.ceil(displayModel.old_price * appStore.forexValue)
-              }}
-              RON</s
+              >{{ Math.ceil(currentOldPrice * appStore.forexValue) }} RON</s
             >
           </div>
           <div
             class="product-info-price-discount"
             v-if="displayModel.old_price !== null"
           >
-            Reducere de {{ discount }}%
+            Reducere de {{ Math.round(((currentPrice - currentOldPrice) / currentPrice) * 100).toFixed(0) }}%
           </div>
         </div>
       </section>
@@ -167,10 +211,18 @@
   </div>
 </template>
 <script setup>
-import { computed, onBeforeMount, onMounted, ref, watchEffect } from "vue";
+import {
+  computed,
+  onBeforeMount,
+  onMounted,
+  ref,
+  watchEffect,
+  watch,
+} from "vue";
 import { useAppStore } from "../stores/appStore";
 import Carousel from "primevue/carousel";
 import Dropdown from "primevue/dropdown";
+import RadioButton from "primevue/radiobutton";
 import router from "../router";
 const appStore = useAppStore();
 const displayModel = ref({});
@@ -182,6 +234,11 @@ const bikeSlogan = ref("");
 
 const currentInstallment = ref(12);
 const installmentOptions = ref([12, 24, 36, 48]);
+
+const omologareModel = ref([]);
+
+const currentPrice = ref(0);
+const currentOldPrice = ref(0);
 
 const similarModels = ref([]);
 const header =
@@ -199,8 +256,10 @@ onBeforeMount(() => {
   }, 1000);
 });
 
+const displayModelColors = ref();
+
 function loadCurrentBike() {
-  if(appStore.currentBike === null){
+  if (appStore.currentBike === null) {
     appStore.currentBike = JSON.parse(localStorage.getItem("currentBike"));
   }
   displayModel.value = appStore.currentBike;
@@ -208,19 +267,41 @@ function loadCurrentBike() {
   carouselImages.value = getGallery();
 
   bikeDisplayName.value = displayModel.value.bike_name.toUpperCase();
-  bikeSlogan.value = displayModel.value.bike_slogan !== null ? displayModel.value.bike_slogan.toUpperCase() : '';
+  bikeSlogan.value =
+    displayModel.value.bike_slogan !== null
+      ? displayModel.value.bike_slogan.toUpperCase()
+      : "";
+
   if (
-    displayModel.value.old_price !== "null" &&
-    displayModel.value.old_price !== ""
+    typeof displayModel.value.price === "object" &&
+    displayModel.value.price !== null
   ) {
-    discount.value = Math.round(
-      ((displayModel.value.price - displayModel.value.old_price) /
-        displayModel.value.price) *
-        100
-    ).toFixed(0);
+    currentPrice.value = displayModel.value.price[0].replace(/\D/g, "");
+  } else if (displayModel.value.price !== null) {
+    currentPrice.value = displayModel.value.price.replace(/\D/g, "");
+  } else {
+    currentPrice.value = "Pret indisponibil";
+  }
+  if (
+    typeof displayModel.value.old_price === "object" &&
+    displayModel.value.old_price !== null
+  ) {
+    currentOldPrice.value = displayModel.value.old_price[0].replace(/\D/g, "");
+  } else if (displayModel.value.old_price !== null) {
+    currentOldPrice.value = displayModel.value.old_price.replace(/\D/g, "");
+  } else {
+    currentOldPrice.value = "Pret indisponibil";
   }
 
+  // if (
+  //   displayModel.value.old_price !== "null" &&
+  //   displayModel.value.old_price !== ""
+  // ) {
+  //   discount.value = Math.round(((currentPrice.value - currentOldPrice.value) / currentPrice.value) * 100).toFixed(0);
+  // }
+
   similarModels.value = getRandomSlice(getSimilarModels()[0], 4);
+  displayModelColors.value = JSON.parse(displayModel.value.colors_display);
 }
 
 onMounted(() => {
@@ -229,6 +310,42 @@ onMounted(() => {
     loadCurrentBike();
   }, 300);
 });
+
+const changeBikeColor = (color, model) => {
+  if (model.brand === "royal_enfield") {
+    currentPrice.value = parseInt(model.price[model.colors.indexOf(color)]);
+    currentOldPrice.value = parseInt(model.old_price[model.colors.indexOf(color)]);
+    console.log(currentPrice.value, currentOldPrice.value);
+  } else {
+    const brandBikes =
+      appStore.allBikes[
+        `${displayModel.value.brand}_${displayModel.value.vehicle_type}`
+      ];
+    const bikeMatch = brandBikes.filter((bike) => {
+      return bike.bike_name.includes(color);
+    });
+
+    const baseBikeMatch = bikeMatch.filter((bike) => {
+      const bikeName = bike.bike_name.split("-");
+      const baseBikeName = bikeName.slice(0, bikeName.indexOf(color));
+      const currentBikeName = displayModel.value.bike_name.split("-");
+      const baseCurrentBikeName = currentBikeName.slice(
+        0,
+        currentBikeName.indexOf(color)
+      );
+      console.log("baseBikeName", baseBikeName);
+      console.log("baseCurrentBikeName", baseCurrentBikeName);
+      if(baseBikeName.join("-") === baseCurrentBikeName.join('-')) {
+        console.log(bike)
+        return bike;
+      }
+      
+    });
+    if (baseBikeMatch.length > 0) {
+      setModelAsCurrent(baseBikeMatch[0]);
+    }
+  }
+};
 
 const setModelAsCurrent = (model) => {
   localStorage.setItem("currentBike", JSON.stringify(model));
@@ -282,14 +399,14 @@ const getGallery = () => {
     gallery.push(motoboomImageResizer(displayModel.value.image));
   } else {
     for (const img of displayModel.value.gallery) {
-      gallery.push(motoboomImageResizer(img));
+      gallery.push(motoboomImageResizer(img.replace(/\'/g, "")));
     }
   }
   return gallery;
 };
 
 const motoboomImageResizer = (image) => {
-  if(image.includes("$http")){
+  if (image.includes("$http")) {
     image = image.replace("$http", "http");
   }
   if (image.includes("motoboom")) {
@@ -307,12 +424,17 @@ const getCategory = () => {
 };
 
 const calulateInstallments = () => {
-  return Math.round(displayModel.value.price / currentInstallment.value);
+  let bikePrice = Array.isArray(displayModel.value.price)
+    ? displayModel.value.price[0]
+    : displayModel.value.price;
+  return Math.round(bikePrice / currentInstallment.value);
 };
 const calculateRonInstallments = () => {
+  let bikePrice = Array.isArray(displayModel.value.price)
+    ? displayModel.value.price[0]
+    : displayModel.value.price;
   return Math.round(
-    Math.ceil(displayModel.value.price * appStore.forexValue) /
-      currentInstallment.value
+    Math.ceil(bikePrice * appStore.forexValue) / currentInstallment.value
   );
 };
 
@@ -337,6 +459,19 @@ const showRabla = computed(() => {
     return true;
   }
 });
+
+watch(
+  () => omologareModel.value,
+  () => {
+    const priceIndex = displayModel.value.omologare.indexOf(
+      omologareModel.value
+    );
+    currentPrice.value = displayModel.value.price[priceIndex].replace(
+      /\D/g,
+      ""
+    );
+  }
+);
 
 watchEffect(() => {
   loadCurrentBike();
@@ -492,6 +627,7 @@ watchEffect(() => {
 
 .product-info-details {
   padding: 1rem;
+  position: relative;
 }
 
 .product-description {
@@ -500,6 +636,100 @@ watchEffect(() => {
   text-justify: distribute;
   font-family: "Oswald", sans-serif;
   font-weight: 300;
+}
+
+.omologare-display {
+  font-size: 1.25rem;
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+      font-family: "Oswald", sans-serif;
+      label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--dark-shade);
+        font-size: 0.9rem;
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+        div {
+          font-size: 1.25rem;
+        }
+        .p-radiobutton-box {
+          border-color: transparent;
+          color: #b3b3b3;
+        }
+        .p-radiobutton-box::after {
+          content: " ";
+          width: 40px;
+          height: 15px;
+          background: #b3b3b3;
+          clip-path: polygon(
+            75% 0%,
+            100% 50%,
+            75% 100%,
+            0% 100%,
+            25% 50%,
+            0% 0%
+          );
+        }
+        .p-radiobutton .p-radiobutton-box.p-highlight {
+          border-color: transparent;
+          background: transparent;
+          &::after {
+            content: " ";
+            width: 40px;
+            height: 15px;
+            background: var(--dark-accent);
+            clip-path: polygon(
+              75% 0%,
+              100% 50%,
+              75% 100%,
+              0% 100%,
+              25% 50%,
+              0% 0%
+            );
+          }
+        }
+        .p-radiobutton
+          .p-radiobutton-box:not(.p-disabled):not(.p-highlight):hover {
+          border-color: transparent;
+          color: var(--dark-accent);
+        }
+        .p-radiobutton .p-radiobutton-box:not(.p-disabled).p-focus {
+          box-shadow: 0 0 0 0rem var(--dark-accent);
+        }
+      }
+    }
+  }
+}
+
+.colors-container {
+  padding-left: 1rem;
+  span {
+    width: 100px;
+    text-transform: capitalize;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    li {
+      display: flex;
+      margin-bottom: 0.25rem;
+    }
+  }
+}
+
+.color-display {
+  display: flex;
+}
+
+.color-block {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--dark-shade);
 }
 
 .product-info-price {
