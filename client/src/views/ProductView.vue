@@ -154,7 +154,7 @@
                     :binary="true"
                     :value="omologare"
                   />
-                  <div>{{ omologare.toUpperCase() }}</div>
+                  <div>{{ omologare === "l7e" ? "Euro5" : omologare.toUpperCase() }}</div>
                 </label>
               </li>
             </ul>
