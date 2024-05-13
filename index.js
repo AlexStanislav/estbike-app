@@ -13,6 +13,7 @@ const history = require('connect-history-api-fallback');
 const scrapeForex = require('./api/scrapeForex')
 const forexData = require('./data/forexData')
 const cron = require('cron');
+const fs = require('fs');
 connection();
 
 app.use(express.urlencoded({ extended: true }));
@@ -39,10 +40,114 @@ app.get('/api/bikes', async (req, res) => {
         }
 
         for (const bikeTypeIndex in bikes) {
-            const bikeTypes = bikes[bikeTypeIndex]
+            let bikeTypes = bikes[bikeTypeIndex]
+            // if (bikeTypeIndex === 'swm_bikes') {
+            //     const bikesArr = bikeTypes
+            //     const bikes = () => {
+            //         const colorBikes = {};
+            //         for (const key in bikesArr) {
+            //             const bike = bikesArr[key];
+            //             const bikeNameArr = bike.bike_name.split("-");
+            //             if (bikeNameArr.length >= 3) {
+            //                 let colorArr = bikeNameArr.slice(2, bikeNameArr.length);
+            //                 let color = colorArr.join(" ").replace(/\d+\s/g, "");
+            //                 if (colorArr.length === 3) {
+            //                     colorArr.shift();
+            //                     color = colorArr.join(" ");
+            //                 }
+            //                 if (color.length === 1) {
+            //                     color = null;
+            //                 }
+
+            //                 if (color !== null && color !== "bike") {
+            //                     colorBikes[bike.bike_name] = bike;
+            //                 }
+            //             }
+            //         }
+
+            //         const addColors = (obj) => {
+            //             const colors = {};
+            //             for (const key in obj) {
+            //                 const bikeNameArr = key.split("-");
+            //                 let bikeName = "";
+            //                 let colorArr = bikeNameArr.slice(2, bikeNameArr.length);
+            //                 let color = colorArr.join(" ").replace(/\d+\s/g, "");
+
+            //                 if (bikeNameArr.length >= 3) {
+            //                     bikeName = bikeNameArr.slice(0, 2).join("-");
+            //                 } else {
+            //                     bikeName = bikeNameArr.slice(0, 3).join("-");
+            //                 }
+
+            //                 if (colorArr.length === 3) {
+            //                     colorArr.shift();
+            //                     color = colorArr.join(" ");
+            //                 }
+            //                 if (color.length === 1) {
+            //                     color = null;
+            //                 }
+
+            //                 if (!colors[bikeName]) {
+            //                     colors[bikeName] = [];
+            //                 }
+            //                 if (!colors[bikeName].includes(color)) {
+            //                     colors[bikeName].push(color);
+            //                 }
+            //             }
+            //             for (const key in obj) {
+            //                 const bikeNameArr = key.split("-");
+            //                 let bikeName;
+            //                 if (bikeNameArr.length >= 3) {
+            //                     bikeName = bikeNameArr.slice(0, 2).join("-");
+            //                 } else {
+            //                     bikeName = bikeNameArr.slice(0, 3).join("-");
+            //                 }
+            //                 obj[key].colors = colors[bikeName];
+            //             }
+            //         };
+
+            //         addColors(colorBikes);
+
+            //         return bikesArr;
+            //     };
+            //     bikeTypes = bikes()
+            // }
+
             for (const bikeIndex in bikeTypes) {
                 const bike = bikeTypes[bikeIndex]
 
+                if(bike.bike_slogan === null || bike.bike_slogan === "undefined") {
+                    bike.bike_slogan = ''
+                }
+
+                if (bike.vehicle_type === 'atv' || bike.vehicle_type === 'ssv') {
+                    if (bike.brand === 'polaris') {
+                        if (bike.bike_name.includes('t3b') || bike.bike_name.includes('l7e') || bike.bike_name.includes('t1b')) {
+                            const omologare = bike.bike_name.split("-")
+                            bike.omologare = omologare.filter(item => item === 't3b' || item === 'l7e' || item === 't1b')[0]
+                        }
+                    }
+
+                    if (bike.omologare === 't1b') {
+                        bike.omologare = 't3b'
+                    }
+
+                    if (bike.omologare === null || bike.omologare === "undefined") {
+                        bike.omologare = 'neinmatriculabil'
+                    }
+
+                    if (bike.omologare !== 'neinmatriculabil') {
+                        bike.omologare = bike.omologare.replace(/\{/g, "[").replace(/\}/g, "]");
+                        if (!bike.omologare.toLowerCase().includes("null")) {
+                            bike.omologare = JSON.parse(bike.omologare)
+                        } else {
+                            bike.omologare = 'neinmatriculabil'
+                        }
+                    }
+
+                } else {
+                    bike.omologare = null
+                }
 
                 if (bike.bike_name.includes('\(') && bike.bike_name.includes('\)')) {
                     bike.bike_name = bike.bike_name.replace(/-\(.+\)/g, '').replace(/\d+(\/\d+)+/g, bike.capacitate)
@@ -57,7 +162,7 @@ app.get('/api/bikes', async (req, res) => {
                     bike.vehicle_type = 'ssv'
                 }
 
-                if(bike.bike_name.includes("utv")){
+                if (bike.bike_name.includes("utv")) {
                     bike.vehicle_type = "ssv"
                 }
 
@@ -91,7 +196,7 @@ app.get('/api/bikes', async (req, res) => {
                     bike.category = null
                 }
 
-                if(bike.category !== null && bike.category.includes('/')){
+                if (bike.category !== null && bike.category.includes('/')) {
                     bike.brand = bike.category.replace('/', '')
                     bike.category = null
                 }
@@ -129,32 +234,67 @@ app.get('/api/bikes', async (req, res) => {
                     bike.permis = ['B']
                 }
 
-                
-                if (bike.price === "undefined" || bike.price === "null" || bike.price === null || bike.price === undefined) {
+                if (bike.price === "null" || bike.price === "" || bike.price === "undefined" || bike.price === null || bike.price === undefined) {
                     bike.price = null
                 }
 
-                if (bike.price !== null && bike.price !== undefined && bike.price !== "null" && bike.price !== "undefined" && bike.price.includes("{")) {
-                    bike.price = parseInt(bike.price.replace(/[{}]/g, "").replace(/\"/g, "").split(",")[0].replace(/[.,\s]+/g, ""))
-                } else if (bike.price !== null && bike.price !== undefined && bike.price !== "null" && bike.price !== "undefined") {
-                    bike.price = parseInt(bike.price.replace(/[.,\s]+/g, ""))
-                }
-
-                if (bike.old_price !== null && bike.old_price !== undefined && bike.old_price !== "null" && bike.old_price !== "undefined") {
-                    bike.old_price = parseInt(bike.old_price.replace(/[.,\s]+/g, ""))
-                }
-
-                if (bike.old_price === null || bike.old_price === undefined || bike.old_price === "null" || bike.old_price === "undefined") {
+                if (bike.old_price === "null" || bike.old_price === "" || bike.old_price === "undefined" || bike.old_price === null || bike.old_price === undefined) {
                     bike.old_price = null
                 }
 
-                if (bike.price === bike.old_price) {
+                if (bike.price !== null && !bike.price.includes("{")) {
+                    bike.price = bike.price.replace(/\D/g, '')
+                }
+
+
+                if (bike.old_price !== null && !bike.old_price.includes("{")) {
+                    bike.old_price = bike.old_price.replace(/\D/g, '')
+                }
+
+                if (bike.price !== null && bike.price.includes("{")) {
+                    bike.price = bike.price.replace(/\{/g, "[").replace(/\}/g, "]").replace(/\'/g, '"');
+                    if (bike.price.toLowerCase().includes("null")) {
+                        bike.price = null
+                    }
+                    bike.price = JSON.parse(bike.price)
+                }
+
+                if (bike.old_price !== null && bike.old_price.includes("{")) {
+                    bike.old_price = bike.old_price.replace(/\{/g, "[").replace(/\}/g, "]").replace(/\'/g, '"');;
+                    if (bike.old_price.toLowerCase().includes("null")) {
+                        bike.old_price = null
+                    }
+                    bike.old_price = JSON.parse(bike.old_price)
+                }
+
+                if ((bike.price !== null && !bike.price.includes("{")) && (bike.old_price !== null && !bike.old_price.includes("{"))) {
+                    if (bike.price === bike.old_price) {
+                        bike.old_price = null
+                    }
+                }
+
+                if (Array.isArray(bike.price) && bike.price.length === 0) {
+                    bike.price = null
+                }
+
+                if (Array.isArray(bike.old_price) && bike.old_price.length === 0) {
                     bike.old_price = null
                 }
 
-                if (bike.price === null || isNaN(bike.price) && bike.old_price !== null) {
-                    bike.price = bike.old_price
-                    bike.old_price = null
+                if (bike.colors === "undefined" || bike.colors === "null" || bike.colors === null || bike.colors === undefined) {
+                    bike.colors = null
+                }
+
+                if (bike.colors !== null) {
+                    bike.colors = JSON.parse(bike.colors.replace("{", "[").replace("}", ']'))
+                }
+
+                if (bike.colors_display === "undefined" || bike.colors_display === "null" || bike.colors_display === null || bike.colors_display === undefined) {
+                    bike.colors_display = null
+                }
+
+                if (bike.colors_display !== null) {
+                    bike.colors_display = bike.colors_display.replace('"{', '{').replace('}"', '}').replace(/\\"/g, '"')
                 }
             }
         }
