@@ -198,11 +198,11 @@
           <div class="similar-info-container">
             <h3>{{ model.bike_name.toUpperCase() }}</h3>
             <h4 v-if="model.price !== null">
-              {{ model.price }} {{ model.currency }}
+              {{ Array.isArray(model.price) ? model.price[0] : model.price }} {{ model.currency }}
             </h4>
             <h4 v-else>Pret Indisponibil</h4>
             <h4 v-if="model.old_price !== null">
-              <s>{{ model.old_price }} {{ model.currency }}</s>
+              <s>{{ Array.isArray(model.old_price) ? model.old_price[0] : model.old_price }} {{ model.currency }}</s>
             </h4>
           </div>
         </div>
