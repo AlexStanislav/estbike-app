@@ -43,18 +43,16 @@ export const useAppStore = defineStore('appStore', {
       })
     },
     setHomeBrands() {
-      let brands = {};
+      const brandModelMap = {};
       for (const bikeType in this.allBikes) {
-        const bikeInfo = bikeType.split("_");
-        brands[bikeInfo[0]] = []
+        const [brand, model] = bikeType.split("_");
+        const normalizedBrand = model === "enfield" ? "royal_enfield" : brand;
+
+        brandModelMap[normalizedBrand] = brandModelMap[normalizedBrand] || [];
+        brandModelMap[normalizedBrand].push(model);
       }
 
-      for (const bikeType in this.allBikes) {
-        const bikeInfo = bikeType.split("_");
-        brands[bikeInfo[0]].push(bikeInfo[1])
-      }
-
-      this.homeBrands = brands
+      this.homeBrands = brandModelMap;
     },
     setHomeModelTypes() {
       let models = [];

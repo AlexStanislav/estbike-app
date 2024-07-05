@@ -1,18 +1,10 @@
 <template>
   <div class="models">
     <section class="filter-section">
-      <Button
-        class="filters-button reset-filters"
-        icon="pi pi-filter-slash"
-        label="Reseteaza filtrele"
-        @click="methods.resetFilters()"
-      />
-      <Button
-        class="filters-button apply-filters"
-        icon="pi pi-filter"
-        label="Filtreaza"
-        @click="methods.applyFilters()"
-      />
+      <Button class="filters-button reset-filters" icon="pi pi-filter-slash" label="Reseteaza filtrele"
+        @click="methods.resetFilters()" />
+      <Button class="filters-button apply-filters" icon="pi pi-filter" label="Filtreaza"
+        @click="methods.applyFilters()" />
       <Accordion :multiple="true" :activeIndex="filtersActiveIndex">
         <!-- <AccordionTab header="Tip Vehicul">
           <ul class="type-tab">
@@ -32,11 +24,7 @@
           <ul class="brand-tab">
             <li v-for="(brand, index) of brandFilter" :key="index">
               <label>
-                <RadioButton
-                  v-model="modelBrand"
-                  :binary="true"
-                  :value="brand"
-                />
+                <RadioButton v-model="modelBrand" :binary="true" :value="brand" />
                 <span>{{
                   brand.includes("_")
                     ? brand.replace("_", " ").toUpperCase()
@@ -46,98 +34,54 @@
             </li>
           </ul>
         </AccordionTab>
-        <AccordionTab
-          :disabled="motorFilters.length === 0"
-          header="Capacitate Cilindrica"
-        >
+        <AccordionTab :disabled="motorFilters.length === 0" header="Capacitate Cilindrica">
           <ul class="category-tab">
-            <li
-              v-for="(info, index) in motorFilters"
-              :key="index"
-              :header="info"
-            >
+            <li v-for="(info, index) in motorFilters" :key="index" :header="info">
               <label>
-                <RadioButton
-                  v-model="modelMotor"
-                  :binary="true"
-                  :value="info"
-                />
+                <RadioButton v-model="modelMotor" :binary="true" :value="info" />
                 <span>{{ info.includes("+") ? info : `${info}cc` }}</span>
               </label>
             </li>
           </ul>
         </AccordionTab>
-        <AccordionTab
-          header="Omologare"
-          :disabled="filters.type !== 'atv' && filters.type !== 'ssv'"
-        >
+        <AccordionTab header="Omologare" :disabled="filters.type !== 'atv' && filters.type !== 'ssv'">
           <ul class="omologare-tab">
             <li>
               <label>
-                <RadioButton
-                  v-model="modelOmologare"
-                  :binary="true"
-                  value="l7e"
-                />
+                <RadioButton v-model="modelOmologare" :binary="true" value="l7e" />
                 <span>Euro5</span>
               </label>
             </li>
             <li>
               <label>
-                <RadioButton
-                  v-model="modelOmologare"
-                  :binary="true"
-                  value="t3b"
-                />
+                <RadioButton v-model="modelOmologare" :binary="true" value="t3b" />
                 <span>T3</span>
               </label>
             </li>
             <li>
               <label>
-                <RadioButton
-                  v-model="modelOmologare"
-                  :binary="true"
-                  value="neinmatriculabil"
-                />
+                <RadioButton v-model="modelOmologare" :binary="true" value="neinmatriculabil" />
                 <span>Neinmatriculabil</span>
               </label>
             </li>
           </ul>
         </AccordionTab>
-        <AccordionTab
-          :disabled="categoriesFilter.length === 0"
-          header="Categorie"
-        >
+        <AccordionTab :disabled="categoriesFilter.length === 0" header="Categorie">
           <ul class="category-tab">
-            <li
-              v-for="(category, index) in categoriesFilter"
-              :key="index"
-              :header="category"
-              @click="toggleAccordion(category)"
-            >
+            <li v-for="(category, index) in categoriesFilter" :key="index" :header="category"
+              @click="toggleAccordion(category)">
               <label>
-                <RadioButton
-                  v-model="modelCategory"
-                  :binary="true"
-                  :value="category"
-                />
+                <RadioButton v-model="modelCategory" :binary="true" :value="category" />
                 <span>{{ category.toUpperCase() }}</span>
               </label>
             </li>
           </ul>
         </AccordionTab>
-        <AccordionTab
-          :disabled="licenseFilter.length === 0 || disableLicenseTab"
-          header="Categorie Permis"
-        >
+        <AccordionTab :disabled="licenseFilter.length === 0 || disableLicenseTab" header="Categorie Permis">
           <ul class="license-tab">
             <li v-for="(license, index) of licenseFilter" :key="index">
               <label>
-                <RadioButton
-                  v-model="modelLicense"
-                  :binary="true"
-                  :value="license"
-                />
+                <RadioButton v-model="modelLicense" :binary="true" :value="license" />
                 <span>{{ license.toUpperCase() }}</span>
               </label>
             </li>
@@ -160,112 +104,58 @@
         <AccordionTab :disabled="displayedModels.length === 0" header="Pret">
           <div class="price-filter">
             <div class="price-inputs">
-              <InputText
-                class="min-price-input"
-                type="text"
-                v-model.number="priceRange[0]"
-                :placeholder="minPrice"
-                readonly
-              />
-              <InputText
-                class="max-price-input"
-                type="text"
-                v-model.number="priceRange[1]"
-                :placeholder="maxPrice"
-                readonly
-              />
+              <InputText class="min-price-input" type="text" v-model.number="priceRange[0]" :placeholder="minPrice"
+                readonly />
+              <InputText class="max-price-input" type="text" v-model.number="priceRange[1]" :placeholder="maxPrice"
+                readonly />
             </div>
             <div class="slider-container">
-              <Slider
-                v-model="priceRange"
-                :min="minPrice"
-                :max="maxPrice"
-                range
-                :step="100"
-              />
+              <Slider v-model="priceRange" :min="minPrice" :max="maxPrice" range :step="100" />
             </div>
           </div>
         </AccordionTab>
       </Accordion>
     </section>
     <section class="bike-section">
-      <div
-        class="mobile-vehicle-reset"
-        v-if="appStore.isMobile() && displayedModels.length !== 0"
-      >
-        <Button
-          label="Alege alt tip de vehicul"
-          class="change-vehicle"
-          icon="pi pi-filter-slash"
-          @click="methods.resetFilters()"
-        />
+      <div class="mobile-vehicle-reset" v-if="appStore.isMobile() && displayedModels.length !== 0">
+        <Button label="Alege alt tip de vehicul" class="change-vehicle" icon="pi pi-filter-slash"
+          @click="methods.resetFilters()" />
       </div>
       <section class="bike-section-header" v-if="displayedModels.length > 0">
         <span class="header-models-count">{{ numberOfModels }} MODELE</span>
-        <span
-          >Pagina {{ currentPage + 1 }}/{{
-            Math.ceil(numberOfModels / rowsPerPage)
-          }}</span
-        >
+        <span>Pagina {{ currentPage + 1 }}/{{
+          Math.ceil(numberOfModels / rowsPerPage)
+        }}</span>
         <span class="price-filter-dropdown-container">
           <span class="price-filter-label">Aranjeaza dupa pret:</span>
-          <Dropdown
-            class="price-filter-dropdown"
-            v-model="currentPriceOption"
-            :options="priceFilter"
-            @change="methods.handlePriceFilterChange"
-          />
+          <Dropdown class="price-filter-dropdown" v-model="currentPriceOption" :options="priceFilter"
+            @change="methods.handlePriceFilterChange" />
         </span>
       </section>
       <section class="bike-section-display" v-if="modelsLoaded">
-        <ProductCard
-          v-for="(bike, index) in displayedModels"
-          :key="index"
-          :bike="bike"
-        />
+        <ProductCard v-for="(bike, index) in displayedModels" :key="index" :bike="bike" />
       </section>
       <section class="bike-section-empty" v-else>
-        <Skeleton
-          animation="wave"
-          class="mb-2"
-          width="17rem"
-          height="25rem"
-          v-for="i in 11"
-          :key="i"
-        ></Skeleton>
+        <Skeleton animation="wave" class="mb-2" width="17rem" height="25rem" v-for="i in 11" :key="i"></Skeleton>
       </section>
-      <div
-        class="bike-section-no-match"
-        v-if="displayedModels.length === 0 && Object.keys(filters).length > 0"
-      >
+      <div class="bike-section-no-match" v-if="displayedModels.length === 0 && Object.keys(filters).length > 0">
         <span>Nu au fost gasite modele corespunzatoare filtrelor</span>
       </div>
-      <section
-        class="vehicle-type-selection"
-        v-if="displayedModels.length === 0 && Object.keys(filters).length === 0"
-      >
+      <section class="vehicle-type-selection" v-if="displayedModels.length === 0 && Object.keys(filters).length === 0">
         <h2>Va rugam alegeti tipul de vehicul dorit pentru vizualizare</h2>
 
         <div class="vehicle-card-container">
-          <div
-            class="vehicle-type-card"
-            v-for="vehicleType in typeFilter"
-            :key="vehicleType"
-            @click="methods.handleVehicleTypeChange(vehicleType)"
-          >
+          <div class="vehicle-type-card" v-for="vehicleType in typeFilter" :key="vehicleType"
+            @click="methods.handleVehicleTypeChange(vehicleType)">
             <div class="clip-path-bg"></div>
             <h3>{{ vehicleType.label.toUpperCase() }}</h3>
           </div>
         </div>
       </section>
       <div class="bike-section-footer" v-if="displayedModels.length > 0">
-        <Paginator
-          ref="paginatorRef"
-          :rows="rowsPerPage"
-          :totalRecords="allModels.length"
+        <Paginator ref="paginatorRef" :rows="rowsPerPage" :totalRecords="allModels.length"
           template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink JumpToPageDropdown"
-          @page="handlePaginatorChange"
-        >
+          @page="handlePaginatorChange">
         </Paginator>
       </div>
     </section>
@@ -544,9 +434,9 @@ const methods = {
         if (filters.capacitate.includes("-")) {
           motorMatch =
             parseInt(model.capacitate) >=
-              parseInt(filters.capacitate.split("-")[0]) &&
+            parseInt(filters.capacitate.split("-")[0]) &&
             parseInt(model.capacitate) <=
-              parseInt(filters.capacitate.split("-")[1]);
+            parseInt(filters.capacitate.split("-")[1]);
         } else if (filters.capacitate.includes("+")) {
           motorMatch = parseInt(model.capacitate) >= 800;
         } else {
@@ -576,33 +466,51 @@ const methods = {
       const typeMatch =
         !filters.type || filters.type === model.vehicle_type.toLowerCase();
 
-      const priceMatch =
-        !filters.priceRange ||
-        (model.price >= filters.priceRange[0] &&
-          model.price <= filters.priceRange[1]);
 
-      if (priceMatch) {
-        return (
-          yearMatch &&
-          categoryMatch &&
-          motorMatch &&
-          omologareMatch &&
-          licenseMatch &&
-          brandMatch &&
-          priceMatch &&
-          typeMatch
-        );
+      let priceMatch = true;
+      if (Array.isArray(model.price)) {
+        let price = parseInt(model.price[0].replace('.', ''))
+        priceMatch = !filters.priceRange || (price >= filters.priceRange[0] && price <= filters.priceRange[1]);
       } else {
-        return (
-          yearMatch &&
-          categoryMatch &&
-          motorMatch &&
-          omologareMatch &&
-          licenseMatch &&
-          brandMatch &&
-          typeMatch
-        );
+        priceMatch =
+          !filters.priceRange ||
+          (model.price >= filters.priceRange[0] &&
+            model.price <= filters.priceRange[1]);
       }
+
+      return (
+        yearMatch &&
+        categoryMatch &&
+        motorMatch &&
+        omologareMatch &&
+        licenseMatch &&
+        brandMatch &&
+        priceMatch &&
+        typeMatch
+      );
+
+      // if (priceMatch) {
+      //   return (
+      //     yearMatch &&
+      //     categoryMatch &&
+      //     motorMatch &&
+      //     omologareMatch &&
+      //     licenseMatch &&
+      //     brandMatch &&
+      //     priceMatch &&
+      //     typeMatch
+      //   );
+      // } else {
+      //   return (
+      //     yearMatch &&
+      //     categoryMatch &&
+      //     motorMatch &&
+      //     omologareMatch &&
+      //     licenseMatch &&
+      //     brandMatch &&
+      //     typeMatch
+      //   );
+      // }
     });
 
     allModels.value = filteredModels;
@@ -665,21 +573,15 @@ const methods = {
     }
   },
   getPriceRange: function (brand = null) {
-    const prices = [];
-    for (const bike of allModels.value) {
-      if (brand !== null && bike.brand === brand) {
-        if (bike.price !== null) {
-          prices.push(bike.price);
-        }
-      }
-      if (brand === null) {
-        if (bike.price !== null) {
-          prices.push(bike.price);
-        }
-      }
-    }
+    const prices = allModels.value
+      .map(bike => Array.isArray(bike.price) ? bike.price[0] : bike.price)
+      .filter(price => price !== null && !price.includes('.'))
+      .map(price => price.replace('.', ''));
 
-    return [Math.min(...prices), Math.max(...prices)];
+    return brand
+      ? [Math.min(...prices.filter(price => price !== null && bike.brand === brand)),
+      Math.max(...prices.filter(price => price !== null && bike.brand === brand))]
+      : [Math.min(...prices), Math.max(...prices)];
   },
   getLicenseFilters: function (brand = null) {
     const licenseCategories = [];
@@ -875,12 +777,19 @@ watch(
   }
 );
 
+
+function removeKeyFromObject(obj, key) {
+  const { [key]: omitted, ...rest } = obj;
+  return rest;
+}
+
 watch(
   () => modelBrand.value,
   () => {
     if (modelBrand.value !== null) {
       filters.value.brand = modelBrand.value;
       methods.setBrandFilters(modelBrand.value);
+      filters.value = removeKeyFromObject(filters.value, 'priceRange');
       methods.applyFilters();
       modelOmologare.value = null;
       modelLicense.value = null;
@@ -963,6 +872,7 @@ onMounted(async () => {
 
 const filterByQuery = () => {
   const filters = modelFilters.value[0];
+  console.log(modelFilters.value)
   modelBrand.value = filters.brand;
   if (filters.type !== undefined) {
     modelType.value = filters.type;
@@ -989,22 +899,27 @@ const filterByQuery = () => {
   position: relative;
   margin-left: 2rem;
   justify-self: flex-start;
+
   .p-accordion-header {
     width: 100%;
     background: #e8e8e8;
   }
+
   .p-accordion-header-link {
     width: fit-content;
     background: transparent;
     border: none;
   }
+
   ul {
     list-style: none;
     padding: 0;
     margin: 0;
+
     li {
       font-family: "Oswald", sans-serif;
       padding: 0.5rem 0;
+
       label {
         display: flex;
         align-items: center;
@@ -1013,47 +928,48 @@ const filterByQuery = () => {
         font-size: 0.9rem;
         transition: all 0.2s ease-in-out;
         cursor: pointer;
+
         .p-radiobutton-box {
           border-color: transparent;
           color: #b3b3b3;
         }
+
         .p-radiobutton-box::after {
           content: " ";
           width: 40px;
           height: 15px;
           background: #b3b3b3;
-          clip-path: polygon(
-            75% 0%,
-            100% 50%,
-            75% 100%,
-            0% 100%,
-            25% 50%,
-            0% 0%
-          );
+          clip-path: polygon(75% 0%,
+              100% 50%,
+              75% 100%,
+              0% 100%,
+              25% 50%,
+              0% 0%);
         }
+
         .p-radiobutton .p-radiobutton-box.p-highlight {
           border-color: transparent;
           background: transparent;
+
           &::after {
             content: " ";
             width: 40px;
             height: 15px;
             background: var(--dark-accent);
-            clip-path: polygon(
-              75% 0%,
-              100% 50%,
-              75% 100%,
-              0% 100%,
-              25% 50%,
-              0% 0%
-            );
+            clip-path: polygon(75% 0%,
+                100% 50%,
+                75% 100%,
+                0% 100%,
+                25% 50%,
+                0% 0%);
           }
         }
-        .p-radiobutton
-          .p-radiobutton-box:not(.p-disabled):not(.p-highlight):hover {
+
+        .p-radiobutton .p-radiobutton-box:not(.p-disabled):not(.p-highlight):hover {
           border-color: transparent;
           color: var(--dark-accent);
         }
+
         .p-radiobutton .p-radiobutton-box:not(.p-disabled).p-focus {
           box-shadow: 0 0 0 0rem var(--dark-accent);
         }
@@ -1072,12 +988,15 @@ const filterByQuery = () => {
   display: flex;
   flex-flow: column wrap;
   gap: 1rem;
+
   .p-inputtext {
     width: 50%;
   }
+
   .slider-container {
     width: 100%;
   }
+
   .price-inputs {
     display: flex;
     gap: 1rem;
@@ -1115,6 +1034,7 @@ const filterByQuery = () => {
   gap: 1rem;
   z-index: 3;
   position: relative;
+
   span {
     font-size: 1rem;
   }
@@ -1127,15 +1047,18 @@ const filterByQuery = () => {
   position: absolute;
   align-items: center;
   right: 2rem;
+
   .price-filter-label {
     font-size: 1.2rem;
   }
+
   .price-filter-dropdown {
     width: 13rem;
     right: 2rem;
     top: 0.1rem;
     background: transparent;
     border: none;
+
     span {
       font-size: 1rem;
     }
@@ -1149,9 +1072,11 @@ const filterByQuery = () => {
   margin-top: 1rem;
   display: flex;
   justify-content: center;
+
   .p-paginator {
     background: transparent;
   }
+
   .p-paginator .p-paginator-pages .p-paginator-page {
     min-width: 2rem;
     height: 2rem;
@@ -1162,6 +1087,7 @@ const filterByQuery = () => {
   display: flex;
   flex-flow: column;
   align-items: center;
+
   h2 {
     text-align: center;
   }
@@ -1174,6 +1100,7 @@ const filterByQuery = () => {
   padding: 1rem;
   justify-content: center;
 }
+
 .vehicle-type-card {
   width: 15rem;
   text-align: center;
@@ -1182,6 +1109,7 @@ const filterByQuery = () => {
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   position: relative;
+
   .clip-path-bg {
     width: 15rem;
     height: 100%;
@@ -1248,21 +1176,26 @@ const filterByQuery = () => {
     margin-right: 2rem;
   }
 }
+
 @media screen and (max-width: 1024px) {
   .models {
     gap: 0.5rem;
   }
+
   .filter-section {
     width: 20%;
   }
+
   .price-filter {
     .p-inputtext {
       width: 100%;
     }
+
     .price-inputs {
       flex-flow: column wrap;
     }
   }
+
   .bike-section-display {
     gap: 0.5rem;
   }
@@ -1272,27 +1205,35 @@ const filterByQuery = () => {
   .models {
     flex-flow: column wrap;
   }
+
   .filter-section {
     width: 80%;
   }
+
   .bike-section {
     width: 100%;
   }
+
   .bike-section-display {
     justify-content: center;
   }
+
   .bike-section-header {
+
     .price-filter-label,
     .header-models-count,
     .header-models-type {
       display: none;
     }
+
     span {
       font-size: 1rem;
     }
   }
+
   .bike-section-footer nav {
     width: 100%;
+
     .p-paginator {
       padding: 0;
     }

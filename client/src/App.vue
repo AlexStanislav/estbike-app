@@ -36,7 +36,7 @@
               :key="brand"
               @click="goToBrand(brand)"
             >
-              <i class="pi pi-angle-double-right"></i>{{ brand.toUpperCase() }}
+              <i class="pi pi-angle-double-right"></i>{{ brand.toUpperCase().replace(/_/g, " ") }}
             </li>
           </ul>
           <ul>
