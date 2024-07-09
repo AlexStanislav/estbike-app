@@ -86,9 +86,9 @@
         <li @click="appStore.sidebarOpen = false">
           <router-link to="/modele">Modele</router-link>
         </li>
-        <li @click="appStore.sidebarOpen = false">
+        <!-- <li @click="appStore.sidebarOpen = false">
           <router-link to="/rabla">Rabla</router-link>
-        </li>
+        </li> -->
         <li @click="appStore.sidebarOpen = false">
           <router-link to="/service">Service</router-link>
         </li>

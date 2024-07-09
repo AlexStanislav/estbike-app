@@ -15,11 +15,11 @@ const router = createRouter({
       name: 'despre',
       component: () => import('../views/AboutView.vue')
     },
-    {
-      path: '/rabla',
-      name: 'rabla',
-      component: () => import('../views/RablaView.vue')
-    },
+    // {
+    //   path: '/rabla',
+    //   name: 'rabla',
+    //   component: () => import('../views/RablaView.vue')
+    // },
     {
       path: '/modele',
       name: 'modele',
