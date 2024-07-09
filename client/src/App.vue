@@ -98,7 +98,7 @@
           </ul>
           <br />
           <ul>
-            <li><i class="pi pi-mobile"></i>0733782453</li>
+            <li><i class="pi pi-mobile"></i>0774515065</li>
             <li><i class="pi pi-map-marker"></i>Str. Șelimbăr nr 10, Brebu</li>
             <li><i class="pi pi-envelope"></i>motobrebu@example.com</li>
           </ul>

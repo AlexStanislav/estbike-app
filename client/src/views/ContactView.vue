@@ -8,14 +8,6 @@
           <div class="info-row">
             <div class="info-picto"><i class="pi pi-phone"></i></div>
             <div class="info-content">
-              <a href="https://wa.me/0733782453" target="_blank"
-                >+40 733 782 453</a
-              >
-            </div>
-          </div>
-          <div class="info-row">
-            <div class="info-picto"><i class="pi pi-phone"></i></div>
-            <div class="info-content">
               <a href="https://wa.me/0774515065" target="_blank"
                 >+40 774 515 065</a
               >

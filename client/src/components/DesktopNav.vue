@@ -25,7 +25,7 @@
     <div id="phone-number-container">
       <i class="pi pi-phone" />
       <div id="phone-number">
-        <a href="https://wa.me/0733782453" target="_blank">+40 733 782 453</a>
+        <a href="https://wa.me/0774515065" target="_blank">+40 774 515 065</a>
       </div>
     </div>
     <div id="header-decoration">
