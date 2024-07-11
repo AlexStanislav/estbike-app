@@ -49,7 +49,7 @@
           </span>
           <span>
             <i class="pi pi-envelope"></i>
-            <div>motobrebu@example.com</div>
+            <div>office@brebumoto.ro</div>
           </span>
           <span>
             <i class="pi pi-map-marker"></i>

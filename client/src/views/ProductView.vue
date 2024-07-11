@@ -184,7 +184,7 @@
       </section>
     </div>
     <div class="product-bottom-container">
-      <h2>Modele similare</h2>
+      <h2>Vehicule similare</h2>
       <div class="similar-models-container">
         <div
           class="similar-model-card"

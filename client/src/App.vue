@@ -59,10 +59,10 @@
               <i class="pi pi-angle-double-right"></i
               ><router-link to="/despre">Despre noi</router-link>
             </li>
-            <li>
+            <!-- <li>
               <i class="pi pi-angle-double-right"></i
               ><router-link to="/rabla">Rabla</router-link>
-            </li>
+            </li> -->
             <li>
               <i class="pi pi-angle-double-right"></i
               ><router-link to="/termeni">Termeni si conditii</router-link>
@@ -100,7 +100,7 @@
           <ul>
             <li><i class="pi pi-mobile"></i>0774515065</li>
             <li><i class="pi pi-map-marker"></i>Str. Șelimbăr nr 10, Brebu</li>
-            <li><i class="pi pi-envelope"></i>motobrebu@example.com</li>
+            <li><i class="pi pi-envelope"></i>office@brebumoto.ro</li>
           </ul>
         </div>
       </div>
@@ -173,7 +173,7 @@ const goToBrand = (query) => {
   appStore.togglePreloader(true);
   appStore.setModelsFilters({ brand: query });
   setTimeout(() => {
-    router.push({ path: "/modele" });
+    router.push({ path: "/vehicule" });
     window.scrollTo(0, 0);
   }, 100);
 };

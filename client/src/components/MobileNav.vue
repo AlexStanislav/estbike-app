@@ -84,7 +84,7 @@
           <router-link to="/despre">Despre Noi</router-link>
         </li>
         <li @click="appStore.sidebarOpen = false">
-          <router-link to="/modele">Modele</router-link>
+          <router-link to="/vehicule">Vehicule</router-link>
         </li>
         <!-- <li @click="appStore.sidebarOpen = false">
           <router-link to="/rabla">Rabla</router-link>
@@ -167,13 +167,13 @@ const vehicleTypes = getVehicleTypes();
 
 const goToModels = (brand, vehicleType) => {
   appStore.setModelsFilters({ brand, type: vehicleType });
-  router.push({ path: "/modele" });
+  router.push({ path: "/vehicule" });
   appStore.sidebarOpen = false;
 };
 
 const goToModel = (brand) => {
   appStore.setModelsFilters({ brand: brand });
-  router.push({ path: "/modele" });
+  router.push({ path: "/vehicule" });
   appStore.sidebarOpen = false;
 };
 

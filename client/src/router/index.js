@@ -21,7 +21,7 @@ const router = createRouter({
     //   component: () => import('../views/RablaView.vue')
     // },
     {
-      path: '/modele',
+      path: '/vehicule',
       name: 'modele',
       component: () => import('../views/ModelsView.vue')
     },
@@ -83,11 +83,11 @@ router.beforeEach((to, from, next) => {
   //       console.log('preload-toggle');
   //     }, 1000);
   //   } else {
-  //     if (to.path === '/modele') {
+  //     if (to.path === '/vehicule') {
   //       next('/')
   //     }
   //   }
-  // } else if (to.path !== '/' || to.path !== '/modele' || to.path !== '/model') {
+  // } else if (to.path !== '/' || to.path !== '/vehicule' || to.path !== '/model') {
   //   appStore.togglePreloader()
   //   setTimeout(() => {
   //     appStore.togglePreloader()

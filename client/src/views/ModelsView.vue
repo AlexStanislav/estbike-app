@@ -139,7 +139,7 @@
         <Skeleton animation="wave" class="mb-2" width="17rem" height="25rem" v-for="i in 11" :key="i"></Skeleton>
       </section>
       <div class="bike-section-no-match" v-if="displayedModels.length === 0 && Object.keys(filters).length > 0">
-        <span>Nu au fost gasite modele corespunzatoare filtrelor</span>
+        <span>Nu au fost gasite vehicule corespunzatoare filtrelor</span>
       </div>
       <section class="vehicle-type-selection" v-if="displayedModels.length === 0 && Object.keys(filters).length === 0">
         <h2>Va rugam alegeti tipul de vehicul dorit pentru vizualizare</h2>
@@ -632,7 +632,9 @@ const methods = {
     let brands = [];
     for (const bike of modelsToFilter) {
       if (!brands.includes(bike.brand)) {
-        brands.push(bike.brand);
+        if(bike.brand !== 'husqvarna' && bike.brand !== 'gasgas' && bike.brand !== 'ktm'){
+          brands.push(bike.brand);
+        }
       }
     }
 

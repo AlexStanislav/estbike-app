@@ -6,9 +6,9 @@
       <router-link @mouseenter="hideMenu()" to="/despre"
         >Despre Noi</router-link
       >
-      <a @mouseenter="toggleMenu" @click="goTo('/modele')">
+      <a @mouseenter="toggleMenu" @click="goTo('/vehicule')">
         <span>
-          Modele
+          Vehicule
           <Menu
             ref="menu"
             id="overlay_menu"
@@ -77,31 +77,31 @@ const menuItems = ref([
   {
     label: "ATV",
     command: () => {
-      goAndSetVehicle("/modele", "atv");
+      goAndSetVehicle("/vehicule", "atv");
     },
   },
   {
     label: "Motociclete",
     command: () => {
-      goAndSetVehicle("/modele", "bikes");
+      goAndSetVehicle("/vehicule", "bikes");
     },
   },
   {
     label: "Scutere",
     command: () => {
-      goAndSetVehicle("/modele", "scooters");
+      goAndSetVehicle("/vehicule", "scooters");
     },
   },
   {
     label: "Snowmobile",
     command: () => {
-      goAndSetVehicle("/modele", "snowmobiles");
+      goAndSetVehicle("/vehicule", "snowmobiles");
     },
   },
   {
     label: "SSV",
     command: () => {
-      goAndSetVehicle("/modele", "ssv");
+      goAndSetVehicle("/vehicule", "ssv");
     },
   },
 ]);
@@ -290,13 +290,14 @@ const selectBike = (bike) => {
 }
 
 #phone-number-container {
-  width: fit-content;
+  width: 15%;
   height: 50px;
   border-bottom: 3px solid var(--main);
   display: flex;
   color: var(--light-shade);
   background: var(--dark-shade);
   align-items: center;
+  justify-content: flex-end;
   i {
     font-size: 1.2rem;
     color: var(--light-shade);
