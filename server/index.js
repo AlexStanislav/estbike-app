@@ -234,6 +234,12 @@ app.get('/api/bikes', async (req, res) => {
                     bike.permis = ['B']
                 }
 
+                if(bike.category !== null){
+                    if(bike.category.toLowerCase().includes("children")){
+                        bike.permis = []
+                    }
+                }
+
                 if (bike.price === "null" || bike.price === "" || bike.price === "undefined" || bike.price === null || bike.price === undefined) {
                     bike.price = null
                 }

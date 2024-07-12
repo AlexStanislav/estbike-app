@@ -521,9 +521,13 @@ const methods = {
     filteredModels.sort((a, b) => a.price - b.price);
     displayedModels.value = filteredModels.slice(startIndex, endIndex);
   },
-  applyFilters: function () {
+  applyFilters: function (value = null) {
     modelsLoaded.value = false;
-    this.filterModels(filters.value);
+    if(value) {
+      this.filterModels(value);
+    } else{
+      this.filterModels(filters.value);
+    }
     setTimeout(() => {
       modelsLoaded.value = true;
     }, 1000);
@@ -551,6 +555,9 @@ const methods = {
       maxPrice.value = methods.getPriceRange()[1];
       appStore.clearModelsFilters();
     }, 50);
+
+    localStorage.removeItem("modelBrand");
+    localStorage.removeItem("modelType");
 
     setTimeout(() => {
       modelsLoaded.value = true;
@@ -690,8 +697,16 @@ const methods = {
     return removeDuplicateObjects(bikeType, "value");
   },
   handleVehicleTypeChange: function (vehicleType) {
+    const typeValue = vehicleType.value ? vehicleType.value : vehicleType;
+
+    if(!localStorage.getItem("modelType")){
+      localStorage.setItem("modelType", typeValue)
+    }
+
+    console.log("typeValue", typeValue)
+
     filtersActiveIndex.value = [0];
-    modelType.value = vehicleType.value;
+    modelType.value = typeValue;
     modelsLoaded.value = false;
     setTimeout(() => {
       this.applyFilters();
@@ -797,6 +812,8 @@ watch(
       modelLicense.value = null;
       modelMotor.value = null;
       modelLicense.value = null;
+
+      localStorage.setItem("modelBrand", modelBrand.value);
     }
   }
 );
@@ -869,12 +886,21 @@ onMounted(async () => {
         header.classList.add("sticky");
       }
     }, 500);
-  }
+
+    if(localStorage.getItem("modelBrand") || localStorage.getItem("modelType")) {
+      const storageBrand = localStorage.getItem("modelBrand");
+      const storageType = localStorage.getItem("modelType");
+      methods.handleVehicleTypeChange(storageType)
+
+      setTimeout(() => {
+        modelBrand.value = storageBrand;
+      }, 300);
+    }
+}
 });
 
 const filterByQuery = () => {
   const filters = modelFilters.value[0];
-  console.log(modelFilters.value)
   modelBrand.value = filters.brand;
   if (filters.type !== undefined) {
     modelType.value = filters.type;

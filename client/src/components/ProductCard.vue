@@ -76,9 +76,6 @@ const bikePrice = computed(() => {
   ) {
     return parseInt(props.bike.price[0].replace(/\D/g, ""));
   }
-  if(props.bike.brand === 'segway'){
-    console.log(props.bike.price)
-  }
   if(Array.isArray(props.bike.price)){
     return parseInt(props.bike.price[0].replace(/\D/g, ""));
   }
@@ -102,7 +99,6 @@ const bikeOldPrice = computed(() => {
     props.bike.brand === "argo" ||
     props.bike.brand === "tgb"
   ) {
-    console.log(props.bike.old_price)
     return parseInt(props.bike.old_price[0].replace(/\D/g, ""));
   }
   if(Array.isArray(props.bike.old_price)){

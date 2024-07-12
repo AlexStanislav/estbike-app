@@ -2,9 +2,10 @@
   <section class="home-view">
     <Skeleton
       width="100%"
-      height="400px"
+      height="100vh"
       v-if="store.allBikes === null"
-    ></Skeleton>
+    >
+  </Skeleton>
     <Carousel
       class="home-carousel"
       :value="carouselImages"

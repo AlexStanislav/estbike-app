@@ -129,7 +129,7 @@
   </div>
 </template>
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import Loader from "./components/Loader.vue";
 import { useAppStore } from "./stores/appStore";
 import DesktopNav from "./components/DesktopNav.vue";
@@ -168,6 +168,10 @@ onMounted(async () => {
   };
 });
 
+onUnmounted(() => {
+  localStorage.removeItem("modelBrand")
+  localStorage.removeItem("modelType")
+});
 
 const goToBrand = (query) => {
   appStore.togglePreloader(true);

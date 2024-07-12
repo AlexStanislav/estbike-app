@@ -59,9 +59,10 @@ router.beforeEach((to, from, next) => {
 
   window.scrollTo(0, 0)
 
+  appStore.togglePreloader(true)
+
   if (to.path === '/cookies' || to.path === '/termeni') {
     if (localStorage.getItem("gdpr") === null) {
-      console.log('gdpr-toggle');
       localStorage.setItem("gdpr", true);
       appStore.toggleGDPRDialog(false)
     }
