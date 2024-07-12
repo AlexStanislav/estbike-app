@@ -112,7 +112,9 @@ const toggleMenu = (event) => {
 };
 
 const goAndSetVehicle = (url, vehicleType) => {
-  appStore.setQueryVehicleType(vehicleType);
+  appStore.setQueryVehicleType(vehicleType)
+  localStorage.setItem("modelType", vehicleType)
+  localStorage.removeItem("modelBrand")
   setTimeout(() => {
     router.push({ path: url });
   }, 100);

@@ -593,7 +593,7 @@ const methods = {
   getLicenseFilters: function (brand = null) {
     const licenseCategories = [];
     const allLicenses = [];
-    const regexMatch = /[{}""]/g;
+    const regexMatch = /[{}""'']/g;
     for (const model of allModels.value) {
       if (brand !== null && model.brand === brand) {
         if (
@@ -811,7 +811,6 @@ watch(
       modelOmologare.value = null;
       modelLicense.value = null;
       modelMotor.value = null;
-      modelLicense.value = null;
 
       localStorage.setItem("modelBrand", modelBrand.value);
     }

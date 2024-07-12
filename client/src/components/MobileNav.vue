@@ -69,7 +69,7 @@
                     :key="index"
                     @click="goToModels(brand, vehicle)"
                   >
-                    {{ brand.toUpperCase() }}
+                    {{ brand.toUpperCase().replace("_", " ") }}
                   </li>
                 </ul>
               </AccordionTab>
@@ -167,6 +167,8 @@ const vehicleTypes = getVehicleTypes();
 
 const goToModels = (brand, vehicleType) => {
   appStore.setModelsFilters({ brand, type: vehicleType });
+  localStorage.setItem("modelType", vehicleType)
+  localStorage.setItem("modelBrand", brand)
   router.push({ path: "/vehicule" });
   appStore.sidebarOpen = false;
 };
