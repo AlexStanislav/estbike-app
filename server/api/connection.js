@@ -36,7 +36,7 @@ module.exports = (callback = null) => {
     };
 
     // Store the connection object in the process object
-    // process.postgresql = connection;
+    process.postgresql = connection;
 
     // Call the optional callback function with the connection object
     if (callback) {
