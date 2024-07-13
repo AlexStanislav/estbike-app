@@ -27,6 +27,25 @@ function extractNumbersFromString(str) {
     if (str.match(/\d+/g) !== null) return str.match(/\d+/g).map(Number);
 }
 
+function stringToJson(inputString) {
+    // Remove the starting and ending quotes
+    let string = inputString.substring(1, inputString.length - 1);
+    
+    // Remove the square brackets
+    string = string.substring(1, string.length - 1);
+    
+    // Split the string into individual elements
+    let elements = string.split("','");
+    
+    // Remove the single quotes from each element
+    let jsonElements = elements.map(element => element.replace("'", ""));
+    
+    // Convert the elements into a JSON array
+    let jsonArray = JSON.stringify(jsonElements);
+    
+    return jsonArray;
+}
+
 app.get('/api/bikes', async (req, res) => {
     try {
         const tables = await process.postgresql.query(`SELECT tablename FROM pg_tables WHERE schemaname = 'public'`);
@@ -138,6 +157,8 @@ app.get('/api/bikes', async (req, res) => {
 
                     if (bike.omologare !== 'neinmatriculabil') {
                         bike.omologare = bike.omologare.replace(/\{/g, "[").replace(/\}/g, "]");
+
+                        bike.omologare = stringToJson(bike.omologare)
                         if (!bike.omologare.toLowerCase().includes("null")) {
                             bike.omologare = JSON.parse(bike.omologare)
                         } else {
