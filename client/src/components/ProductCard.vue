@@ -26,10 +26,10 @@
         }}
       </h2>
       <p class="price-container">
-        <b class="bike-price" v-if="bike.price !== null">{{ bikePrice }} EUR</b>
+        <b class="bike-price" v-if="bike.price !== null">{{ typeof bikePrice === 'string' ? parseInt(bikePrice.replace(/\D/g, "")) : bikePrice }} EUR</b>
         <b v-else>Pret Indisponibil</b>
         <span class="bike-old-price" v-if="bike.old_price !== null"
-          ><s>{{ bikeOldPrice }} EUR</s></span
+          ><s>{{ typeof bikeOldPrice === 'string' ? parseInt(bikeOldPrice.replace(/\D/g, "")) : bikeOldPrice }} EUR</s></span
         >
       </p>
     </div>
@@ -74,7 +74,7 @@ const bikePrice = computed(() => {
     props.bike.brand === "argo" ||
     props.bike.brand === "tgb" 
   ) {
-    return parseInt(props.bike.price[0].replace(/\D/g, ""));
+    return typeof props.bike.price === "string" ? parseInt(props.bike.price[0].replace(/\D/g, "")) : props.bike.price[0];
   }
   if(Array.isArray(props.bike.price)){
     return parseInt(props.bike.price[0].replace(/\D/g, ""));

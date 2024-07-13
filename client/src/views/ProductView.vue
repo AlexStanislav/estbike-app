@@ -104,7 +104,7 @@
           </ul>
         </div>
         <div class="product-info-price">
-          <div class="omologare-display" v-if="displayModel.omologare !== null">
+          <div class="omologare-display" v-if="displayModel.omologare !== null && displayModel.omologare[0] !== ''">
             Omologare:
             <ul v-if="
               displayModel.omologare !== null &&
@@ -117,7 +117,8 @@
                 </label>
               </li>
             </ul>
-            <div class="no-omologare" v-else-if="displayModel.omologare !== null && displayModel.omologare[0] !== undefined">
+            <div class="no-omologare"
+              v-else-if="displayModel.omologare !== null && displayModel.omologare[0] !== undefined">
               <div class="no-omologare-icon"></div>
               {{ displayModel.omologare[0].toUpperCase() }}
             </div>
@@ -231,7 +232,7 @@ function loadCurrentBike() {
     typeof displayModel.value.price === "object" &&
     displayModel.value.price !== null
   ) {
-    currentPrice.value = displayModel.value.price[0].replace(/\D/g, "");
+    currentPrice.value = typeof displayModel.value.price[0] === 'string' ? displayModel.value.price[0].replace(/\D/g, "") : displayModel.value.price[0];
   } else if (displayModel.value.price !== null) {
     currentPrice.value = displayModel.value.price.replace(/\D/g, "");
   } else {
@@ -241,9 +242,9 @@ function loadCurrentBike() {
     typeof displayModel.value.old_price === "object" &&
     displayModel.value.old_price !== null
   ) {
-    currentOldPrice.value = displayModel.value.old_price[0].replace(/\D/g, "");
+    currentOldPrice.value = typeof displayModel.value.old_price[0] === 'string' ? displayModel.value.old_price[0].replace(/\D/g, "") : typeof displayModel.value.old_price[0] === 'string' ? displayModel.value.old_price[0].replace(/\D/g, "") : displayModel.value.old_price[0];
   } else if (displayModel.value.old_price !== null) {
-    currentOldPrice.value = displayModel.value.old_price.replace(/\D/g, "");
+    currentOldPrice.value = typeof displayModel.value.old_price === 'string' ? displayModel.value.old_price.replace(/\D/g, "") : typeof displayModel.value.old_price === 'string' ? displayModel.value.old_price.replace(/\D/g, "") : displayModel.value.old_price;
   } else {
     currentOldPrice.value = "Pret indisponibil";
   }
@@ -382,7 +383,7 @@ const calculateInstallments = () => {
     ? displayModel.value.price[0]
     : displayModel.value.price;
 
-  bikePrice = parseInt(bikePrice.replace(/\D/g, ""));
+  bikePrice = typeof bikePrice === 'string' ? parseInt(bikePrice.replace(/\D/g, "")) : bikePrice;
 
   return Math.round(bikePrice / currentInstallment.value);
 };
@@ -391,7 +392,7 @@ const calculateRonInstallments = () => {
     ? displayModel.value.price[0]
     : displayModel.value.price;
 
-  bikePrice = parseInt(bikePrice.replace(/\D/g, ""));
+  bikePrice = typeof bikePrice === 'string' ? parseInt(bikePrice.replace(/\D/g, "")) : bikePrice;
   return Math.round(
     Math.ceil(bikePrice * appStore.forexValue) / currentInstallment.value
   );
@@ -425,10 +426,7 @@ watch(
     const priceIndex = displayModel.value.omologare.indexOf(
       omologareModel.value
     );
-    currentPrice.value = displayModel.value.price[priceIndex].replace(
-      /\D/g,
-      ""
-    );
+    currentPrice.value = typeof displayModel.value.price[priceIndex] === 'string' ? displayModel.value.price[priceIndex].replace(/\D/g, "") : displayModel.value.price[priceIndex];
 
     installmentPrice.value = Math.round(currentPrice.value / currentInstallment.value)
     ronInstallmentPrice.value = Math.round(Math.ceil(currentPrice.value * appStore.forexValue) / currentInstallment.value)
@@ -440,7 +438,7 @@ watch(
   () => {
     installmentPrice.value = Math.round(currentPrice.value / currentInstallment.value)
     ronInstallmentPrice.value = Math.round(Math.ceil(currentPrice.value * appStore.forexValue) / currentInstallment.value)
-})
+  })
 
 watchEffect(() => {
   loadCurrentBike();

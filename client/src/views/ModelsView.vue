@@ -469,7 +469,7 @@ const methods = {
 
       let priceMatch = true;
       if (Array.isArray(model.price)) {
-        let price = parseInt(model.price[0].replace('.', ''))
+        let price = typeof model.price[0] === 'string' ? parseInt(model.price[0].replace('.', '')) : model.price[0];
         priceMatch = !filters.priceRange || (price >= filters.priceRange[0] && price <= filters.priceRange[1]);
       } else {
         priceMatch =
@@ -523,9 +523,9 @@ const methods = {
   },
   applyFilters: function (value = null) {
     modelsLoaded.value = false;
-    if(value) {
+    if (value) {
       this.filterModels(value);
-    } else{
+    } else {
       this.filterModels(filters.value);
     }
     setTimeout(() => {
@@ -582,7 +582,7 @@ const methods = {
   getPriceRange: function (brand = null) {
     const prices = allModels.value
       .map(bike => Array.isArray(bike.price) ? bike.price[0] : bike.price)
-      .filter(price => price !== null && !price.includes('.'))
+      .filter(price => price !== null && typeof price === 'string' && !price.includes('.'))
       .map(price => price.replace('.', ''));
 
     return brand
@@ -639,7 +639,7 @@ const methods = {
     let brands = [];
     for (const bike of modelsToFilter) {
       if (!brands.includes(bike.brand)) {
-        if(bike.brand !== 'husqvarna' && bike.brand !== 'gasgas' && bike.brand !== 'ktm'){
+        if (bike.brand !== 'husqvarna' && bike.brand !== 'gasgas' && bike.brand !== 'ktm') {
           brands.push(bike.brand);
         }
       }
@@ -699,7 +699,7 @@ const methods = {
   handleVehicleTypeChange: function (vehicleType) {
     const typeValue = vehicleType.value ? vehicleType.value : vehicleType;
 
-    if(!localStorage.getItem("modelType")){
+    if (!localStorage.getItem("modelType")) {
       localStorage.setItem("modelType", typeValue)
     }
 
@@ -886,7 +886,7 @@ onMounted(async () => {
       }
     }, 500);
 
-    if(localStorage.getItem("modelBrand") || localStorage.getItem("modelType")) {
+    if (localStorage.getItem("modelBrand") || localStorage.getItem("modelType")) {
       const storageBrand = localStorage.getItem("modelBrand");
       const storageType = localStorage.getItem("modelType");
       methods.handleVehicleTypeChange(storageType)
@@ -895,7 +895,7 @@ onMounted(async () => {
         modelBrand.value = storageBrand;
       }, 300);
     }
-}
+  }
 });
 
 const filterByQuery = () => {
