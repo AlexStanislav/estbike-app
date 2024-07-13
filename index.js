@@ -147,6 +147,10 @@ app.get('/api/bikes', async (req, res) => {
                         }
                     }
 
+                    if(bike.omologare !== null && bike.omologare.includes('"')){
+                        bike.omologare = bike.omologare.replace(/"/g, "'")
+                    }
+
                     if (bike.omologare === 't1b') {
                         bike.omologare = 't3b'
                     }
