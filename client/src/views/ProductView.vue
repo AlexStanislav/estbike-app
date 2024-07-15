@@ -90,16 +90,15 @@
         <div class="colors-container" v-if="displayModelColors !== null">
           <h3>Culori disponibile:</h3>
           <ul>
-            <li v-for="colorName in displayModel.colors" :key="colorName"
-              @click="changeBikeColor(colorName, displayModel)">
-              <span>{{ colorName }}</span>
-              <div class="color-display" v-if="Array.isArray(displayModelColors[colorName])">
-                <div class="color-block" v-for="color in displayModelColors[colorName]" :key="color"
-                  :style="{ background: `#${color}` }"></div>
+            <li v-for="(colorsArray, index) in displayModelColors" :key="index"
+              @click="changeBikeColor(index, displayModel)">
+              <span>{{ index }}</span>
+              <div class="color-display" v-if="Array.isArray(colorsArray)">
+                <div class="color-block" v-for="color in colorsArray" :key="color"
+                  :style="{ background: color.includes('#') ? `${color}` : `#${color}` }"></div>
               </div>
-              <div class="color-display" v-else>
-                <div class="color-block" :style="{ background: `#${displayModelColors[colorName]}` }"></div>
-              </div>
+              <div class="color-block" v-else
+                :style="{ background: colorsArray.includes('#') ? `${colorsArray}` : `#${colorsArray}` }"></div>
             </li>
           </ul>
         </div>
@@ -257,13 +256,17 @@ function loadCurrentBike() {
   // }
 
   similarModels.value = getRandomSlice(getSimilarModels()[0], 4);
-  displayModelColors.value = JSON.parse(displayModel.value.colors_display);
+  displayModelColors.value = JSON.parse(displayModel.value.colors_display.replace(/'/g, '"'));
 }
 
 onMounted(() => {
   header.classList.add("sticky");
   setTimeout(() => {
     loadCurrentBike();
+
+    for (const color in displayModelColors.value) {
+      console.log(color);
+    }
 
     installmentPrice.value = calculateInstallments();
     ronInstallmentPrice.value = calculateRonInstallments();
@@ -283,21 +286,27 @@ const changeBikeColor = (color, model) => {
       return bike.bike_name.includes(color);
     });
 
-    const baseBikeMatch = bikeMatch.filter((bike) => {
-      const bikeName = bike.bike_name.split("-");
-      const baseBikeName = bikeName.slice(0, bikeName.indexOf(color));
-      const currentBikeName = displayModel.value.bike_name.split("-");
-      const baseCurrentBikeName = currentBikeName.slice(
-        0,
-        currentBikeName.indexOf(color)
-      );
-      if (baseBikeName.join("-") === baseCurrentBikeName.join('-')) {
+    const modelColors = displayModel.value.colors
+
+    console.log(modelColors)
+
+    const bikeColorMatch = bikeMatch.filter((bike) => {
+      const bikeNameParts = bike.bike_name.split("-");
+      const currentBikeNameParts = displayModel.value.bike_name.split("-");
+      const bikeName = bikeNameParts
+        .filter((part) => !modelColors.includes(part))
+        .join(" ");
+      const currentBikeName = currentBikeNameParts
+        .filter((part) => !modelColors.includes(part))
+        .join(" ");
+
+      if(currentBikeName.includes(bikeName)) {
         return bike;
       }
+    })
 
-    });
-    if (baseBikeMatch.length > 0) {
-      setModelAsCurrent(baseBikeMatch[0]);
+    if (bikeColorMatch.length > 0) {
+      setModelAsCurrent(bikeColorMatch[0]);
     }
   }
 };
