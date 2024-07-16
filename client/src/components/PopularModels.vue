@@ -2,38 +2,15 @@
   <div class="home-promo">
     <h1>Promotii</h1>
     <div class="promo-categories">
-      <div
-        class="promo-box"
-        v-for="(model, index) in popularModels"
-        :key="index"
-        :data-model="index"
-        @click="selectModel"
-      >
-      <div class="promo-box-shape">
-       {{ modelCardName(index).includes("_") ? modelCardName(index).replace("_", " ") : modelCardName(index) }}
-      </div>
-        <!-- <div
-          class="promo-box-shape"
-          :style="{
-            backgroundImage: `url(${motoboomImageResizer(model[0].gallery[1])}`,
-          }"
-        >
-          <img
-            :src="`${imgURL(
-              `../assets/img/logo/${index.replace(/_bikes/g, '')}`
-            )}.svg`"
-            :class="`${index.replace(/_bikes/g, '')}-logo`"
-          />
-          <div class="promo-box-gradient"></div>
-        </div> -->
+      <div class="promo-box" v-for="(model, index) in popularModels" :key="index" :data-model="index"
+        @click="selectModel">
+        <div class="promo-box-shape">
+          {{ modelCardName(index).includes("_") ? modelCardName(index).replace("_", " ") : modelCardName(index) }}
+        </div>
       </div>
     </div>
     <div class="promo-container">
-      <ProductCard
-        v-for="(model, index) in currentPromoModels"
-        :key="index"
-        :bike="model"
-      />
+      <ProductCard v-for="(model, index) in currentPromoModels" :key="index" :bike="model" />
     </div>
   </div>
 </template>
@@ -76,21 +53,8 @@ const getPopularModels = (allBikes) => {
     const bikes = [];
     const brand = allBikes[brandIndex];
 
-    // const oldPriceBrands = brand.filter((bike) => {
-    //   if (bike.old_price !== null) {
-    //     return bike;
-    //   }
-    // })
-
-    // oldPriceBrands.filter((bike) => {
-    //   if (bike.is_popular === true) {
-    //     bikes.push(bike);
-    //     finalPopular[brandIndex] = bikes;
-    //   }
-    // });
-
     brand.filter((bike) => {
-      if (bike.old_price !== null) {
+      if (bike.old_price !== null && bike.old_price[0] !== null) {
         bikes.push(bike);
         finalPopular[brandIndex] = bikes;
       }
@@ -100,19 +64,19 @@ const getPopularModels = (allBikes) => {
 };
 
 const modelCardName = (name) => {
-  if(name.includes("atv")){
+  if (name.includes("atv")) {
     return `ATV ${name.replace("_atv", "").toUpperCase()}`;
   }
-  if(name.includes("ssv")){
+  if (name.includes("ssv")) {
     return `SSV ${name.replace("_ssv", "").toUpperCase()}`;
   }
-  if(name.includes("scooters")){
+  if (name.includes("scooters")) {
     return `Scutere ${name.replace("_scooters", "").toUpperCase()}`;
   }
-  if(name.includes("bikes")){
+  if (name.includes("bikes")) {
     return `Motociclete ${name.replace("_bikes", "").toUpperCase()}`;
   }
-  if(name.includes("snowmobiles")){
+  if (name.includes("snowmobiles")) {
     return `Snowmobile ${name.replace("_snowmobiles", "").toUpperCase()}`;
   }
 }
