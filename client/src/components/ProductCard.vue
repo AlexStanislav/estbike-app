@@ -16,7 +16,7 @@
     </div>
     <div class="info-container">
       <div v-if="showDiscount" class="ribbon">
-        {{ Math.round(((bikeOldPrice - bikePrice) / bikeOldPrice) * 100) }}%
+        {{ discount }}%
       </div>
       <h2>
         {{
@@ -57,6 +57,23 @@ const bikeLicenses = computed(() => {
     finalArray.push(license.replace(/[{}""]/g, ""));
   }
   return finalArray;
+});
+
+const discount = computed(() => {
+  let price = 0;
+  let old_price = 0;
+  if(Array.isArray(props.bike.price)){
+    price = parseInt(props.bike.price[0].replace(/\D/g, ""));
+  }else{
+    price = props.bike.price;
+  }
+
+  if(Array.isArray(props.bike.old_price)){
+    old_price = parseInt(props.bike.old_price[0].replace(/\D/g, ""));
+  }else{
+    old_price = props.bike.old_price;
+  }
+  return Math.round(((old_price - price) / old_price) * 100);
 });
 
 const selectBike = (bike) => {
