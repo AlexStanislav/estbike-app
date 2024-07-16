@@ -310,6 +310,10 @@ app.get('/api/bikes', async (req, res) => {
 
                 if (Array.isArray(bike.old_price) && bike.old_price.length === 0) {
                     bike.old_price = null
+                } 
+
+                if(Array.isArray(bike.old_price) && bike.old_price[0] === ''){
+                    bike.old_price[0] = null
                 }
 
                 if (bike.colors === "undefined" || bike.colors === "null" || bike.colors === null || bike.colors === undefined) {
