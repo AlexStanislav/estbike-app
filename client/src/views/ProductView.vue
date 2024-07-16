@@ -256,7 +256,7 @@ function loadCurrentBike() {
   // }
 
   similarModels.value = getRandomSlice(getSimilarModels()[0], 4);
-  displayModelColors.value = JSON.parse(displayModel.value.colors_display.replace(/'/g, '"'));
+  displayModelColors.value = displayModel.value.colors_display !== null ? JSON.parse(displayModel.value.colors_display.replace(/'/g, '"')) : null;
 }
 
 onMounted(() => {
