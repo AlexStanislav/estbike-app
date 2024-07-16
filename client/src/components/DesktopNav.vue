@@ -48,7 +48,7 @@
             class="autocomplete-result"
             @click="selectBike(slotProps.option)"
           >
-            {{ slotProps.option.bike_name }} - {{ slotProps.option.main_year }}
+            {{ slotProps.option.bike_name.replace(/-/g, " ").toUpperCase() }} - {{ slotProps.option.main_year }}
           </div>
         </template>
       </AutoComplete>
@@ -130,8 +130,9 @@ const suggestions = ref([]);
 const search = (event) => {
   const models = getAllModels();
   suggestions.value = models.filter((model) => {
-    if (model.bike_name.toLowerCase().includes(event.query.toLowerCase())) {
-      return model.bike_name.replace(/-/g, " ");
+    let bikeName = model.bike_name.replace(/-/g, " ");
+    if (bikeName.toLowerCase().includes(event.query.toLowerCase())) {
+      return bikeName;
     }
   });
 };
@@ -203,6 +204,16 @@ const selectBike = (bike) => {
   .p-inputtext:focus {
     box-shadow: 0 0 0 0.2rem var(--main);
   }
+}
+
+.autocomplete-result {
+   width: 300px;
+   font-size: 0.8em;
+}
+
+.p-autocomplete-panel{
+  margin-top: 10px;
+  margin-left: -15px;
 }
 
 .main-nav {

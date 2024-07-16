@@ -28,7 +28,7 @@
       <p class="price-container">
         <b class="bike-price" v-if="bike.price !== null">{{ typeof bikePrice === 'string' ? parseInt(bikePrice.replace(/\D/g, "")) : bikePrice }} EUR</b>
         <b v-else>Pret Indisponibil</b>
-        <span class="bike-old-price" v-if="bike.old_price !== null"
+        <span class="bike-old-price" v-if="bikeOldPrice !== null"
           ><s>{{ typeof bikeOldPrice === 'string' ? parseInt(bikeOldPrice.replace(/\D/g, "")) : bikeOldPrice }} EUR</s></span
         >
       </p>
@@ -63,17 +63,19 @@ const discount = computed(() => {
   let price = 0;
   let old_price = 0;
   if(Array.isArray(props.bike.price)){
-    price = parseInt(props.bike.price[0].replace(/\D/g, ""));
+    price = typeof props.bike.price[0] === 'string' ? parseInt(props.bike.price[0].replace(/\D/g, "")) : props.bike.price[0];
   }else{
     price = props.bike.price;
   }
 
   if(Array.isArray(props.bike.old_price)){
-    old_price = parseInt(props.bike.old_price[0].replace(/\D/g, ""));
-  }else{
+    old_price = typeof props.bike.old_price[0] === 'string' ? parseInt(props.bike.old_price[0].replace(/\D/g, "")) : props.bike.old_price[0];
+  }
+  else{
     old_price = props.bike.old_price;
   }
-  return Math.round(((old_price - price) / old_price) * 100);
+
+  return Math.abs(Math.round(((old_price - price) / old_price) * 100)).toFixed(0);
 });
 
 const selectBike = (bike) => {
@@ -91,10 +93,10 @@ const bikePrice = computed(() => {
     props.bike.brand === "argo" ||
     props.bike.brand === "tgb" 
   ) {
-    return typeof props.bike.price === "string" ? parseInt(props.bike.price[0].replace(/\D/g, "")) : props.bike.price[0];
+    return typeof props.bike.price[0] === "string" ? parseInt(props.bike.price[0].replace(/\D/g, "")) : props.bike.price[0];
   }
   if(Array.isArray(props.bike.price)){
-    return parseInt(props.bike.price[0].replace(/\D/g, ""));
+    return typeof props.bike.price[0] === "string" ? parseInt(props.bike.price[0].replace(/\D/g, "")) : props.bike.price[0];
   }
   if (
     props.bike.brand.toLowerCase().includes("gasgas") ||
@@ -116,10 +118,11 @@ const bikeOldPrice = computed(() => {
     props.bike.brand === "argo" ||
     props.bike.brand === "tgb"
   ) {
-    return parseInt(props.bike.old_price[0].replace(/\D/g, ""));
+    if(props.bike.old_price === null) return null;
+    return typeof props.bike.old_price === 'string' ? parseInt(props.bike.old_price[0].replace(/\D/g, "")) : props.bike.old_price[0];
   }
   if(Array.isArray(props.bike.old_price)){
-    return parseInt(props.bike.old_price[0].replace(/\D/g, ""));
+    return typeof props.bike.old_price[0] === 'string' ? parseInt(props.bike.old_price[0].replace(/\D/g, "")) : props.bike.old_price[0];
   }
   if (
     props.bike.brand.toLowerCase().includes("gasgas") ||
@@ -140,7 +143,8 @@ const showDiscount = computed(() => {
   return (
     props.bike.old_price !== "null" &&
     props.bike.old_price !== "" &&
-    props.bike.old_price !== null
+    props.bike.old_price !== null && 
+    props.bike.old_price[0] !== null
   );
 });
 

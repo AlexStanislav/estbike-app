@@ -124,11 +124,11 @@
           </div>
           <div class="eur-price" v-if="displayModel.price !== null">
             <span>{{ currentPrice }} EUR</span>
-            <s v-if="displayModel.old_price !== null">{{ currentOldPrice }} EUR</s>
+            <s v-if="currentOldPrice !== null && !isNaN(currentOldPrice)">{{ currentOldPrice }} EUR</s>
           </div>
           <div class="ron-price" v-if="displayModel.price !== null">
             <span>{{ Math.ceil(currentPrice * appStore.forexValue) }} RON</span>
-            <s v-if="displayModel.old_price !== null">{{ Math.ceil(currentOldPrice * appStore.forexValue) }} RON</s>
+            <s v-if="currentOldPrice !== null && !isNaN(currentOldPrice)">{{ Math.ceil(currentOldPrice * appStore.forexValue) }} RON</s>
           </div>
           <div class="product-info-price-discount" v-if="displayModel.old_price !== null">
             Reducere de {{ Math.round(((currentPrice - currentOldPrice) / currentPrice) * 100).toFixed(0) }}%
@@ -455,7 +455,7 @@ watchEffect(() => {
 </script>
 <style lang="scss">
 .product {
-  width: 80%;
+  width: 90%;
   margin: 80px auto 0 auto;
 
   span {
