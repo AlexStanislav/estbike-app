@@ -316,10 +316,6 @@ app.get('/api/bikes', async (req, res) => {
                     bike.old_price[0] = null
                 }
 
-                if(bike.bike_name.includes("imperiale")){
-                    console.log(bike)
-                }
-
                 if (bike.colors === "undefined" || bike.colors === "null" || bike.colors === null || bike.colors === undefined) {
                     bike.colors = null
                 }
