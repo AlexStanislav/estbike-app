@@ -308,7 +308,9 @@ const methods = {
 
     // allBikes["swm_bikes"] = filteredSwm;
     const models = Object.values(allBikes).flat();
-    const finalModels = models.filter((model) => model.display_model);
+    const finalModels = models.filter((model) => { 
+      return model.display_model 
+    });
     return finalModels;
   },
   getYears: function (brand = null) {
@@ -646,7 +648,6 @@ const methods = {
     }
 
     brands.sort((a, b) => a.localeCompare(b));
-
     this.getBrandNumbers();
 
     return [...new Set(brands)];
@@ -702,8 +703,6 @@ const methods = {
     if (!localStorage.getItem("modelType")) {
       localStorage.setItem("modelType", typeValue)
     }
-
-    console.log("typeValue", typeValue)
 
     filtersActiveIndex.value = [0];
     modelType.value = typeValue;
@@ -875,9 +874,6 @@ onMounted(async () => {
       filterByQuery();
     }
 
-    if (queryVehicleType.value) {
-      methods.handleVehicleTypeChange(queryVehicleType);
-    }
 
     setTimeout(() => {
       const header = document.querySelector(".desktop-nav");
@@ -895,6 +891,10 @@ onMounted(async () => {
         modelBrand.value = storageBrand;
       }, 300);
     }
+
+    // if (queryVehicleType.value) {
+    //   methods.handleVehicleTypeChange(queryVehicleType);
+    // }
   }
 });
 
