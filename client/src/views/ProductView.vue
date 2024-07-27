@@ -468,7 +468,7 @@ watchEffect(() => {
   height: 100%;
   display: flex;
   position: relative;
-  gap: 2rem;
+  gap: 4rem;
 }
 
 .bike-name-crumb {
@@ -867,11 +867,43 @@ watchEffect(() => {
   background-color: var(--main);
 }
 
+@media screen and (width: 1920px) {
+  .product {
+    width: 90%;
+  }
+
+  .product-top-container {
+    gap: 3rem;
+  }
+  
+}
+
+@media screen and (max-width: 1440px), screen and (max-width: 1600px) {
+  .product {
+    width: 95%;
+  }
+
+  .product-top-container {
+    gap: 4.5rem;
+  }
+}
+
 @media screen and (max-width: 1366px) {
   .product {
     width: 95%;
   }
 }
+
+@media screen and (max-width: 1280px) {
+  .product {
+    width: 95%;
+  }
+
+  .product-top-container {
+    gap: 4rem;
+  }
+}
+
 
 @media screen and (max-height: 414px) {
   .product-info-price-discount {
