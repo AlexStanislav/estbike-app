@@ -34,7 +34,8 @@
             </li>
           </ul>
         </AccordionTab>
-        <AccordionTab :disabled="motorFilters.length === 0" header="Capacitate Cilindrica">
+        <AccordionTab :disabled="motorFilters.length === 0" header="Capacitate Cilindrica ">
+          <i class="filter-reset pi pi-filter-slash" @click="methods.clearFilter('capacitate')"></i>
           <ul class="category-tab">
             <li v-for="(info, index) in motorFilters" :key="index" :header="info">
               <label>
@@ -45,6 +46,7 @@
           </ul>
         </AccordionTab>
         <AccordionTab header="Omologare" :disabled="filters.type !== 'atv' && filters.type !== 'ssv'">
+          <i class="filter-reset pi pi-filter-slash" @click="methods.clearFilter('omologare')"></i>
           <ul class="omologare-tab">
             <li>
               <label>
@@ -67,6 +69,7 @@
           </ul>
         </AccordionTab>
         <AccordionTab :disabled="categoriesFilter.length === 0" header="Categorie">
+          <i class="filter-reset pi pi-filter-slash" @click="methods.clearFilter('category')"></i>
           <ul class="category-tab">
             <li v-for="(category, index) in categoriesFilter" :key="index" :header="category"
               @click="toggleAccordion(category)">
@@ -78,6 +81,7 @@
           </ul>
         </AccordionTab>
         <AccordionTab :disabled="licenseFilter.length === 0 || disableLicenseTab" header="Categorie Permis">
+          <i class="filter-reset pi pi-filter-slash" @click="methods.clearFilter('permis')"></i>
           <ul class="license-tab">
             <li v-for="(license, index) of licenseFilter" :key="index">
               <label>
@@ -234,6 +238,26 @@ const toggleAccordion = function (category) {
   }
 };
 const methods = {
+  clearFilter: function (filter) {
+    filters.value[filter] = null;
+    if(filter === 'capacitate') {
+      modelMotor.value = null;
+    }
+
+    if(filter === 'permis') {
+      modelLicense.value = null;
+    }
+
+    if(filter === 'category') {
+      modelCategory.value = null;
+    }
+
+    if(filter === 'omologare') {
+      modelOmologare.value = null;
+    }
+    
+    this.applyFilters()
+  },
   getModelsNumber: function (filters) {
     const models = this.getAllModels();
     const filteredModels = models.filter((model) => {
@@ -365,7 +389,17 @@ const methods = {
 
     const uniqueCategories = [...new Set(categories)];
 
-    return uniqueCategories.sort((a, b) => a.localeCompare(b));
+    function removeDuplicates(arr) {
+      return arr.map(item => item.toLowerCase()).sort().filter((item, index, self) => 
+        index === self.indexOf(item)
+      );
+    }
+
+    const finalArray = removeDuplicates(uniqueCategories);
+
+    console.log(finalArray)
+
+    return finalArray.sort((a, b) => a.localeCompare(b));
   },
   getMotorInfo: function (brand = null) {
     let motorCapacities = [];
@@ -430,7 +464,9 @@ const methods = {
       const yearMatch =
         !filters.main_year || filters.main_year === model.main_year;
       const categoryMatch =
-        !filters.category || filters.category === model.category;
+        !filters.category ||
+        filters.category.toLowerCase() ===
+          (model.category?.toLowerCase() ?? null);
       let motorMatch = true;
       if (filters.capacitate) {
         if (filters.capacitate.includes("-")) {
@@ -917,6 +953,16 @@ const filterByQuery = () => {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+}
+
+.filter-reset {
+  position: relative;
+  float: right;
+  background: var(--main);
+  padding: 0.5em;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .filter-section {

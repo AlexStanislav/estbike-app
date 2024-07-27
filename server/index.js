@@ -221,10 +221,6 @@ app.get('/api/bikes', async (req, res) => {
                     bike.category = null
                 }
 
-                if(bike.category !== null && bike.category.toLowerCase().includes('e-bike')){
-                    bike.category = 'e-ride'
-                }
-
                 if (bike.category !== null && bike.category.includes('/')) {
                     bike.brand = bike.category.replace('/', '')
                     bike.category = null
