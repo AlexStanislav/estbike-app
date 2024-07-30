@@ -75,7 +75,7 @@
               @click="toggleAccordion(category)">
               <label>
                 <RadioButton v-model="modelCategory" :binary="true" :value="category" />
-                <span>{{ category.toUpperCase() }}</span>
+                <span>{{ category.toUpperCase().replace("-", " ").replace("&-", "& ") }}</span>
               </label>
             </li>
           </ul>
@@ -370,7 +370,9 @@ const methods = {
           category !== "null" &&
           (typeof category !== "object" || Object.keys(category).length !== 0)
         ) {
-          categories.push(category);
+          if(bike.vehicle_type === filters.value.type) {
+            categories.push(category);
+          }
         }
       }
       if (brand === null) {
@@ -382,7 +384,9 @@ const methods = {
           category !== "null" &&
           (typeof category !== "object" || Object.keys(category).length !== 0)
         ) {
-          categories.push(category);
+          if(bike.vehicle_type === filters.value.type) {
+            categories.push(category);
+          }
         }
       }
     }
@@ -397,7 +401,6 @@ const methods = {
 
     const finalArray = removeDuplicates(uniqueCategories);
 
-    console.log(finalArray)
 
     return finalArray.sort((a, b) => a.localeCompare(b));
   },

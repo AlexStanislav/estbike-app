@@ -130,7 +130,7 @@
             <span>{{ Math.ceil(currentPrice * appStore.forexValue) }} RON</span>
             <s v-if="currentOldPrice !== null && !isNaN(currentOldPrice)">{{ Math.ceil(currentOldPrice * appStore.forexValue) }} RON</s>
           </div>
-          <div class="product-info-price-discount" v-if="currentOldPrice !== null">
+          <div class="product-info-price-discount" v-if="currentOldPrice !== null && currentOldPrice.toLowerCase() !== 'pret indisponibil'">
             Reducere de {{ Math.round(((currentPrice - currentOldPrice) / currentPrice) * 100).toFixed(0) }}%
           </div>
         </div>
