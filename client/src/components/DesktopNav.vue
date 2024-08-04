@@ -1,21 +1,14 @@
 <template>
   <div class="desktop-nav">
-    <img src="../assets/img/logo.svg" alt="motobrebu Logo" @click="goTo('/')" />
+    <img v-if="isSticky || router.currentRoute.value.path !== '/'" style="padding-left: 50px;" lazy src="../assets/img/logo/logo-inverted.png" alt="motobrebu Logo" @click="goTo('/')" />
+    <img v-else lazy src="../assets/img/logo/logo.png" alt="motobrebu Logo" @click="goTo('/')" />
     <nav class="main-nav">
       <router-link @mouseenter="hideMenu()" to="/">Acasă</router-link>
-      <router-link @mouseenter="hideMenu()" to="/despre"
-        >Despre Noi</router-link
-      >
+      <router-link @mouseenter="hideMenu()" to="/despre">Despre Noi</router-link>
       <a @mouseenter="toggleMenu" @click="goTo('/vehicule')">
         <span>
           Vehicule
-          <Menu
-            ref="menu"
-            id="overlay_menu"
-            :model="menuItems"
-            :popup="true"
-            @mouseleave="hideMenu()"
-          />
+          <Menu ref="menu" id="overlay_menu" :model="menuItems" :popup="true" @mouseleave="hideMenu()" />
         </span>
       </a>
       <!-- <router-link @mouseenter="hideMenu()" to="/rabla">Rabla</router-link> -->
@@ -36,18 +29,10 @@
     </div>
     <div class="search-container p-input-icon-left">
       <i class="pi pi-search" />
-      <AutoComplete
-        v-model="searchValue"
-        :suggestions="suggestions"
-        @complete="search"
-        optionLabel="bike_name"
-        placeholder="Cauta..."
-      >
+      <AutoComplete v-model="searchValue" :suggestions="suggestions" @complete="search" optionLabel="bike_name"
+        placeholder="Cauta...">
         <template #option="slotProps">
-          <div
-            class="autocomplete-result"
-            @click="selectBike(slotProps.option)"
-          >
+          <div class="autocomplete-result" @click="selectBike(slotProps.option)">
             {{ slotProps.option.bike_name.replace(/-/g, " ").toUpperCase() }} - {{ slotProps.option.main_year }}
           </div>
         </template>
@@ -62,6 +47,10 @@ import { ref } from "vue";
 import { useAppStore } from "../stores/appStore";
 import Menu from "primevue/menu";
 const appStore = useAppStore();
+
+const isSticky = ref(false);
+
+
 const goTo = (url) => {
   menu.value.hide();
   router.push({ path: url });
@@ -69,7 +58,14 @@ const goTo = (url) => {
 
 if (appStore.isMobile() === false) {
   window.addEventListener("scroll", () => {
-    if (window.scrollY > 0 && menu.value !== null) menu.value.hide();
+    if (window.scrollY > 0 && menu.value !== null) {
+      isSticky.value = true;
+      menu.value.hide()
+    } else {
+      isSticky.value = false;
+    }
+
+    console.log(isSticky.value);
   });
 }
 
@@ -169,23 +165,30 @@ const selectBike = (bike) => {
   left: 10%;
   position: fixed;
   z-index: 10;
+
   img {
-    width: 198px;
+    width: auto;
+    height: 50px;
     margin-right: 1rem;
+    margin-left: 1rem;
     cursor: pointer;
   }
+
   .p-input-icon-left {
     margin-left: 5rem;
     filter: drop-shadow(0px 3px 0px var(--main));
   }
+
   i {
     color: var(--dark-accent);
     z-index: 3;
     left: 1.5rem;
   }
-  .p-input-icon-left > .p-autocomplete-input {
+
+  .p-input-icon-left>.p-autocomplete-input {
     padding-left: 3rem;
   }
+
   .p-autocomplete-input {
     background: var(--dark-shade);
     border: none;
@@ -207,11 +210,11 @@ const selectBike = (bike) => {
 }
 
 .autocomplete-result {
-   width: 300px;
-   font-size: 0.8em;
+  width: 300px;
+  font-size: 0.8em;
 }
 
-.p-autocomplete-panel{
+.p-autocomplete-panel {
   margin-top: 10px;
   margin-left: -15px;
 }
@@ -223,6 +226,7 @@ const selectBike = (bike) => {
   background: var(--dark-shade);
   display: flex;
   border-bottom: 3px solid var(--main);
+
   a {
     cursor: pointer;
     text-decoration: none;
@@ -231,29 +235,33 @@ const selectBike = (bike) => {
     transition: all 0.15s ease-in;
     text-shadow: 0px 0px 2px #000;
   }
+
   a:hover {
     background: var(--main);
     color: var(--light-shade);
   }
+
   a.router-link-exact-active {
     background: var(--main);
     color: var(--light-shade);
   }
 }
+
 .p-menu.p-menu-overlay {
   background: var(--dark-shade);
   border-radius: 0;
 }
+
 .p-menuitem-text {
   color: #fff;
 }
+
 .p-menuitem-content:hover {
   background: var(--main) !important;
   color: #fff;
 }
-.p-menu
-  .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus
-  > .p-menuitem-content {
+
+.p-menu .p-menuitem:not(.p-highlight):not(.p-disabled).p-focus>.p-menuitem-content {
   background: transparent;
   color: #fff;
 }
@@ -273,6 +281,7 @@ const selectBike = (bike) => {
   position: absolute;
   z-index: 2;
 }
+
 #top-decoration-shadow {
   width: 0;
   height: 0;
@@ -282,6 +291,7 @@ const selectBike = (bike) => {
   position: absolute;
   z-index: 0;
 }
+
 #bottom-decoration-shadow {
   width: 0;
   height: 0;
@@ -311,6 +321,7 @@ const selectBike = (bike) => {
   background: var(--dark-shade);
   align-items: center;
   justify-content: flex-end;
+
   i {
     font-size: 1.2rem;
     color: var(--light-shade);
@@ -320,6 +331,7 @@ const selectBike = (bike) => {
 #phone-number {
   font-size: 1rem;
   margin: 0.5rem 0.5rem;
+
   a {
     text-decoration: none;
     color: var(--light-shade);
@@ -331,12 +343,15 @@ const selectBike = (bike) => {
     width: 90%;
     left: 5%;
   }
+
   nav {
     width: 60%;
   }
+
   #phone-number-container {
     width: 15%;
   }
+
   #phone-number {
     font-size: 0.9rem;
   }
@@ -346,10 +361,12 @@ const selectBike = (bike) => {
   .desktop-nav {
     width: 100%;
   }
+
   .sticky {
     img {
       margin-right: 1rem !important;
     }
+
     #phone-number-container {
       right: 22% !important;
     }

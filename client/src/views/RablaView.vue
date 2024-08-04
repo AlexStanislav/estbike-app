@@ -12,14 +12,13 @@
     <article id="rabla-intro">
       <h1>Salut motociclistule,</h1>
       <p>
-        Noi suntem Moto Brebu si iti multumim ca ne-ai ales pe noi ca furnizori de
+        Noi suntem Brebu Moto si iti multumim ca ne-ai ales pe noi ca furnizori de
         vehicule pentru pasiunea ta.
         <br />
         Pe noi ne gasesti fizic in locatiile de mai jos, dar poti achizitiona si
         de la distanta iar noi iti putem livra motocicleta/scuterul/atv-ul dorit
         chiar la domiciliu.
         <br />
-        Moto Brebu CONSTANTA – Strada Medeea nr.1A CONSTANTA office@motobrebu.ro EST
         BIKE CAMPINA – Strada Selimbar nr.10 localitatea BREBU MANASTIREI jud
         PRAHOVA campina@motobrebu.ro
         <br />
@@ -35,7 +34,7 @@
         <br />
         Va rugam sa parcurgeti cu atentie informatiile de mai jos. Inscrierea in
         program si achizitia vehiculelor noi se desfasoara conform pasilor
-        prezentati mai jos. Toate documentele vor fi trimise catre Moto Brebu
+        prezentati mai jos. Toate documentele vor fi trimise catre Brebu Moto
         CONSTANTA pe email la adresa logistica@motobrebu.ro sau fizic (pot fi
         trimise si prin curier) la adresa noastra din CONSTANTA , strada Medeea
         nr 1A (cu mentiunea departament logistica) in forma solicitata mai jos.
@@ -192,7 +191,7 @@
         <p>
             Intrucat procesul de inscriere si achizitie in programul Rabla Clasic presupune timp, responsabilitate, atentie si corectitudine, va rugam ca transmiterea datelor si documentelor necesare sa fie facuta in forma prezentata si solicitata mai jos conform etapelor descrise.
             <br><br>
-            In cazul transmiterii incomplete a documentelor necesare dosaruluui,  sau in formatul solicitat, catre departamente diferite ale Moto Brebu  sau la adrese diferite fata de cea mentionata, se va implementa un cost suplimentar de asistenta si consultanta in valoare de 500 ron tva/inclus/dosar intrucat ne solicita suplimentar, ca timp de solutionare si efort uman.
+            In cazul transmiterii incomplete a documentelor necesare dosaruluui,  sau in formatul solicitat, catre departamente diferite ale Brebu Moto  sau la adrese diferite fata de cea mentionata, se va implementa un cost suplimentar de asistenta si consultanta in valoare de 500 ron tva/inclus/dosar intrucat ne solicita suplimentar, ca timp de solutionare si efort uman.
             <br><br>
             Intrucat stocurile si disponibilitatile  vehiculelor sunt foarte schimbatoare datorita cererii crescute, a livrarilor insuficiente sau intarziate de probleme de productie si transport ne rezervam dreptul de a refuza vanzarea vehiculelor prin Programul Rabla Clasic in conditii speciale cum ar fi: stoc redus, disponibilitati fara termene de livrare clare, lipsa unei rezervari sau a unei precomenzi cu incasarea unui avans, etc.
             <br><br>
@@ -200,7 +199,7 @@
             <br><br>
             <br><br>
             <br><br>
-            Toate drepturile pentru acest text sunt rezervate Moto Brebu.
+            Toate drepturile pentru acest text sunt rezervate Brebu Moto.
         </p>
     </article>
   </section>

@@ -39,7 +39,7 @@
             <div class="contact-card facebook-card">
               <i class="pi pi-facebook main-icon"></i>
               <h2>FACEBOOK</h2>
-              <h3>Moto Brebu</h3>
+              <h3>Brebu Moto</h3>
               <div class="follow-button">FOLLOW</div>
             </div>
             <div class="contact-card instagram-card">

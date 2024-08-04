@@ -11,9 +11,9 @@
     <footer>
       <div class="footer-container">
         <div class="footer-wrapper">
-          <img lazy src="@/assets/img/logo.svg" alt="" />
+          <img lazy src="@/assets/img/logo/logo-inverted.png" alt="" />
           <p>
-            Moto Brebu reprezinta pasiunea imensa pentru motociclete si ATV-uri
+            Brebu Moto reprezinta pasiunea imensa pentru motociclete si ATV-uri
             concretizata intr-un magazin de motociclete si ATV, echipamente si
             accesorii. Proiectul a fost inceput in primavara...
           </p>
@@ -251,6 +251,9 @@ footer {
 
 .footer-wrapper {
   width: 50%;
+  img{
+    width: 198px;
+  }
 }
 
 .footer-container {
