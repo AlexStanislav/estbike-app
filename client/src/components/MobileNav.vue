@@ -329,7 +329,7 @@ const hasSublinks = (brand) => {
       font-size: 1.5rem;
     }
     img {
-      width: 140px;
+      width: 100px;
       height: 35px;
     }
     #phone-number-container {
