@@ -28,7 +28,7 @@
       <p class="price-container">
         <b class="bike-price" v-if="bike.price !== null">{{ typeof bikePrice === 'string' ? parseInt(bikePrice.replace(/\D/g, "")) : bikePrice }} EUR</b>
         <b v-else>Pret Indisponibil</b>
-        <span class="bike-old-price" v-if="bikeOldPrice !== null"
+        <span class="bike-old-price" v-if="bikeOldPrice !== null && bikeOldPrice !== 0"
           ><s>{{ typeof bikeOldPrice === 'string' ? parseInt(bikeOldPrice.replace(/\D/g, "")) : bikeOldPrice }} EUR</s></span
         >
       </p>
