@@ -2,7 +2,7 @@
   <div id="preloader" v-if="isVisible">
     <div id="preload-content">
       <div id="preload-logo">
-        <img lazy src="@/assets/img/logo/logo.png" alt="Logo motobrebu" />
+        <img lazy src="@/assets/img/logo/logo.png" alt="Logo brebumoto" />
       </div>
       <div id="spinner-container">
         <div id="pulsing-spinner"></div>
@@ -46,6 +46,7 @@ defineProps({
   text-align: center;
   top: 73%;
   position: absolute;
+
   img {
     width: 160px;
   }
@@ -101,14 +102,17 @@ defineProps({
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
+
 @keyframes secondSpinner {
   0% {
     transform: rotate(360deg);
   }
+
   100% {
     transform: rotate(0deg);
   }
@@ -119,9 +123,41 @@ defineProps({
     width: 0;
     height: 0;
   }
+
   100% {
     width: 8rem;
     height: 8rem;
+  }
+}
+
+@media screen and (max-width: 414px), screen and (max-height: 414px) {
+
+  #first-spinner {
+    width: 10rem;
+    height: 10rem;
+    border: 4px solid transparent;
+    border-bottom: 4px solid var(--main);
+    border-top: 4px solid var(--main);
+  }
+
+  #second-spinner {
+    width: 8rem;
+    height: 8rem;
+    border: 4px solid transparent;
+    border-left: 4px solid var(--dark-shade);
+    border-right: 4px solid var(--dark-shade);
+  }
+
+  @keyframes pulsating {
+    0% {
+      width: 0;
+      height: 0;
+    }
+
+    100% {
+      width: 4rem;
+      height: 4rem;
+    }
   }
 }
 </style>

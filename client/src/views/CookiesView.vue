@@ -89,7 +89,7 @@
                     dreptul de solicita ștergerea datelor cu caracter personal, cu excepția situațiilor în care legea interzice ștergerea.
                 </li>
                 <li>
-                    Puteți exercita drepturile de mai sus oricând, contactându-ne la adresa Constanta, judetul Constanta, str Medeea, nr 1A, email: office@motobrebu.ro, telefon: 0757.777.064. Puteți contacta responsabilul nostru cu protecția datelor la adresa Constanta, judetul Constanta, str Medeea, nr 1A , email: office@motobrebu.ro.
+                    Puteți exercita drepturile de mai sus oricând, contactându-ne la adresa Constanta, judetul Constanta, str Medeea, nr 1A, email: office@brebumoto.ro, telefon: 0757.777.064. Puteți contacta responsabilul nostru cu protecția datelor la adresa Constanta, judetul Constanta, str Medeea, nr 1A , email: office@brebumoto.ro.
                 </li>
             </ul>
         

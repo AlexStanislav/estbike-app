@@ -240,22 +240,22 @@ const toggleAccordion = function (category) {
 const methods = {
   clearFilter: function (filter) {
     filters.value[filter] = null;
-    if(filter === 'capacitate') {
+    if (filter === 'capacitate') {
       modelMotor.value = null;
     }
 
-    if(filter === 'permis') {
+    if (filter === 'permis') {
       modelLicense.value = null;
     }
 
-    if(filter === 'category') {
+    if (filter === 'category') {
       modelCategory.value = null;
     }
 
-    if(filter === 'omologare') {
+    if (filter === 'omologare') {
       modelOmologare.value = null;
     }
-    
+
     this.applyFilters()
   },
   getModelsNumber: function (filters) {
@@ -332,8 +332,8 @@ const methods = {
 
     // allBikes["swm_bikes"] = filteredSwm;
     const models = Object.values(allBikes).flat();
-    const finalModels = models.filter((model) => { 
-      return model.display_model 
+    const finalModels = models.filter((model) => {
+      return model.display_model
     });
     return finalModels;
   },
@@ -370,7 +370,7 @@ const methods = {
           category !== "null" &&
           (typeof category !== "object" || Object.keys(category).length !== 0)
         ) {
-          if(bike.vehicle_type === filters.value.type) {
+          if (bike.vehicle_type === filters.value.type) {
             categories.push(category);
           }
         }
@@ -384,7 +384,7 @@ const methods = {
           category !== "null" &&
           (typeof category !== "object" || Object.keys(category).length !== 0)
         ) {
-          if(bike.vehicle_type === filters.value.type) {
+          if (bike.vehicle_type === filters.value.type) {
             categories.push(category);
           }
         }
@@ -394,7 +394,7 @@ const methods = {
     const uniqueCategories = [...new Set(categories)];
 
     function removeDuplicates(arr) {
-      return arr.map(item => item.toLowerCase()).sort().filter((item, index, self) => 
+      return arr.map(item => item.toLowerCase()).sort().filter((item, index, self) =>
         index === self.indexOf(item)
       );
     }
@@ -469,7 +469,7 @@ const methods = {
       const categoryMatch =
         !filters.category ||
         filters.category.toLowerCase() ===
-          (model.category?.toLowerCase() ?? null);
+        (model.category?.toLowerCase() ?? null);
       let motorMatch = true;
       if (filters.capacitate) {
         if (filters.capacitate.includes("-")) {
@@ -1274,6 +1274,45 @@ const filterByQuery = () => {
 
   .bike-section-display {
     gap: 0.5rem;
+  }
+}
+
+@media screen and (max-height: 414px) {
+  .models {
+    flex-flow: column wrap;
+  }
+
+  .filter-section {
+    width: 90%;
+  }
+
+  .bike-section {
+    width: 100%;
+  }
+
+  .bike-section-display {
+    justify-content: center;
+  }
+
+  .bike-section-header {
+
+    .price-filter-label,
+    .header-models-count,
+    .header-models-type {
+      display: none;
+    }
+
+    span {
+      font-size: 1rem;
+    }
+  }
+
+  .bike-section-footer nav {
+    width: 100%;
+
+    .p-paginator {
+      padding: 0;
+    }
   }
 }
 

@@ -1,11 +1,11 @@
 <template>
   <div class="mobile-nav">
     <i class="pi pi-bars menu-icon" @click="toggleSidebar()"></i>
-    <img lazy src="../assets/img/logo/logo-inverted.png" alt="Logo motobrebu" />
+    <img lazy src="../assets/img/logo/logo-inverted.png" alt="Logo brebumoto" />
     <div id="phone-number-container">
       <i class="pi pi-phone" />
       <div id="phone-number">
-        <a href="https://wa.me/0774515065" target="_blank">+40 774 515 065</a>
+        <a href="https://wa.me/+40774515065" target="_blank">+40 774 515 065</a>
       </div>
     </div>
     <Sidebar v-model:visible="appStore.sidebarOpen" header="Meniu">

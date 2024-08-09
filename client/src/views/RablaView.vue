@@ -20,7 +20,7 @@
         chiar la domiciliu.
         <br />
         BIKE CAMPINA – Strada Selimbar nr.10 localitatea BREBU MANASTIREI jud
-        PRAHOVA campina@motobrebu.ro
+        PRAHOVA campina@brebumoto.ro
         <br />
         <br />
         Aceasta este o sinteza a informatiilor prezente in Ghidul de Finantare
@@ -35,7 +35,7 @@
         Va rugam sa parcurgeti cu atentie informatiile de mai jos. Inscrierea in
         program si achizitia vehiculelor noi se desfasoara conform pasilor
         prezentati mai jos. Toate documentele vor fi trimise catre Brebu Moto
-        CONSTANTA pe email la adresa logistica@motobrebu.ro sau fizic (pot fi
+        CONSTANTA pe email la adresa logistica@brebumoto.ro sau fizic (pot fi
         trimise si prin curier) la adresa noastra din CONSTANTA , strada Medeea
         nr 1A (cu mentiunea departament logistica) in forma solicitata mai jos.
       </p>
@@ -58,7 +58,7 @@
             <br><br>
             NU este necesar ca autoturismul sa fie proprietatea personala a solicitantului. Acesta poate participa in program si poate casa un autovehicul ce se afla in proprietatea altei persoane (fizice sau juridice) iar aceasta este de acord cu cedarea dreptului de casare.
             <br><br>
-            Daca nu aveti autoturism pentru casare te putem ajuta cu procurarea unuia cu drept de casare. Solicitarile le puteti trimite la email <b> <a href="mailto:logistica@motobrebu.ro">logistica@motobrebu.ro</a></b>
+            Daca nu aveti autoturism pentru casare te putem ajuta cu procurarea unuia cu drept de casare. Solicitarile le puteti trimite la email <b> <a href="mailto:logistica@brebumoto.ro">logistica@brebumoto.ro</a></b>
         </p>
     </article>
     <article id="rabla-prime-casare">
@@ -118,9 +118,9 @@
         <h2>PASII PROCEDURALI ai DOSARULUI RABLA</h2>
         <p>
             <ol>
-                <li>Verificati disponibilitatea motocicletei/scuterului pe motobrebu.ro, telefonic 0752312097, 0757777064, 0774515065 sau email <a href="mailto:office@motobrebu.ro">office@motobrebu.ro</a>. Rezervati motocicleta/scuterul dorit pt achizitie.</li>
+                <li>Verificati disponibilitatea motocicletei/scuterului pe brebumoto.ro, telefonic 0752312097, 0757777064, 0774515065 sau email <a href="mailto:office@brebumoto.ro">office@brebumoto.ro</a>. Rezervati motocicleta/scuterul dorit pt achizitie.</li>
                 <br>
-                <li>Actele de mai sus trebuie transmise catre noi in ORIGINAL sau SCANATE (nu fotografiate cu telefonul), predate in showroom sau pe email: logistica@motobrebu.ro. Nu sunt acceptate pe whatsapp, messenger, etc.</li>
+                <li>Actele de mai sus trebuie transmise catre noi in ORIGINAL sau SCANATE (nu fotografiate cu telefonul), predate in showroom sau pe email: logistica@brebumoto.ro. Nu sunt acceptate pe whatsapp, messenger, etc.</li>
                 <br>
                 <li>Noi inscriem datele primite in sistemul AFM. Ele sunt verificate in sistem de catre reprezentantii AFM si daca sunt corecte se emite NOTA de INSCRIERE cu numar unic. In acest moment sunteti acceptati in program. Nota de Inscriere este valabila 300 zile de la data inscrierii.</li>
                 <br>

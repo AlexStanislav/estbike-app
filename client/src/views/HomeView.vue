@@ -1,28 +1,15 @@
 <template>
   <section class="home-view">
-    <Skeleton
-      width="100%"
-      height="100vh"
-      v-if="store.allBikes === null"
-    >
-  </Skeleton>
-    <Carousel
-      class="home-carousel"
-      :value="carouselImages"
-      :showNavigators="false"
-      circular
-      :autoplayInterval="5000"
-    >
+    <Skeleton width="100%" height="100vh" v-if="store.allBikes === null">
+    </Skeleton>
+    <Carousel class="home-carousel" :value="carouselImages" :showNavigators="false" circular :autoplayInterval="5000">
       <template #item="slotProps">
         <div class="top-gradient"></div>
         <img lazy class="home-carousel-img" :src="slotProps.data.img" :alt="slotProps.data.alt" />
         <div class="carousel-text-container">
           <h1>{{ slotProps.data.title }}</h1>
           <h2>{{ slotProps.data.subtitle }}</h2>
-          <Button
-            label="Mail multe detalii"
-            @click="selectBike(slotProps.data)"
-          />
+          <Button label="Mail multe detalii" @click="selectBike(slotProps.data)" />
         </div>
         <div class="bottom-gradient"></div>
       </template>
@@ -40,13 +27,13 @@
         <div class="contact-card instagram-card">
           <i class="pi pi-instagram main-icon"></i>
           <h2>INSTAGRAM</h2>
-          <h3>@motobrebu</h3>
+          <h3>@brebumoto</h3>
           <div class="follow-button">FOLLOW</div>
         </div>
         <div class="contact-card call-card">
           <span>
             <i class="pi pi-phone"></i>
-            <div>0733782453</div>
+            <div>0774515065</div>
           </span>
           <span>
             <i class="pi pi-envelope"></i>
@@ -58,16 +45,10 @@
           </span>
         </div>
         <div class="contact-card map-card">
-          <iframe
-            id="home-map"
-            src="https://maps.google.com/maps?q=EST%20Bike%20Campina&t=&z=17&ie=UTF8&iwloc=&output=embed"
-            width="320"
-            height="320"
-            style="border: 0"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
+          <iframe id="home-map"
+            src="https://maps.google.com/maps?q=EST%20Bike%20Campina&t=&z=17&ie=UTF8&iwloc=&output=embed" width="320"
+            height="320" style="border: 0" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
     </div>
@@ -103,6 +84,7 @@ const selectBike = (bike) => {
   for (const model of models) {
     if (model.bike_name === bike.alt) {
       store.setCurrentBike(model);
+      localStorage.setItem("currentBike", JSON.stringify(model));
       router.push({ path: `/model` });
     }
   }
@@ -160,11 +142,13 @@ onUnmounted(() => {
 @media screen and (max-width: 414px) {
   .promo-box {
     width: 18rem;
-    height: 10rem;
+    height: 6rem;
     margin: 0.5rem 0;
+    font-size: 1.2em;
+
     .promo-box-shape {
       width: 17.5rem;
-      height: 9.5rem;
+      height: 5rem;
     }
   }
 }

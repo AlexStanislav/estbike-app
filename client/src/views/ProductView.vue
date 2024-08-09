@@ -128,9 +128,12 @@
           </div>
           <div class="ron-price" v-if="displayModel.price !== null">
             <span>{{ Math.ceil(currentPrice * appStore.forexValue) }} RON</span>
-            <s v-if="currentOldPrice !== null && !isNaN(currentOldPrice)">{{ Math.ceil(currentOldPrice * appStore.forexValue) }} RON</s>
+            <s v-if="currentOldPrice !== null && !isNaN(currentOldPrice)">{{ Math.ceil(currentOldPrice *
+              appStore.forexValue)
+              }} RON</s>
           </div>
-          <div class="product-info-price-discount" v-if="currentOldPrice !== null && currentOldPrice.toLowerCase() !== 'pret indisponibil'">
+          <div class="product-info-price-discount"
+            v-if="currentOldPrice !== null && currentOldPrice.toLowerCase() !== 'pret indisponibil'">
             Reducere de {{ Math.round(((currentPrice - currentOldPrice) / currentPrice) * 100).toFixed(0) }}%
           </div>
         </div>
@@ -260,7 +263,9 @@ function loadCurrentBike() {
 }
 
 onMounted(() => {
-  header.classList.add("sticky");
+  if (appStore.isMobile()) {
+    header.classList.add("sticky");
+  }
   setTimeout(() => {
     loadCurrentBike();
 
@@ -300,7 +305,7 @@ const changeBikeColor = (color, model) => {
         .filter((part) => !modelColors.includes(part))
         .join(" ");
 
-      if(currentBikeName.includes(bikeName)) {
+      if (currentBikeName.includes(bikeName)) {
         return bike;
       }
     })
@@ -875,10 +880,11 @@ watchEffect(() => {
   .product-top-container {
     gap: 3rem;
   }
-  
+
 }
 
-@media screen and (max-width: 1440px), screen and (max-width: 1600px) {
+@media screen and (max-width: 1440px),
+screen and (max-width: 1600px) {
   .product {
     width: 95%;
   }
@@ -940,6 +946,10 @@ watchEffect(() => {
 
   .product-info-price-discount {
     position: initial;
+  }
+
+  .sticky #phone-number-container {
+    right: 0 !important;
   }
 }
 </style>

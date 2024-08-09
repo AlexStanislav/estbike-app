@@ -8,7 +8,7 @@
           <div class="info-row">
             <div class="info-picto"><i class="pi pi-phone"></i></div>
             <div class="info-content">
-              <a href="https://wa.me/0774515065" target="_blank"
+              <a href="https://wa.me/+40774515065" target="_blank"
                 >+40 774 515 065</a
               >
             </div>
@@ -18,7 +18,7 @@
               <i class="pi pi-envelope"></i>
             </div>
             <div class="info-content">
-              <a href="mailto:office@motobrebu.ro">office@motobrebu.ro</a>
+              <a href="mailto:office@brebumoto.ro">office@brebumoto.ro</a>
             </div>
           </div>
           <div class="info-row">
@@ -26,7 +26,7 @@
               <i class="pi pi-envelope"></i>
             </div>
             <div class="info-content">
-              <a href="mailto:campina@motobrebu.ro">campina@motobrebu.ro</a>
+              <a href="mailto:campina@brebumoto.ro">campina@brebumoto.ro</a>
             </div>
           </div>
           <div class="info-row">
@@ -45,7 +45,7 @@
             <div class="contact-card instagram-card">
               <i class="pi pi-instagram main-icon"></i>
               <h2>INSTAGRAM</h2>
-              <h3>@motobrebu</h3>
+              <h3>@brebumoto</h3>
               <div class="follow-button">FOLLOW</div>
             </div>
           </div>

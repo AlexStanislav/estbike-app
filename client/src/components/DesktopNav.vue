@@ -1,7 +1,7 @@
 <template>
   <div class="desktop-nav">
-    <img v-if="isSticky || router.currentRoute.value.path !== '/'" style="padding-left: 50px;" lazy src="../assets/img/logo/logo-inverted.png" alt="motobrebu Logo" @click="goTo('/')" />
-    <img v-else lazy src="../assets/img/logo/logo.png" alt="motobrebu Logo" @click="goTo('/')" />
+    <img v-if="isSticky || router.currentRoute.value.path !== '/'" style="padding-left: 50px;" lazy src="../assets/img/logo/logo-inverted.png" alt="brebumoto Logo" @click="goTo('/')" />
+    <img v-else lazy src="../assets/img/logo/logo.png" alt="brebumoto Logo" @click="goTo('/')" />
     <nav class="main-nav">
       <router-link @mouseenter="hideMenu()" to="/">Acasă</router-link>
       <router-link @mouseenter="hideMenu()" to="/despre">Despre Noi</router-link>

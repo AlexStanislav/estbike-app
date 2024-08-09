@@ -19,8 +19,8 @@
           </p>
           <span @click="router.push('/despre')">Cititi mai mult</span>
           <p>&nbsp;</p>
-          <p>
-            Toate informatiile au rol de prezentare, iar MotoBrebu nu raspunde
+          <p style="color: var(--main);">
+            Toate informatiile au rol de prezentare, iar BrebuMoto nu raspunde
             de erori de afisaj.
           </p>
         </div>
@@ -104,7 +104,7 @@
           </ul>
         </div>
       </div>
-      <p class="copyright">Copyright © {{ new Date().getFullYear() }} motobrebu. All rights reserved.</p>
+      <p class="copyright">Copyright © {{ new Date().getFullYear() }} brebumoto. Toate drepturile rezervate.</p>
     </footer>
     <Loader :isVisible="appStore.showPreloader" />
     <Toast />
@@ -331,6 +331,11 @@ footer {
   }
 }
 
+@media screen and (max-height: 414px) {
+  .footer-container {
+    font-size: 0.8em;
+  }
+}
 @media screen and (max-width: 414px) {
   body {
     overflow-x: hidden;
