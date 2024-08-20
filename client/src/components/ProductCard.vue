@@ -93,7 +93,8 @@ const bikePrice = computed(() => {
     props.bike.brand === "argo" ||
     props.bike.brand === "tgb" 
   ) {
-    return typeof props.bike.price[0] === "string" ? parseInt(props.bike.price[0].replace(/\D/g, "")) : props.bike.price[0];
+    console.log(props.bike.bike_name, props.bike.price);
+    return typeof props.bike.price === "string" ? parseInt(props.bike.price.replace(/\D/g, "")) : props.bike.price[0];
   }
   if(Array.isArray(props.bike.price)){
     return typeof props.bike.price[0] === "string" ? parseInt(props.bike.price[0].replace(/\D/g, "")) : props.bike.price[0];
