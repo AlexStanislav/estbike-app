@@ -22,13 +22,13 @@
           <i class="pi pi-facebook main-icon"></i>
           <h2>FACEBOOK</h2>
           <h3>Brebu Moto</h3>
-          <div class="follow-button">FOLLOW</div>
+          <div class="follow-button" @click="openSocialMedia('https://www.facebook.com/estbikecampina')">FOLLOW</div>
         </div>
         <div class="contact-card instagram-card">
           <i class="pi pi-instagram main-icon"></i>
           <h2>INSTAGRAM</h2>
           <h3>@brebumoto</h3>
-          <div class="follow-button">FOLLOW</div>
+          <div class="follow-button" @click="openSocialMedia('https://www.instagram.com/estbikecampina/')">FOLLOW</div>
         </div>
         <div class="contact-card call-card">
           <span>
@@ -134,6 +134,11 @@ watchEffect(() => {
 onUnmounted(() => {
   window.removeEventListener("scroll", toggleStickyNav);
 });
+
+function openSocialMedia(url){
+  window.open(url, "_blank");
+}
+
 </script>
 <style lang="scss">
 @import "../assets/imports/home.carousel.scss";
