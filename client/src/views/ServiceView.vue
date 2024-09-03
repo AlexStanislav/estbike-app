@@ -37,16 +37,15 @@
             />
             <label>Email* </label>
           </span>
-          <span class="p-float-label">
+          <!-- <span class="p-float-label">
             <InputText
               type="text"
               class="service-input"
               v-model="formValues.client_address"
             />
             <label>Adresa* </label>
-          </span>
-        </div>
-        <div class="form-container">
+          </span> -->
+
           <span class="p-float-label">
             <InputText
               type="text"
@@ -55,15 +54,17 @@
             />
             <label>Telefon* </label>
           </span>
+        </div>
+        <div class="form-container">
 
-          <span class="p-float-label">
+          <!-- <span class="p-float-label">
             <InputText
               type="text"
               class="service-input"
               v-model="formValues.client_work_location"
             />
             <label>Punct de lucru* </label>
-          </span>
+          </span> -->
 
           <span class="p-float-label">
             <InputText
@@ -81,8 +82,6 @@
             />
             <label>Marca* </label>
           </span>
-        </div>
-        <div class="form-container">
           <span class="p-float-label">
             <InputText
               type="text"
@@ -100,7 +99,9 @@
             />
             <label>An fabricatie* </label>
           </span>
-
+        </div>
+        <div class="form-container form-container-last">
+          
           <span class="p-float-label">
             <InputText
               type="text"
@@ -281,9 +282,7 @@ const formValues = ref({
   client_first_name: "",
   client_last_name: "",
   client_email: "",
-  client_address: "",
   client_phone: "",
-  client_work_location: "",
   vehicle_type: "",
   brand: "",
   category: "",
@@ -413,6 +412,13 @@ textarea {
   .p-float-label {
     margin: 1rem 0.5rem;
   }
+}
+
+.form-container-last {
+  display: flex;
+  flex-flow: column wrap;
+  padding: 1rem 0;
+  justify-content: flex-start
 }
 
 .service-check-container {
