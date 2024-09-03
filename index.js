@@ -30,19 +30,19 @@ function extractNumbersFromString(str) {
 function stringToJson(inputString) {
     // Remove the starting and ending quotes
     let string = inputString.substring(1, inputString.length - 1);
-    
+
     // Remove the square brackets
     string = string.substring(1, string.length - 1);
-    
+
     // Split the string into individual elements
     let elements = string.split("','");
-    
+
     // Remove the single quotes from each element
     let jsonElements = elements.map(element => element.replace("'", ""));
-    
+
     // Convert the elements into a JSON array
     let jsonArray = JSON.stringify(jsonElements);
-    
+
     return jsonArray;
 }
 
@@ -60,82 +60,11 @@ app.get('/api/bikes', async (req, res) => {
 
         for (const bikeTypeIndex in bikes) {
             let bikeTypes = bikes[bikeTypeIndex]
-            // if (bikeTypeIndex === 'swm_bikes') {
-            //     const bikesArr = bikeTypes
-            //     const bikes = () => {
-            //         const colorBikes = {};
-            //         for (const key in bikesArr) {
-            //             const bike = bikesArr[key];
-            //             const bikeNameArr = bike.bike_name.split("-");
-            //             if (bikeNameArr.length >= 3) {
-            //                 let colorArr = bikeNameArr.slice(2, bikeNameArr.length);
-            //                 let color = colorArr.join(" ").replace(/\d+\s/g, "");
-            //                 if (colorArr.length === 3) {
-            //                     colorArr.shift();
-            //                     color = colorArr.join(" ");
-            //                 }
-            //                 if (color.length === 1) {
-            //                     color = null;
-            //                 }
-
-            //                 if (color !== null && color !== "bike") {
-            //                     colorBikes[bike.bike_name] = bike;
-            //                 }
-            //             }
-            //         }
-
-            //         const addColors = (obj) => {
-            //             const colors = {};
-            //             for (const key in obj) {
-            //                 const bikeNameArr = key.split("-");
-            //                 let bikeName = "";
-            //                 let colorArr = bikeNameArr.slice(2, bikeNameArr.length);
-            //                 let color = colorArr.join(" ").replace(/\d+\s/g, "");
-
-            //                 if (bikeNameArr.length >= 3) {
-            //                     bikeName = bikeNameArr.slice(0, 2).join("-");
-            //                 } else {
-            //                     bikeName = bikeNameArr.slice(0, 3).join("-");
-            //                 }
-
-            //                 if (colorArr.length === 3) {
-            //                     colorArr.shift();
-            //                     color = colorArr.join(" ");
-            //                 }
-            //                 if (color.length === 1) {
-            //                     color = null;
-            //                 }
-
-            //                 if (!colors[bikeName]) {
-            //                     colors[bikeName] = [];
-            //                 }
-            //                 if (!colors[bikeName].includes(color)) {
-            //                     colors[bikeName].push(color);
-            //                 }
-            //             }
-            //             for (const key in obj) {
-            //                 const bikeNameArr = key.split("-");
-            //                 let bikeName;
-            //                 if (bikeNameArr.length >= 3) {
-            //                     bikeName = bikeNameArr.slice(0, 2).join("-");
-            //                 } else {
-            //                     bikeName = bikeNameArr.slice(0, 3).join("-");
-            //                 }
-            //                 obj[key].colors = colors[bikeName];
-            //             }
-            //         };
-
-            //         addColors(colorBikes);
-
-            //         return bikesArr;
-            //     };
-            //     bikeTypes = bikes()
-            // }
 
             for (const bikeIndex in bikeTypes) {
                 const bike = bikeTypes[bikeIndex]
 
-                if(bike.bike_slogan === null || bike.bike_slogan === "undefined") {
+                if (bike.bike_slogan === null || bike.bike_slogan === "undefined") {
                     bike.bike_slogan = ''
                 }
 
@@ -147,7 +76,7 @@ app.get('/api/bikes', async (req, res) => {
                         }
                     }
 
-                    if(bike.omologare !== null && bike.omologare.includes('"')){
+                    if (bike.omologare !== null && bike.omologare.includes('"')) {
                         bike.omologare = bike.omologare.replace(/"/g, "'")
                     }
 
@@ -259,8 +188,8 @@ app.get('/api/bikes', async (req, res) => {
                     bike.permis = ['B']
                 }
 
-                if(bike.category !== null){
-                    if(bike.category.toLowerCase().includes("children")){
+                if (bike.category !== null) {
+                    if (bike.category.toLowerCase().includes("children")) {
                         bike.permis = []
                     }
                 }
@@ -310,9 +239,9 @@ app.get('/api/bikes', async (req, res) => {
 
                 if (Array.isArray(bike.old_price) && bike.old_price.length === 0) {
                     bike.old_price = null
-                } 
+                }
 
-                if(Array.isArray(bike.old_price) && bike.old_price[0] === ''){
+                if (Array.isArray(bike.old_price) && bike.old_price[0] === '') {
                     bike.old_price[0] = null
                 }
 
@@ -338,7 +267,18 @@ app.get('/api/bikes', async (req, res) => {
 
         const currency_data = forexData.value
 
-        res.json({ bikes: bikes, forex: currency_data })
+        const brandsToBeFiltered = ['ktm_bikes', 'gasgas_bikes', 'husqvarna_bikes']
+        
+        const bikeBrands = Object.keys(bikes);
+        const filteredBikes = {};
+
+        for (const brand of bikeBrands) {
+            if (!brandsToBeFiltered.includes(brand)) {
+                filteredBikes[brand] = bikes[brand];
+            }
+        }
+
+        res.json({ bikes: filteredBikes, forex: currency_data })
     } catch (error) {
         console.log(error)
     }
