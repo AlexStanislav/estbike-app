@@ -224,7 +224,7 @@ function loadCurrentBike() {
     displayModel.value.omologare = null
   }
 
-  bikeDisplayName.value = displayModel.value.bike_name.toUpperCase();
+  bikeDisplayName.value = displayModel.value.bike_name.toUpperCase().replace("-", " ");
   bikeSlogan.value =
     displayModel.value.bike_slogan !== null
       ? displayModel.value.bike_slogan.toUpperCase()

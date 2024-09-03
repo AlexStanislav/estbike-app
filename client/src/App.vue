@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <header>
@@ -13,9 +12,9 @@
         <div class="footer-wrapper">
           <img lazy src="@/assets/img/logo/logo-inverted.png" alt="" />
           <p>
-            Brebu Moto reprezinta pasiunea imensa pentru motociclete si ATV-uri
-            concretizata intr-un magazin de motociclete si ATV, echipamente si
-            accesorii. Proiectul a fost inceput in primavara...
+            La Brebu Moto, pasiunea pentru două roți ne definește. Suntem o echipă dedicată să oferim
+            cele mai bune motociclete, scutere și ATV-uri, adaptate nevoilor fiecărui client.
+            Indiferent dacă ești în căutarea unui scuter de 125 cmc pentru...
           </p>
           <span @click="router.push('/despre')">Cititi mai mult</span>
           <p>&nbsp;</p>
@@ -29,24 +28,13 @@
         <h3>Stock-ul Nostru</h3>
         <div class="footer-link-list">
           <ul class="footer-brands">
-            <li
-              v-for="brand in Object.keys(appStore.homeBrands).sort((a, b) =>
-                a.localeCompare(b)
-              )"
-              :key="brand"
-              @click="goToBrand(brand)"
-            >
+            <li v-for="brand in appStore.homeBrands.sort((a, b) => a.localeCompare(b))" :key="brand" @click="goToBrand(brand)">
               <i class="pi pi-angle-double-right"></i>{{ brand.toUpperCase().replace(/_/g, " ") }}
             </li>
           </ul>
           <ul>
-            <li
-              v-for="modelType in appStore.homeModelTypes"
-              :key="modelType"
-              @click="goToModel(modelType)"
-            >
-              <i class="pi pi-angle-double-right"></i
-              >{{ modelType.toUpperCase() }}
+            <li v-for="modelType in appStore.homeModelTypes" :key="modelType" @click="goToModel(modelType)">
+              <i class="pi pi-angle-double-right"></i>{{ modelType.toUpperCase() }}
             </li>
           </ul>
         </div>
@@ -56,24 +44,20 @@
         <div class="footer-link-list">
           <ul>
             <li>
-              <i class="pi pi-angle-double-right"></i
-              ><router-link to="/despre">Despre noi</router-link>
+              <i class="pi pi-angle-double-right"></i><router-link to="/despre">Despre noi</router-link>
             </li>
             <!-- <li>
               <i class="pi pi-angle-double-right"></i
               ><router-link to="/rabla">Rabla</router-link>
             </li> -->
             <li>
-              <i class="pi pi-angle-double-right"></i
-              ><router-link to="/termeni">Termeni si conditii</router-link>
+              <i class="pi pi-angle-double-right"></i><router-link to="/termeni">Termeni si conditii</router-link>
             </li>
             <li>
-              <i class="pi pi-angle-double-right"></i
-              ><router-link to="/cookies">Politica de cookie-uri</router-link>
+              <i class="pi pi-angle-double-right"></i><router-link to="/cookies">Politica de cookie-uri</router-link>
             </li>
             <li>
-              <i class="pi pi-angle-double-right"></i
-              ><router-link to="/contact">Contact</router-link>
+              <i class="pi pi-angle-double-right"></i><router-link to="/contact">Contact</router-link>
             </li>
           </ul>
           <br />
@@ -195,28 +179,35 @@ function acceptGDPR() {
   top: 0;
   background: var(--dark-shade);
   border-bottom: 3px solid var(--main);
+
   img {
     margin-right: 4rem;
   }
+
   #header-decoration {
     display: none;
   }
+
   nav {
     border: none;
   }
+
   .p-input-icon-left {
     position: absolute;
     right: 0;
     filter: none;
   }
+
   .p-inputtext {
     background: var(--main);
     height: 50px;
     margin: 0;
   }
+
   i {
     color: var(--dark-shade);
   }
+
   #phone-number-container {
     border: none;
     right: 17%;
@@ -237,6 +228,7 @@ footer {
   justify-content: center;
   position: relative;
   padding: 5rem 0 5rem 0;
+
   .copyright {
     margin: 0;
     padding: 0.5rem;
@@ -251,7 +243,8 @@ footer {
 
 .footer-wrapper {
   width: 50%;
-  img{
+
+  img {
     width: 198px;
   }
 }
@@ -262,15 +255,18 @@ footer {
   display: flex;
   flex-flow: column wrap;
   align-items: center;
+
   span {
     border-bottom: 1px solid white;
     cursor: pointer;
   }
+
   p {
     font-size: 0.8rem;
     text-align: justify;
     text-justify: distribute;
   }
+
   h3 {
     font-size: 1.5rem;
     margin: 0 0 1rem 0;
@@ -284,14 +280,17 @@ footer {
     color: var(--light-shade);
     text-decoration: none;
   }
+
   ul {
     list-style: none;
     margin: 0;
     padding: 0;
   }
+
   li {
     font-family: "Oswald", sans-serif;
     font-weight: 300;
+
     i {
       margin-right: 0.5rem;
     }
@@ -303,6 +302,7 @@ footer {
   flex-flow: column wrap;
   height: 80%;
   cursor: pointer;
+
   li {
     margin-right: 2rem;
   }
@@ -317,14 +317,17 @@ footer {
 
 .gdpr-dialog {
   width: 40%;
+
   .p-dialog-content {
     background: var(--dark-shade);
     color: var(--light-shade);
     border-radius: 5px;
+
     p {
       font-size: 1.2rem;
     }
   }
+
   .p-dialog-header,
   .p-dialog-footer {
     display: none;
@@ -336,19 +339,24 @@ footer {
     font-size: 0.8em;
   }
 }
+
 @media screen and (max-width: 414px) {
   body {
     overflow-x: hidden;
   }
+
   .footer-container {
     width: 95%;
     margin-bottom: 5rem;
   }
+
   .footer-brands {
     margin-left: -5rem !important;
   }
+
   .gdpr-dialog {
     width: 90%;
+
     .p-dialog-content p {
       font-size: 1rem;
     }
@@ -358,6 +366,7 @@ footer {
 @media screen and (max-height: 851px) and (orientation: landscape) {
   .gdpr-dialog {
     width: 90%;
+
     .p-dialog-content p {
       font-size: 1rem;
     }

@@ -21,8 +21,8 @@
       <h2>
         {{
           bike.bike_name.toUpperCase().match(/'\d+/g)
-            ? bike.bike_name.replace(/'\d+/g, "").toUpperCase()
-            : bike.bike_name.toUpperCase()
+            ? bike.bike_name.replace(/'\d+/g, "").toUpperCase().replace(/-/g, " ")
+            : bike.bike_name.toUpperCase().replace(/-/g, " ")
         }}
       </h2>
       <p class="price-container">

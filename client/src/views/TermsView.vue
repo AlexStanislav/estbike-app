@@ -292,6 +292,8 @@
 </template>
 <script setup>
 import { onMounted, ref } from "vue";
+import { useAppStore } from "../stores/appStore";
+const store = useAppStore();
 
 const indexLinks = ref([]);
 
@@ -307,6 +309,9 @@ const goTo = (element) => {
 };
 
 onMounted(() => {
+  setTimeout(() => {
+    store.togglePreloader(false);
+  }, 1000);
   for (const link of document.getElementsByTagName("article")) {
     if (link.getAttribute("id") !== null) {
       indexLinks.value.push(link);

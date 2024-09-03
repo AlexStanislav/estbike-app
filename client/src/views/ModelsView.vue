@@ -608,16 +608,28 @@ const methods = {
   handlePriceFilterChange: function () {
     if (currentPriceOption.value === "Crescator") {
       allModels.value = allModels.value.sort((a, b) => a.price - b.price);
-      displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+      modelsLoaded.value = false;
+      setTimeout(() => {
+        modelsLoaded.value = true;
+        displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+      }, 800);
     }
     if (currentPriceOption.value === "Decrescator") {
       allModels.value = allModels.value.sort((a, b) => b.price - a.price);
-      displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+      modelsLoaded.value = false;
+      setTimeout(() => {
+        modelsLoaded.value = true;
+        displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+      }, 800);
     }
     if (currentPriceOption.value === "Initial") {
       allModels.value = methods.getAllModels();
       methods.applyFilters();
-      displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+      modelsLoaded.value = false;
+      setTimeout(() => {
+        modelsLoaded.value = true;
+        displayedModels.value = allModels.value.slice(0, rowsPerPage.value);
+      }, 800);
     }
   },
   getPriceRange: function (brand = null) {

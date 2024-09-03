@@ -120,9 +120,11 @@ onBeforeMount(() => {
 
 onMounted(() => {
   window.addEventListener("scroll", toggleStickyNav);
-  setTimeout(() => {
-    store.togglePreloader(false);
-  }, 1000);
+  if(store.firstLoadComplete){
+    setTimeout(() => {
+      store.togglePreloader(false);
+    }, 1000);
+  }
 });
 
 watchEffect(() => {

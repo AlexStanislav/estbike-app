@@ -19,7 +19,7 @@ export const useAppStore = defineStore('appStore', {
       firstLoadComplete: false,
       favoriteBikes: [],
       currentBike: null,
-      homeBrands: {},
+      homeBrands: [],
       homeModelTypes: [],
       modelsFilters: [],
       queryVehicleType: "",
@@ -46,16 +46,32 @@ export const useAppStore = defineStore('appStore', {
       })
     },
     setHomeBrands() {
-      const brandModelMap = {};
-      for (const bikeType in this.allBikes) {
-        const [brand, model] = bikeType.split("_");
-        const normalizedBrand = model === "enfield" ? "royal_enfield" : brand;
-
-        brandModelMap[normalizedBrand] = brandModelMap[normalizedBrand] || [];
-        brandModelMap[normalizedBrand].push(model);
+      const brands = [];
+      const allBikes = []
+      for (const bikeTable in this.allBikes) {
+        const bikes = this.allBikes[bikeTable]
+        for (const bike of bikes) {
+          allBikes.push(bike)
+        }
       }
 
-      this.homeBrands = brandModelMap;
+      for (const bike of allBikes) {
+        if (!brands.includes(bike.brand)) {
+          brands.push(bike.brand)
+        }
+      }
+      
+      // for (const bikeType in this.allBikes) {
+      //   const [brand, model] = bikeType.split("_");
+      //   const normalizedBrand = model === "enfield" ? "royal_enfield" : brand;
+
+      //   brandModelMap[normalizedBrand] = brandModelMap[normalizedBrand] || [];
+      //   brandModelMap[normalizedBrand].push(model);
+      // }
+
+      // console.log(brandModelMap)
+
+      this.homeBrands = brands;
     },
     setHomeModelTypes() {
       let models = [];
@@ -77,12 +93,13 @@ export const useAppStore = defineStore('appStore', {
 
         setTimeout(() => {
           this.showPreloader = false
-        }, 1000)
+          this.firstLoadComplete = true
+        }, 2500)
         setTimeout(() => {
           if (localStorage.getItem("gdpr") === null) {
             this.toggleGDPRDialog(true)
           }
-        }, 1500);
+        }, 3000);
       } else {
         setTimeout(() => {
           this.showPreloader = false

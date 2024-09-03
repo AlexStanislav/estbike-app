@@ -1,6 +1,7 @@
 <template>
   <div class="desktop-nav">
-    <img v-if="isSticky || router.currentRoute.value.path !== '/'" style="padding-left: 50px;" lazy src="../assets/img/logo/logo-inverted.png" alt="brebumoto Logo" @click="goTo('/')" />
+    <img v-if="isSticky || router.currentRoute.value.path !== '/'" style="padding-left: 50px;" lazy
+      src="../assets/img/logo/logo-inverted.png" alt="brebumoto Logo" @click="goTo('/')" />
     <img v-else lazy src="../assets/img/logo/logo.png" alt="brebumoto Logo" @click="goTo('/')" />
     <nav class="main-nav">
       <router-link @mouseenter="hideMenu()" to="/">Acasă</router-link>
@@ -29,11 +30,13 @@
     </div>
     <div class="search-container p-input-icon-left">
       <i class="pi pi-search" />
-      <AutoComplete v-model="searchValue" :suggestions="suggestions" @complete="search" optionLabel="bike_name"
-        placeholder="Cauta...">
+      <!-- <input type="text"class="search-input" contenteditable="true" @input="autoComplete" placeholder="Cauta..."> -->
+      <AutoComplete v-model="searchValue" :suggestions="suggestions" @complete="search" @keyup.enter="selectResult"
+        optionLabel="bike_name" placeholder="Cauta...">
         <template #option="slotProps">
           <div class="autocomplete-result" @click="selectBike(slotProps.option)">
-            {{ slotProps.option.bike_name.replace(/-/g, " ").toUpperCase() }} - {{ slotProps.option.main_year }}
+            {{ slotProps.option.bike_name.replace(/-/g, " ").toUpperCase() }} {{ slotProps.option.main_year !== null ?
+            '-': ''}} {{ slotProps.option.main_year }}
           </div>
         </template>
       </AutoComplete>
@@ -133,6 +136,17 @@ const search = (event) => {
   });
 };
 
+const selectResult = (e) => {
+  console.log(e.target.value);
+  const bike = suggestions.value.find((bike) => {
+    return (bike.bike_name === e.target.value);
+  })
+
+  setTimeout(() => {
+    selectBike(bike);
+  }, 100);
+}
+
 function getAllModels() {
   const array = [];
   const models = appStore.allBikes;
@@ -207,6 +221,27 @@ const selectBike = (bike) => {
   .p-inputtext:focus {
     box-shadow: 0 0 0 0.2rem var(--main);
   }
+}
+
+.search-input {
+  width: 300px;
+  height: 50px;
+  border-radius: 0;
+  border: none;
+  background: var(--main);
+  color: var(--light-shade);
+  margin-top: 0.2rem;
+  clip-path: polygon(10% 0%, 100% 1%, 100% 100%, 10% 100%, 0% 50%);
+  padding-left: 3rem;
+  font-size: 1.2rem;
+}
+
+.search-input:focus {
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--light-shade);
 }
 
 .autocomplete-result {

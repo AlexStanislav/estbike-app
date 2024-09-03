@@ -56,10 +56,11 @@ const getPopularModels = (allBikes) => {
     brand.filter((bike) => {
       if (bike.old_price !== null && bike.old_price[0] !== null) {
         bikes.push(bike);
-        finalPopular[brandIndex] = bikes;
+        finalPopular[`${bike.brand}_${bike.vehicle_type}`] = bikes;
       }
     });
   }
+  console.log(finalPopular);
   return finalPopular;
 };
 
