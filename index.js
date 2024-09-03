@@ -302,7 +302,7 @@ app.post('/api/registerRequest', (req, res) => {
 
 const insertRequest = (req) => {
     const query = {
-        text: `INSERT INTO public.service_requests (id, client_first_name, client_last_name, client_email, client_address, client_phone, client_work_location, vehicle_type, brand, category, main_year, capacitate, serial_number, other_operations, service_options) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15);`,
+        text: `INSERT INTO public.service_requests (id, client_first_name, client_last_name, client_email, client_phone, vehicle_type, brand, category, main_year, capacitate, serial_number, other_operations, service_options) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);`,
         values: []
     }
 
