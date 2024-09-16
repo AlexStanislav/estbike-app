@@ -174,7 +174,9 @@ app.get('/api/bikes', async (req, res) => {
                 if (bike.capacitate !== null && (bike.permis.length === 0 || bike.permis.includes('{}'))) {
                     const capacitate = parseInt(bike.capacitate)
                     if (capacitate >= 50 && capacitate <= 125) {
-                        bike.permis = ['B']
+                        if (bike.vehicle_type === 'scooters') {
+                            bike.permis = ['B']
+                        }
                     }
                     if (capacitate > 125 && capacitate <= 500) {
                         bike.permis = ['A2', 'A']
@@ -184,9 +186,9 @@ app.get('/api/bikes', async (req, res) => {
                     }
                 }
 
-                if (bike.vehicle_type === "atv" || bike.vehicle_type === "ssv") {
-                    bike.permis = ['B']
-                }
+                // if (bike.vehicle_type === "atv" || bike.vehicle_type === "ssv") {
+                //     bike.permis = ['B']
+                // }
 
                 if (bike.category !== null) {
                     if (bike.category.toLowerCase().includes("children")) {
@@ -268,7 +270,7 @@ app.get('/api/bikes', async (req, res) => {
         const currency_data = forexData.value
 
         const brandsToBeFiltered = ['ktm_bikes', 'gasgas_bikes', 'husqvarna_bikes']
-        
+
         const bikeBrands = Object.keys(bikes);
         const filteredBikes = {};
 
