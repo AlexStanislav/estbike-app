@@ -95,6 +95,9 @@
         <li @click="appStore.sidebarOpen = false">
           <router-link to="/contact">Contact</router-link>
         </li>
+        <li @click="appStore.sidebarOpen = false">
+          <router-link to="/utile">Utile</router-link>
+        </li>
       </ul>
     </Sidebar>
   </div>

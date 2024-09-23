@@ -293,4 +293,10 @@ async function downloadPDF(){
     padding: 0.5em 1em;
     box-sizing: border-box;
 }
+
+@media screen and (max-width: 896px) {
+    .utile-filters {
+        width: 100%;
+    }
+}
 </style>
