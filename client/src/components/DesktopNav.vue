@@ -15,6 +15,7 @@
       <!-- <router-link @mouseenter="hideMenu()" to="/rabla">Rabla</router-link> -->
       <router-link @mouseenter="hideMenu()" to="/service">Service</router-link>
       <router-link @mouseenter="hideMenu()" to="/contact">Contact</router-link>
+      <router-link @mouseenter="hideMenu()" to="/utile">Utile</router-link>
     </nav>
     <div id="phone-number-container">
       <i class="pi pi-phone" />

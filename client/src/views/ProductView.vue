@@ -280,8 +280,10 @@ onMounted(() => {
 
 const changeBikeColor = (color, model) => {
   if (model.brand === "royal_enfield") {
-    currentPrice.value = parseInt(model.price[model.colors.indexOf(color)]);
-    currentOldPrice.value = parseInt(model.old_price[model.colors.indexOf(color)]);
+    if (model.old_price !== null && model.price !== null) {
+      currentPrice.value = parseInt(model.price[model.colors.indexOf(color)]);
+      currentOldPrice.value = parseInt(model.old_price[model.colors.indexOf(color)]);
+    }
   } else {
     const brandBikes =
       appStore.allBikes[

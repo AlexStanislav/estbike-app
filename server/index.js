@@ -14,6 +14,7 @@ const scrapeForex = require('./api/scrapeForex')
 const forexData = require('./data/forexData')
 const cron = require('cron');
 const fs = require('fs');
+const PDFDocument = require('pdfkit');
 connection();
 
 app.use(express.urlencoded({ extended: true }));
@@ -262,6 +263,20 @@ app.get('/api/bikes', async (req, res) => {
                 if (bike.colors_display !== null) {
                     bike.colors_display = bike.colors_display.replace('"{', '{').replace('}"', '}').replace(/\\"/g, '"')
                 }
+
+
+                const transformStringToArray = (str) => {
+                    if (str !== undefined) {
+                        const cleanedStr = str.replace(/\\\"/g, '"').replace(/^\"|\"$/g, '').replace(/\\n/g, '').replace(/\\/g, '').replace(/^\{/g, '').replace(/\}$/g, '')
+                        const jsonString = cleanedStr.slice(1, -1).replace(/\"\{/g, '{').replace(/\}\"/g, '}').replace(/(\d)"(?!\}),([\w\s]+)/g, '$1$2').replace(/(\d)"(?!\})[\s\w]+/g, '$1').replace(/(\d)""/g, '$1"').replace(/:\s"\}/g, ':""').replace(/:"\}/g, ':""}')
+                        return (JSON.parse(`[${jsonString}]`));
+                    }
+                }
+
+                if (bike.tech !== null) {
+                    bike.tech = transformStringToArray(bike.tech)
+                }
+
             }
         }
 
@@ -300,6 +315,76 @@ app.post('/api/registerRequest', (req, res) => {
             res.status(400).json({ message: "Something went wrong" })
         }
     })
+})
+
+app.post('/api/downloadPDF', (req, res) => {
+    const { bike_name, tech } = req.body
+    const doc = new PDFDocument()
+    let filename = 'tech-data.pdf'
+    filename = encodeURIComponent(filename)
+
+    res.setHeader('Content-disposition', 'attachment: filename="' + filename + '"')
+    res.setHeader('Content-type', 'application/pdf')
+
+    doc.pipe(res)
+
+    doc.image('./public/assets/logo-sbxp8TEM.png', {
+        fit: [50, 100], // Adjust the size as needed
+        align: 'right'
+    });
+
+    doc.moveDown()
+    doc.moveDown()
+    doc.moveDown()
+    doc.moveDown()
+    doc.moveDown()
+
+    doc.fontSize('18')
+    doc.text(bike_name, {
+        align: 'center'
+    })
+
+    const chevronPath = 'M9 18l6-6-6-6'
+    
+    const x = 68
+    const y = 139
+
+    doc.save()
+    doc.translate(x, y)
+    doc.scale(1.5)
+    doc.path(chevronPath).lineWidth(2).stroke("#D70000")
+    doc.restore()
+
+    doc.rect(80, 165, 440, 2).fill("#D70000")
+
+    const startX = 100;
+    const startY = 190;
+    const cellPadding = 5;
+    const cellWidth = 200;
+    const cellHeight = 30;
+
+    doc.fontSize('10')
+    doc.fillColor("#000")
+    tech.forEach((item, index) => {
+        const y = startY + index * cellHeight;
+
+        // Draw label cell
+        doc.rect(startX, y, cellWidth, cellHeight).stroke("#bebebe");
+        doc.text(item.label.split("")[0].toUpperCase() + item.label.slice(1), startX + cellPadding, y + cellPadding, {
+            width: cellWidth - 2 * cellPadding,
+            height: cellHeight - 2 * cellPadding,
+        });
+
+        // Draw value cell
+        doc.rect(startX + cellWidth, y, cellWidth, cellHeight).stroke();
+        doc.text(item.value, startX + cellWidth + cellPadding, y + cellPadding, {
+            width: cellWidth - 2 * cellPadding,
+            height: cellHeight - 2 * cellPadding
+        });
+        doc.moveDown()
+    })
+
+    doc.end()
 })
 
 const insertRequest = (req) => {
