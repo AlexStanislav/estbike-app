@@ -197,6 +197,7 @@ app.get('/api/bikes', async (req, res) => {
                     }
                 }
 
+                
                 if (bike.price === "null" || bike.price === "" || bike.price === "undefined" || bike.price === null || bike.price === undefined) {
                     bike.price = null
                 }
@@ -209,11 +210,10 @@ app.get('/api/bikes', async (req, res) => {
                     bike.price = bike.price.replace(/\D/g, '')
                 }
 
-
                 if (bike.old_price !== null && !bike.old_price.includes("{")) {
                     bike.old_price = bike.old_price.replace(/\D/g, '')
                 }
-
+                
                 if (bike.price !== null && bike.price.includes("{")) {
                     bike.price = bike.price.replace(/\{/g, "[").replace(/\}/g, "]").replace(/\'/g, '"');
                     if (bike.price.toLowerCase().includes("null")) {
@@ -236,6 +236,11 @@ app.get('/api/bikes', async (req, res) => {
                     }
                 }
 
+                if(bike.price !== null && typeof bike.price === "string" && bike.price === '' && (bike.old_price !== '' && bike.old_price !== null)){
+                    bike.price = bike.old_price
+                    bike.old_price = null
+                }
+
                 if (Array.isArray(bike.price) && bike.price.length === 0) {
                     bike.price = null
                 }
@@ -246,6 +251,20 @@ app.get('/api/bikes', async (req, res) => {
 
                 if (Array.isArray(bike.old_price) && bike.old_price[0] === '') {
                     bike.old_price[0] = null
+                }
+
+                if(Array.isArray(bike.old_price)) {
+                    let old_price = bike.old_price[0]
+                    if(Array.isArray(bike.price)){
+                        let price = bike.price[0]
+                        if(old_price === price){
+                            bike.old_price = null
+                        }
+                    }else{
+                        if(old_price === bike.price){
+                            bike.old_price = null
+                        }
+                    }
                 }
 
                 if (bike.colors === "undefined" || bike.colors === "null" || bike.colors === null || bike.colors === undefined) {
@@ -417,5 +436,5 @@ const forexJob = new cron.CronJob(
 )
 forexJob.start()
 app.listen(port, () => {
-    console.log(`Server started on http://localhost:${port}`);
+    console.log(`Server started`);
 })
