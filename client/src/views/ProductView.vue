@@ -266,6 +266,10 @@ onMounted(() => {
   if (appStore.isMobile()) {
     header.classList.add("sticky");
   }
+  
+  if (header !== null) {
+    header.classList.add("sticky");
+  }
   setTimeout(() => {
     loadCurrentBike();
 

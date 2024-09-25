@@ -7,7 +7,7 @@
         <span class="license-info" v-if="showLicense">
           Permis:
           <span v-for="(license, index) in bikeLicenses" :key="index">
-            {{ license }}</span
+            {{ license.replace(/'/g, '') }}</span
           >
         </span>
         <!-- <span class="rabla-info" v-if="showRabla">Eligibila Rabla</span> -->
