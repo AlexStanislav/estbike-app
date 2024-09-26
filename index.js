@@ -197,6 +197,10 @@ app.get('/api/bikes', async (req, res) => {
                     }
                 }
 
+               if(bike.image === null && bike.gallery !== null && bike.gallery.length > 0) {
+                    bike.image = bike.gallery[0]
+                }
+
                 
                 if (bike.price === "null" || bike.price === "" || bike.price === "undefined" || bike.price === null || bike.price === undefined) {
                     bike.price = null
