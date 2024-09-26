@@ -291,7 +291,8 @@ app.get('/api/bikes', async (req, res) => {
                 const transformStringToArray = (str) => {
                     if (str !== undefined) {
                         const cleanedStr = str.replace(/\\\"/g, '"').replace(/^\"|\"$/g, '').replace(/\\n/g, '').replace(/\\/g, '').replace(/^\{/g, '').replace(/\}$/g, '')
-                        const jsonString = cleanedStr.slice(1, -1).replace(/\"\{/g, '{').replace(/\}\"/g, '}').replace(/(\d)"(?!\}),([\w\s]+)/g, '$1$2').replace(/(\d)"(?!\})[\s\w]+/g, '$1').replace(/(\d)""/g, '$1"').replace(/:\s"\}/g, ':""').replace(/:"\}/g, ':""}')
+                        let jsonString = cleanedStr.slice(1, -1).replace(/\"\{/g, '{').replace(/\}\"/g, '}').replace(/(\d)"(?!\}),([\w\s]+)/g, '$1$2').replace(/(\d)"(?!\})[\s\w]+/g, '$1').replace(/(\d)""/g, '$1"').replace(/:\s"\}/g, ':""').replace(/:"\}/g, ':""}')
+                        jsonString = jsonString.replace(/'\{/g, '{').replace(/\}'/g, '}').replace(/'/g , '"').replace(/"""/g, '"')
                         return (JSON.parse(`[${jsonString}]`));
                     }
                 }
